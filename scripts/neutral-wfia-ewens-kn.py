@@ -1,4 +1,9 @@
-#!/opt/local/bin/python2.7
+# Copyright (c) 2013.  Mark E. Madsen <mark@madsenlab.org>
+#
+# This work is licensed under the terms of the Creative Commons-GNU General Public Llicense 2.0, as "non-commercial/sharealike".  You may use, modify, and distribute this software for non-commercial purposes, and you must distribute any modifications under the same license.
+#
+# For detailed license terms, see:
+# http://creativecommons.org/licenses/GPL/2.0/
 
 import simuOpt, os, sys, time
 from pprint import pprint
@@ -7,6 +12,7 @@ import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
 from simuPOP.utils import *
 from scipy import stats
+import numpy as np
 
 sampleAlleleNumbers = []
 
