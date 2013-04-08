@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(name="CTPy",
       version="1.0.1",
       packages=['ctpy'],
-      scripts=['scripts/neutral-wfia-ewens-kn.py','scripts/neutral-kn-mongo-storage.py'],
+      scripts=['scripts/neutral-kn-interactive.py'],
       author='Mark E. Madsen',
       author_email='mark@madsenlab.org',
       url='https://github.com/mmadsen/',

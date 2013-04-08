@@ -5,6 +5,6 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
-from richness_sample import RichnessSample
+from richness_sample import sampleNumAlleles
 
 __author__ = 'mark'
