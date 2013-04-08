@@ -20,7 +20,8 @@ import datetime
 from pymongo import MongoClient
 import pprint as pp
 import uuid
-
+from ctpy.sampling import RichnessSample
+import ming as ming
 
 
 """
@@ -51,16 +52,21 @@ population, and counts the number of alleles present in the population and in sa
 
 
 
+config = {'ming.richness.uri': 'mongodb://localhost:27017/richness_samples'}
+ming.configure(**config)
+
+
+# client = MongoClient()  # assume that mongod is running on localhost, default port
+# db = client.test_database
+# # will use "samples" as document name within the SampledRichness collection
+# samples = db.samples
+# richness_samples = db.richness_samples
+# trait_count_samples = db.trait_count_samples
 
 
 
 
-client = MongoClient()  # assume that mongod is running on localhost, default port
-db = client.test_database
-# will use "samples" as document name within the SampledRichness collection
-samples = db.samples
-richness_samples = db.richness_samples
-trait_count_samples = db.trait_count_samples
+
 
 temp_simulation_id = uuid.uuid4().urn
 
@@ -81,17 +87,16 @@ def sampleEwensNumAlleles(pop, param):
     return True
 
 def storeRichnessSample(popID, ssize, richness, locus, generation,mutation,popsize):
-    richness_sample = {
-        "simulation_run_id" : temp_simulation_id,
-        "simulation_time" : generation,
-        "replication" : popID,
-        "locus" : locus,
-        "richness" : richness,
-        "samplesize" : ssize,
-        "population_size" : popsize,
-        "mutation_rate" : mutation
-    }
-    richness_samples.insert(richness_sample)
+    RichnessSample(dict(
+        simulation_time=generation,
+        replication=popID,
+        locus=locus,
+        richness=richness,
+        sample_size=ssize,
+        population_size=popsize,
+        mutation_rate=mutation,
+        simulation_run_id=temp_simulation_id
+    )).m.insert()
     return True
 
 
@@ -136,7 +141,7 @@ options = [
         'name':'mutationrate',
         'default':0.001,
         'label':'Rate of individual innovations/mutations per generation',
-        'type': 'numbers',
+        'type': 'number',
         'validator': 'mutationrate > 0.0',
     }
 
