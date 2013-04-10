@@ -20,8 +20,6 @@ db.richness_sample.aggregate(
 		}
 	})
 
-
-
 """
 
 
@@ -32,14 +30,14 @@ import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
 
 def sampleNumAlleles(pop, param):
-    (ssize, mutation, popsize,sim_id) = param
-    locus = 0
+    (ssize, mutation, popsize,sim_id,numloci) = param
     popID = pop.dvars().rep
     gen = pop.dvars().gen
     sample = drawRandomSample(pop, sizes=ssize)
-    sim.stat(sample, alleleFreq=locus)
-    numAlleles = len(sample.dvars().alleleFreq[locus].values())
-    _storeRichnessSample(popID,ssize,numAlleles,locus,gen,mutation,popsize,sim_id)
+    sim.stat(sample, alleleFreq=sim.ALL_AVAIL)
+    for locus in range(numloci):
+        numAlleles = len(sample.dvars().alleleFreq[locus].values())
+        _storeRichnessSample(popID,ssize,numAlleles,locus,gen,mutation,popsize,sim_id)
     return True
 
 

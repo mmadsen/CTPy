@@ -65,6 +65,13 @@ options = [
         'label':'Rate of individual innovations/mutations per generation',
         'type': 'number',
         'validator': 'mutationrate > 0.0',
+    },
+    {
+        'name':'numloci',
+        'default' : 2,
+        'label' : 'Number of loci to model',
+        'type' : 'integer',
+        'validator' : 'numloci > 0',
     }
 
 ]
@@ -81,7 +88,7 @@ if not pars.getParam():
 beginCollectingData = (3 * pars.stepsize)
 
 
-pop = sim.Population(size=pars.popsize, ploidy=1, loci=1)
+pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
 simu = sim.Simulator(pop, rep=pars.replications)
 
 simu.evolve(
@@ -90,7 +97,7 @@ simu.evolve(
 	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate),
 		sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
 		sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
-        sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = pars.length,

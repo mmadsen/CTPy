@@ -13,3 +13,21 @@ and with probability 1-p, we select a parent randomly.
 
 import simuPOP as sim
 
+class ConformistMatingScheme(sim.HomoMating):
+    """
+    A homogeneous mating scheme which implements a variety of "conformist" transmission rules.
+    """
+
+    def __init__(self, numOffspring=1, sexMode=sim.RANDOM_SEX, globalConformismProbability=0.01, ops=sim.CloneGenoTransmitter(), subPopSize=[],
+                 subPops=sim.ALL_AVAIL, weight=0):
+        sim.HomoMating.__init__(self,
+                                chooser = sim.PyParentsChooser(),
+                                generator = sim.OffspringGenerator(ops, numOffspring, sexMode),
+                                # incomplete
+                                )
+
+    def probSelectParentWithMostPopularTraits(pop, subpop):
+        """
+        Selects parents with the "most popular" traits, with probability
+        """
+        pass

@@ -47,6 +47,7 @@ sampling_interval = 50
 sim_length = 11000
 time_start_stats = 1000
 debug_output_interval = 5000
+numloci = 1
 
 
 for param_combination in itertools.product(*state_space):
@@ -56,7 +57,7 @@ for param_combination in itertools.product(*state_space):
     popsize = param_combination[2]
     sim_id = uuid.uuid4().urn
 
-    pop = sim.Population(size=popsize, ploidy=1, loci=1)
+    pop = sim.Population(size=popsize, ploidy=1, loci=numloci)
     simu = sim.Simulator(pop, rep=replications_per_paramset)
 
     simu.evolve(
@@ -65,7 +66,7 @@ for param_combination in itertools.product(*state_space):
         postOps = [sim.KAlleleMutator(k=100000000, rates=mut),
                sim.Stat(alleleFreq=0, step=sampling_interval,begin=time_start_stats),
                #sim.PyEval(r"'%d, ' % gen", step=debug_output_interval,begin=time_start_stats,reps=0),
-               sim.PyOperator(func=sampling.sampleNumAlleles, param=(ssize, mut, popsize, sim_id), step=sampling_interval,begin=time_start_stats),
+               sim.PyOperator(func=sampling.sampleNumAlleles, param=(ssize, mut, popsize, sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                #sim.PyOutput('\n', reps=-1, step = debug_output_interval, begin=time_start_stats),
                ],
         gen = sim_length,
