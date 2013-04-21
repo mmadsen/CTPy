@@ -64,7 +64,7 @@ for param_combination in itertools.product(*state_space):
     popsize = param_combination[2]
 
     sampling.storeSimulationData(
-        popsize,mut,sim_id,ssize,replications_per_paramset,numloci)
+        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__)
 
 
     pop = sim.Population(size=popsize, ploidy=1, loci=numloci)

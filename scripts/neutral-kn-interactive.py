@@ -92,7 +92,7 @@ beginCollectingData = (3 * pars.stepsize)
 
 logging.info("Beginning simulation run: %s", sim_id)
 
-sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci)
+sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__)
 
 
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)

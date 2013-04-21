@@ -17,14 +17,15 @@ def _get_dataobj_id():
 
 
 
-def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci):
+def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script):
     SimulationRun(dict(
         replicates=replicates,
         population_size=popsize,
         mutation_rate=mutation,
         simulation_run_id=sim_id,
         sample_size=ssize,
-        num_loci=num_loci
+        num_loci=num_loci,
+        script_filename=script
     )).m.insert()
     return True
 
@@ -39,6 +40,7 @@ class SimulationRun(Document):
         name = 'simulation_runs'
 
     _id = Field(schema.ObjectId)
+    script_filename = Field(str)
     replicates = Field(int)
     num_loci = Field(int)
     sample_size = Field(int)
