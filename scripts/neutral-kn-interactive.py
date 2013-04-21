@@ -21,8 +21,6 @@ population, and counts the number of alleles present in the population and in sa
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
-
-
 config = sampling.getMingConfiguration()
 ming.configure(**config)
 
