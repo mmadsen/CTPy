@@ -8,7 +8,9 @@ simuOpt.setOptions(alleleType='long',optimized=False,quiet=True)
 import simuPOP as sim
 import uuid
 import ctpy.sampling as sampling
+import ctpy.utils as utils
 import ming
+import logging
 
 
 """
@@ -17,8 +19,11 @@ population, and counts the number of alleles present in the population and in sa
 """
 
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
-config = {'ming.richness.uri': 'mongodb://localhost:27017/richness_samples', 'ming.traitcounts.uri': 'mongodb://localhost:27017/traitcount_samples'}
+
+
+config = sampling.getMingConfiguration()
 ming.configure(**config)
 
 sim_id = uuid.uuid4().urn
@@ -87,24 +92,30 @@ if not pars.getParam():
 
 beginCollectingData = (3 * pars.stepsize)
 
+logging.info("Beginning simulation run: %s", sim_id)
+
 
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
 simu = sim.Simulator(pop, rep=pars.replications)
 
 simu.evolve(
 	initOps = sim.InitGenotype(freq=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]),
+    preOps = [
+        sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
+    ],
 	matingScheme = sim.RandomSelection(),
 	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
 		sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
-		sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
+		#sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
         sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
+        sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
+        #sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = pars.length,
 )
 
-
+logging.info("Ending simulation run")
 
 
 

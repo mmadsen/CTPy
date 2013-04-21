@@ -24,11 +24,14 @@ db.richness_sample.aggregate(
 """
 
 
-
+import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
+
+def _get_dataobj_id():
+    return 'richness'
 
 def sampleNumAlleles(pop, param):
     (ssize, mutation, popsize,sim_id,numloci) = param
@@ -61,7 +64,7 @@ def _storeRichnessSample(popID, ssize, richness, locus, generation,mutation,pops
 class RichnessSample(Document):
 
     class __mongometa__:
-        session = Session.by_name('richness')
+        session = Session.by_name(_get_dataobj_id())
         name = 'richness_sample'
 
     _id = Field(schema.ObjectId)

@@ -4,13 +4,16 @@ the Ming ORM library.
 
 
 """
-
+import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
-from pprint import pprint
 
+
+
+def _get_dataobj_id():
+    return 'traitcounts'
 
 # locus default sim.ALL_AVAIL
 def sampleTraitCounts(pop, param):
@@ -47,7 +50,7 @@ CountMap = dict(allele=int, count=float)
 class TraitCountSample(Document):
 
     class __mongometa__:
-        session = Session.by_name('traitcounts')
+        session = Session.by_name(_get_dataobj_id())
         name = 'trait_count_sample'
 
     _id = Field(schema.ObjectId)

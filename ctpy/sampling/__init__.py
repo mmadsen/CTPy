@@ -5,7 +5,34 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
+import logging
+
+
+
+
 from richness_sample import sampleNumAlleles
 from trait_count_sample import sampleTraitCounts
+from individual_sample import sampleIndividuals
+
+# When a new module is added for sampling, the module's filename should be added to the module list below,
+# and the module must support a _get_dataobj_id() method which returns the string used in the Ming ORM
+# configuration for MongoDB.  This is defined in each module, and then used in the declarative definition
+# of the data object being stored.  Ming configuration is then automatic so that simulation scripts need
+# include only two lines which are fully generic.
+
+modules = [individual_sample, trait_count_sample, richness_sample]
+
+
+def getMingConfiguration():
+    config = {}
+    urlstring = 'mongodb://localhost:27017/sim_raw_samples'
+    for module in modules:
+        key = ''
+        key += 'ming.'
+        key += module._get_dataobj_id()
+        key += '.uri'
+        config[key] = urlstring
+    logging.debug(config)
+    return config
 
 __author__ = 'mark'
