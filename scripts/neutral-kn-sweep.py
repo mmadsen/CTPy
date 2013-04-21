@@ -37,7 +37,7 @@ sim_id = uuid.uuid4().urn
 
 mutationrates = [0.0001,0.00075,0.001,0.01]
 samplesizes = [10,50,250]
-populationsizes = [500,1000,10000,20000]
+populationsizes = [500,1000,2000,5000,10000]
 
 
 state_space = [
@@ -50,10 +50,10 @@ state_space = [
 # other parameters
 replications_per_paramset = 10
 sampling_interval = 50
-sim_length = 11000
+sim_length = 10000
 time_start_stats = 1000
 numloci = 3
-gen_logging_interval = sim_length / 10
+gen_logging_interval = sim_length / 5
 
 
 for param_combination in itertools.product(*state_space):
@@ -63,13 +63,16 @@ for param_combination in itertools.product(*state_space):
     ssize = param_combination[1]
     popsize = param_combination[2]
 
+    sampling.storeSimulationData(
+        popsize,mut,sim_id,ssize,replications_per_paramset,numloci)
+
 
     pop = sim.Population(size=popsize, ploidy=1, loci=numloci)
     simu = sim.Simulator(pop, rep=replications_per_paramset)
 
     simu.evolve(
         initOps = sim.InitGenotype(freq=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]),
-            preOps = [
+        preOps = [
             sim.PyOperator(func=utils.logGenerationCount, param=(), step=gen_logging_interval, reps=0),
         ],
         matingScheme = sim.RandomSelection(),

@@ -45,8 +45,6 @@ def _storeTraitCountSample(popID, ssize, locus, generation, mutation, popsize, s
 
 
 
-CountMap = dict(allele=int, count=float)
-
 class TraitCountSample(Document):
 
     class __mongometa__:
