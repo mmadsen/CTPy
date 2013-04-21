@@ -18,7 +18,7 @@ population, and counts the number of alleles present in the population and in sa
 
 
 
-config = {'ming.richness.uri': 'mongodb://localhost:27017/richness_samples'}
+config = {'ming.richness.uri': 'mongodb://localhost:27017/richness_samples', 'ming.traitcounts.uri': 'mongodb://localhost:27017/traitcount_samples'}
 ming.configure(**config)
 
 sim_id = uuid.uuid4().urn
@@ -94,10 +94,11 @@ simu = sim.Simulator(pop, rep=pars.replications)
 simu.evolve(
 	initOps = sim.InitGenotype(freq=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]),
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate),
+	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
 		sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
 		sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
         sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = pars.length,

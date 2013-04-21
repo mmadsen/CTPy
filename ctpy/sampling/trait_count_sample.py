@@ -9,6 +9,7 @@ from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
+from pprint import pprint
 
 
 # locus default sim.ALL_AVAIL
@@ -16,23 +17,32 @@ def sampleTraitCounts(pop, param):
     (ssize, mutation, popsize, sim_id,numloci) = param
     popID = pop.dvars().rep
     gen = pop.dvars().gen
-    sample = drawRandomSample(pop, size=ssize)
-    sim.stat(sample, alleleNum=sim.ALL_AVAIL)
+    sample = drawRandomSample(pop, sizes=ssize)
+    sim.stat(sample, alleleFreq=sim.ALL_AVAIL)
     for locus in range(numloci):
-        _storeTraitCountSample(popID, ssize, locus, gen, mutation, popsize, sim_id, sample.dvars().alleleNum[locus].values())
+        alleleMap = sample.dvars().alleleNum[locus]
+        for allele,count in alleleMap.iteritems():
+            _storeTraitCountSample(popID, ssize, locus, gen, mutation, popsize, sim_id, allele, count)
     return True
 
 
-def _storeTraitCountSample(popID, ssize, locus, generation, mutation, popsize, sim_id, count_list):
+def _storeTraitCountSample(popID, ssize, locus, generation, mutation, popsize, sim_id, allele, count):
     TraitCountSample(dict(
-        # fields
+        simulation_time=generation,
+        replication=popID,
+        locus=locus,
+        sample_size=ssize,
+        population_size=popsize,
+        mutation_rate=mutation,
+        simulation_run_id=sim_id,
+        allele=allele,
+        count=count
     )).m.insert()
     return True
 
 
 
-
-
+CountMap = dict(allele=int, count=float)
 
 class TraitCountSample(Document):
 
@@ -48,4 +58,5 @@ class TraitCountSample(Document):
     population_size = Field(int)
     mutation_rate = Field(float)
     simulation_run_id = Field(str)
-    # something for the array of trait counts
+    allele = Field(int)
+    count = Field(float)

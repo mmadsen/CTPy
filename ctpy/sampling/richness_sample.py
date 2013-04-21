@@ -11,11 +11,12 @@ db.richness_sample.aggregate(
 		'population_size' : 1,
 		'richness' : 1,
 		'mutation_rate' : 1,
-		'sample_size' : 1
+		'sample_size' : 1,
+                'locus' : 1,
 	}},
 	{
 		'$group' : {
-			'_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size'},
+			'_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size', locus: '$locus'},
 			'mean_richness' : { '$avg' : '$richness'},
 		}
 	})

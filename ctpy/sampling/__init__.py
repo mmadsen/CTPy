@@ -6,5 +6,6 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 from richness_sample import sampleNumAlleles
+from trait_count_sample import sampleTraitCounts
 
 __author__ = 'mark'
