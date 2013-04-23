@@ -9,9 +9,9 @@ Welcome to CTPy's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-
+   code
 
 Indices and tables
 ==================

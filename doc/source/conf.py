@@ -17,6 +17,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+sys.path.append('/Users/mark/Dropbox/Research/Dissertation Project/models/CTPy')
 
 # -- General configuration -----------------------------------------------------
 
@@ -70,15 +71,15 @@ exclude_patterns = []
 #default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = True
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
-#show_authors = False
+show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -171,13 +172,13 @@ htmlhelp_basename = 'CTPydoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'letterpaper',
 
 # The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+'pointsize': '11pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+'preamble': '\\setcounter{tocdepth}{3}',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -186,6 +187,7 @@ latex_documents = [
   ('index', 'CTPy.tex', u'CTPy Documentation',
    u'Mark E. Madsen', 'manual'),
 ]
+
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
@@ -199,7 +201,7 @@ latex_documents = [
 #latex_show_pagerefs = False
 
 # If true, show URL addresses after external links.
-#latex_show_urls = False
+latex_show_urls = True
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []

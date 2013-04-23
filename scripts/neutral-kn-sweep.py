@@ -9,6 +9,7 @@ import simuPOP as sim
 import uuid
 import ctpy.sampling as sampling
 import ctpy.utils as utils
+import ctpy.math as cpm
 import ming
 import itertools
 import logging
@@ -49,15 +50,17 @@ state_space = [
 
 # other parameters
 replications_per_paramset = 10
-sampling_interval = 50
+sampling_interval = 100
 sim_length = 10000
-time_start_stats = 1000
 numloci = 3
 gen_logging_interval = sim_length / 5
 numalleles = 10
 
+
+
 initial_distribution = utils.constructUniformAllelicDistribution(numalleles)
 logging.info("Initial allelic distribution: %s", initial_distribution)
+
 
 
 for param_combination in itertools.product(*state_space):
@@ -70,6 +73,11 @@ for param_combination in itertools.product(*state_space):
     sampling.storeSimulationData(
         popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__,numalleles)
 
+    time_start_stats = cpm.expectedIAQuasiStationarityTimeHaploid(popsize,mut)
+    logging.info("...Starting data collection at generation: %s", time_start_stats)
+
+    totalSimulationLength = time_start_stats + sim_length
+    logging.info("...Simulation will sample %s generations after stationarity", sim_length)
 
     pop = sim.Population(size=popsize, ploidy=1, loci=numloci)
     simu = sim.Simulator(pop, rep=replications_per_paramset)
@@ -86,6 +94,6 @@ for param_combination in itertools.product(*state_space):
                 sim.PyOperator(func=sampling.sampleTraitCounts, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                 sim.PyOperator(func=sampling.sampleIndividuals, param=(ssize, mut, popsize, sim_id), step=sampling_interval, begin=time_start_stats),
                ],
-        gen = sim_length,
+        gen = totalSimulationLength,
     )
-    logging.info("End run %s", sim_id)
+    logging.info("End run %s at generation %s", sim_id, simu.population(0).dvars().gen)

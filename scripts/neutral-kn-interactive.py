@@ -9,8 +9,10 @@ import simuPOP as sim
 import uuid
 import ctpy.sampling as sampling
 import ctpy.utils as utils
+import ctpy.math as cpm
 import ming
 import logging
+import pprint as pp
 
 
 """
@@ -44,7 +46,7 @@ options = [
     {
         'name':'length',
         'default':10000,
-        'label':'Length of simulation (in generations)',
+        'label':'Length of simulation sample (in generations) after stationarity reached',
         'type': 'integer',
         'validator': 'length > 0',
     },
@@ -95,9 +97,20 @@ if not pars.getParam():
     sys.exit(1)
 
 
-beginCollectingData = (3 * pars.stepsize)
+
+
 
 logging.info("Beginning simulation run: %s", sim_id)
+
+
+beginCollectingData = cpm.expectedIAQuasiStationarityTimeHaploid(pars.popsize,pars.mutationrate)
+logging.info("Starting data collection at generation: %s", beginCollectingData)
+
+totalSimulationLength = beginCollectingData + pars.length
+logging.info("Simulation will sample %s generations after stationarity", pars.length)
+
+
+
 
 sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles)
 
@@ -121,10 +134,10 @@ simu.evolve(
         sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
         #sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
-	gen = pars.length,
+	gen = totalSimulationLength,
 )
 
-logging.info("Ending simulation run")
+logging.info("Ending simulation run at generation %s", simu.population(0).dvars().gen)
 
 
 
