@@ -17,7 +17,7 @@ def _get_dataobj_id():
 
 
 
-def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script):
+def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script,numalleles):
     SimulationRun(dict(
         replicates=replicates,
         population_size=popsize,
@@ -25,7 +25,8 @@ def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script
         simulation_run_id=sim_id,
         sample_size=ssize,
         num_loci=num_loci,
-        script_filename=script
+        script_filename=script,
+        num_initial_alleles=numalleles
     )).m.insert()
     return True
 
@@ -47,4 +48,5 @@ class SimulationRun(Document):
     population_size = Field(int)
     mutation_rate = Field(float)
     simulation_run_id = Field(str)
+    num_initial_alleles = Field(int)
 

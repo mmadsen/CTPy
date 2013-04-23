@@ -5,7 +5,11 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
-from simlogging import logGenerationCount
-from allele_distribution import constructUniformAllelicDistribution
-
 __author__ = 'mark'
+
+
+def constructUniformAllelicDistribution(numalleles):
+    divisor = 100.0 / numalleles
+    frac = divisor / 100.0
+    distribution = [frac] * numalleles
+    return distribution

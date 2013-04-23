@@ -54,6 +54,10 @@ sim_length = 10000
 time_start_stats = 1000
 numloci = 3
 gen_logging_interval = sim_length / 5
+numalleles = 10
+
+initial_distribution = utils.constructUniformAllelicDistribution(numalleles)
+logging.info("Initial allelic distribution: %s", initial_distribution)
 
 
 for param_combination in itertools.product(*state_space):
@@ -64,14 +68,14 @@ for param_combination in itertools.product(*state_space):
     popsize = param_combination[2]
 
     sampling.storeSimulationData(
-        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__)
+        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__,numalleles)
 
 
     pop = sim.Population(size=popsize, ploidy=1, loci=numloci)
     simu = sim.Simulator(pop, rep=replications_per_paramset)
 
     simu.evolve(
-        initOps = sim.InitGenotype(freq=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]),
+        initOps = sim.InitGenotype(freq=initial_distribution),
         preOps = [
             sim.PyOperator(func=utils.logGenerationCount, param=(), step=gen_logging_interval, reps=0),
         ],

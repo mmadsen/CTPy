@@ -75,6 +75,13 @@ options = [
         'label' : 'Number of loci to model',
         'type' : 'integer',
         'validator' : 'numloci > 0',
+    },
+    {
+        'name' : 'numalleles',
+        'default' : 10,
+        'label' : 'Number of initial alleles in population',
+        'type' : 'integer',
+        'validator' : 'numalleles > 0'
     }
 
 ]
@@ -92,14 +99,16 @@ beginCollectingData = (3 * pars.stepsize)
 
 logging.info("Beginning simulation run: %s", sim_id)
 
-sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__)
+sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles)
 
+initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
+logging.info("Initial allelic distribution: %s", initial_distribution)
 
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
 simu = sim.Simulator(pop, rep=pars.replications)
 
 simu.evolve(
-	initOps = sim.InitGenotype(freq=[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]),
+	initOps = sim.InitGenotype(freq=initial_distribution),
     preOps = [
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
