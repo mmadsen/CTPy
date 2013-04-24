@@ -4,9 +4,15 @@
 #
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
+"""
+.. module:: individual_sample
+    :platform: Unix, Windows
+    :synopsis: Data object for storing a sample of N individuals (and their genotypes) in MongoDB, via the Ming ORM.
 
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
 
-__author__ = 'mark'
+"""
+
 import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
@@ -15,9 +21,25 @@ from simuPOP.sampling import drawRandomSample
 import pprint as pp
 
 def _get_dataobj_id():
+    """
+        Returns the short handle used for this data object in Ming configuration
+    """
     return 'individuals'
 
 def sampleIndividuals(pop, param):
+    """Samples individuals from each replicant population, and stores the genotypes of that sample in the database.
+
+        Args:
+
+            pop (Population):  simuPOP population replicate.
+
+            params (list):  list of parameters (sample size, mutation rate, population size, simulation ID)
+
+        Returns:
+
+            Boolean true:  all PyOperators need to return true.
+
+    """
     (ssize, mutation, popsize, sim_id) = param
     popID = pop.dvars().rep
     gen = pop.dvars().gen

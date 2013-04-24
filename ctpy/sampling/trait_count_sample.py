@@ -1,7 +1,9 @@
 """
-TraitCountSample is a declarative document schema for MongoDB storage of trait count samples, using
-the Ming ORM library.
+.. module:: trait_count_sample
+    :platform: Unix, Windows
+    :synopsis: Data object for storing a sample of trait counts (across all loci) in MongoDB, via the Ming ORM.
 
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
 
 """
 import logging
@@ -13,10 +15,25 @@ from simuPOP.sampling import drawRandomSample
 
 
 def _get_dataobj_id():
+    """
+        Returns the short handle used for this data object in Ming configuration
+    """
     return 'traitcounts'
 
-# locus default sim.ALL_AVAIL
 def sampleTraitCounts(pop, param):
+    """Samples trait counts for all loci in a replicant population, and stores the counts  in the database.
+
+        Args:
+
+            pop (Population):  simuPOP population replicate.
+
+            params (list):  list of parameters (sample size, mutation rate, population size, simulation ID, number of loci)
+
+        Returns:
+
+            Boolean true:  all PyOperators need to return true.
+
+    """
     (ssize, mutation, popsize, sim_id,numloci) = param
     popID = pop.dvars().rep
     gen = pop.dvars().gen

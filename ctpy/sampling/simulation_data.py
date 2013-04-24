@@ -4,6 +4,15 @@
 #
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
+
+"""
+.. module:: simulation_data
+    :platform: Unix, Windows
+    :synopsis: Data object for storing metadata and parameter about a simulation run in MongoDB, via the Ming ORM.
+
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+"""
 import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
@@ -13,11 +22,39 @@ from simuPOP.sampling import drawRandomSample
 __author__ = 'mark'
 
 def _get_dataobj_id():
+    """
+        Returns the short handle used for this data object in Ming configuration
+    """
     return 'simulations'
 
 
 
 def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script,numalleles):
+    """Stores the parameters and metadata for a simulation run in the database.
+
+        Args:
+
+            popsize (int):  Population size
+
+            mutation (float):  mutation rate
+
+            sim_id (str):  UUID for this simulation run
+
+            sample size (int):  Number of individuals sampled to calculate various observables (richness, trait frequencies, etc)
+
+            replicates (int):  Number of independent populations to evolve with the same set of parameters
+
+            num_loci (int):  Number of trait dimensions (loci) that individuals are equipped with.
+
+            script (str):  Pathname to the simuPOP simulation script used for this simulation run
+
+            numalleles (int):  Number of initial alleles used to initialize each locus, prior to starting the simulation.
+
+        Returns:
+
+            Boolean true:  all PyOperators need to return true.
+
+    """
     SimulationRun(dict(
         replicates=replicates,
         population_size=popsize,

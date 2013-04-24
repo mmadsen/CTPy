@@ -1,25 +1,30 @@
 """
-RichnessSample is a declarative document schema for MongoDB storage of trait richness samples, using
-the Ming ORM library.
+.. module:: richness_sample
+    :platform: Unix, Windows
+    :synopsis: Data object for storing a sample of trait richness from a population in MongoDB, via the Ming ORM.
 
-Aggregation framework query for calculating the mean richness for combinations of
-population size, mutation rate, and sample size, for comparison with formulas
-derived from Ewens sampling theory.
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
 
-db.richness_sample.aggregate(
-	{ '$project' : {
-		'population_size' : 1,
-		'richness' : 1,
-		'mutation_rate' : 1,
-		'sample_size' : 1,
-                'locus' : 1,
-	}},
-	{
-		'$group' : {
-			'_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size', locus: '$locus'},
-			'mean_richness' : { '$avg' : '$richness'},
-		}
-	})
+
+
+    Aggregation framework query for calculating the mean richness for combinations of
+    population size, mutation rate, and sample size, for comparison with formulas
+    derived from Ewens sampling theory.
+
+    db.richness_sample.aggregate(
+        { '$project' : {
+            'population_size' : 1,
+            'richness' : 1,
+            'mutation_rate' : 1,
+            'sample_size' : 1,
+                    'locus' : 1,
+        }},
+        {
+            '$group' : {
+                '_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size', locus: '$locus'},
+                'mean_richness' : { '$avg' : '$richness'},
+            }
+        })
 
 """
 
@@ -31,9 +36,25 @@ import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
 
 def _get_dataobj_id():
+    """
+        Returns the short handle used for this data object in Ming configuration
+    """
     return 'richness'
 
 def sampleNumAlleles(pop, param):
+    """Samples allele richness for all loci in a replicant population, and stores the richness of the sample in the database.
+
+        Args:
+
+            pop (Population):  simuPOP population replicate.
+
+            params (list):  list of parameters (sample size, mutation rate, population size, simulation ID)
+
+        Returns:
+
+            Boolean true:  all PyOperators need to return true.
+
+    """
     (ssize, mutation, popsize,sim_id,numloci) = param
     popID = pop.dvars().rep
     gen = pop.dvars().gen

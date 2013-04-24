@@ -6,14 +6,31 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 # this module exists so that we can do logging functions which are usable as PyOperators in simuPOP.
+"""
+.. module:: simlogging
+    :platform: Unix, Windows
+    :synopsis: Extensions to the native python logging mechanism for use in simuPOP simulations.
 
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+"""
 
 import logging
 
-__author__ = 'mark'
-
 
 def logGenerationCount(pop, param):
+        """Operator for logging the generation count using simuPOP's PyOperator hook.
+
+        Args:
+
+            implicitly called with a Population object by simuPOP, requires no other arguments
+
+        Returns:
+
+            Boolean true (required of all PyOperator methods)
+
+    """
+
         gen = pop.dvars().gen
         logging.info("Generation: %s", gen)
         return True

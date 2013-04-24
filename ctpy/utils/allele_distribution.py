@@ -4,11 +4,29 @@
 #
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
+"""
+.. module:: allele_distribution
+    :platform: Unix, Windows
+    :synopsis: Module for creating various initial distributions of traits/alleles, for initializing a simuPOP Population.
 
-__author__ = 'mark'
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+"""
+
 
 
 def constructUniformAllelicDistribution(numalleles):
+    """Constructs a uniform distribution of N alleles in the form of a frequency list.
+
+        Args:
+
+            numalleles (int):  Number of alleles present in the initial population.
+
+        Returns:
+
+            (list):  Array of floats, giving the initial frequency of N alleles.
+
+    """
     divisor = 100.0 / numalleles
     frac = divisor / 100.0
     distribution = [frac] * numalleles
