@@ -1,5 +1,5 @@
 """
-ctpy.strategies.conformism contains a variety of methods for implementing a 'conformist'
+The conformism module contains a variety of methods for implementing a 'conformist'
 strategy for cultural transmission.  Each is implemented as a simuPOP PyParentsChooser
 operator, which can then be used to define a custom mating scheme.  This allows one to
 use the standard offspring generators to form the next generation, across subpopulations.

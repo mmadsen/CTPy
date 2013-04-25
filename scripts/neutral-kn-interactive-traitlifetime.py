@@ -10,6 +10,7 @@ import uuid
 import ctpy.sampling as sampling
 import ctpy.utils as utils
 import ctpy.math as cpm
+import ctpy.innovation_models as innov
 import ming
 import logging
 import pprint as pp
@@ -97,7 +98,7 @@ if not pars.getParam():
     sys.exit(1)
 
 
-
+trackingMutator = innov.KAlleleLifetimeTrackingMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL)
 
 
 logging.info("Beginning simulation run: %s", sim_id)
@@ -126,7 +127,7 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
+	postOps = [innov.KAlleleLifetimeTrackingMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL),
 		#sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
 		#sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
         sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
