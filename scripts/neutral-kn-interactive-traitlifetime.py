@@ -118,6 +118,10 @@ sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesi
 initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
 logging.info("Initial allelic distribution: %s", initial_distribution)
 
+lifetime_cache = sampling.TraitLifetimeCache(pars.numloci,pars.numalleles)
+lifetime_cache._debugPrintCache()
+
+
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
 simu = sim.Simulator(pop, rep=pars.replications)
 
@@ -127,7 +131,7 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [innov.KAlleleLifetimeTrackingMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL),
+	postOps = [sim.KAlleleMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL,output=lifetime_cache.allele_lifetime_tracker),
 		#sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
 		#sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
         sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
@@ -137,6 +141,8 @@ simu.evolve(
 		],	
 	gen = totalSimulationLength,
 )
+
+lifetime_cache._debugPrintCache()
 
 logging.info("Ending simulation run at generation %s", simu.population(0).dvars().gen)
 

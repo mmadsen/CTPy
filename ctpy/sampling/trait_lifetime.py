@@ -19,6 +19,8 @@ import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
+import pprint as pp
+from collections import defaultdict
 
 
 def _get_dataobj_id():
@@ -29,28 +31,43 @@ def _get_dataobj_id():
 
 
 
+
+
+
+
+
+
+
 class TraitLifetimeCache:
     """
     Caches the starting generation of each newly mutated allele.  Constructor takes as
      argument the number of loci and initial alleles, since these begin their lifetime at gen 0.
     """
     def __init__(self, numloci, numalleles):
-        cache = {}
+        self.cache = defaultdict(lambda: defaultdict(int))
         for locus in range(numloci):
-            cache[locus] = {}
             for n in range(numalleles):
-                cache[locus][n] = 0
+                self.cache[locus][n] = 0
 
-    def cacheNewAllele(self, pop, locus, ):
+    def cacheNewAllele(self, allele, locus, gen):
         """Given a simuPOP population, checks for newly mutated alleles and records
             the generation of their first occurrence.  Intended to be used as a
             PyOperator in postOps for evolve()
         """
 
+        self.cache[locus][allele] = gen
         return True
 
+    def _debugPrintCache(self):
+        pp.pprint(self.cache)
 
-
+    def allele_lifetime_tracker(self,mutants):
+        for line in mutants.split('\n'):
+            if not line:  # handles trailing \n case
+                continue
+            (gen,loc,ploidy,a1,a2) = line.split('\t')
+            #logging.debug("cacheNewAllele called for locus %s:  %s -> %s in gen %s", loc, a1, a2, gen)
+            self.cacheNewAllele(a2,loc,gen)
 
 class TraitLifetimeRecord(Document):
 

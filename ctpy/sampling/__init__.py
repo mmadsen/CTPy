@@ -14,6 +14,8 @@ from richness_sample import sampleNumAlleles
 from trait_count_sample import sampleTraitCounts
 from individual_sample import sampleIndividuals
 from simulation_data import storeSimulationData
+from trait_lifetime import TraitLifetimeCache
+
 
 
 # When a new module is added for sampling, the module's filename should be added to the module list below,
