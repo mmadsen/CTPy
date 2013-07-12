@@ -98,7 +98,7 @@ if not pars.getParam():
     sys.exit(1)
 
 
-trackingMutator = innov.KAlleleLifetimeTrackingMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL)
+
 
 
 logging.info("Beginning simulation run: %s", sim_id)
@@ -118,8 +118,8 @@ sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesi
 initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
 logging.info("Initial allelic distribution: %s", initial_distribution)
 
-lifetime_cache = sampling.TraitLifetimeCache(pars.numloci,pars.numalleles)
-lifetime_cache._debugPrintCache()
+lifetime_cache = sampling.TraitLifetimeCacheIAModels(pars.replications,pars.numloci,pars.numalleles)
+
 
 
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
@@ -131,18 +131,17 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL,output=lifetime_cache.allele_lifetime_tracker),
-		#sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
+	postOps = [sim.KAlleleMutator(k=100000000,rates=pars.mutationrate, loci=sim.ALL_AVAIL,output=lifetime_cache.allele_origin_tracker),
 		#sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
-        sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
+        #sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        #sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        #sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
+        sim.PyOperator(func=lifetime_cache.allele_demise_tracker, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id, pars.numloci), step=1),
         #sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = totalSimulationLength,
 )
 
-lifetime_cache._debugPrintCache()
 
 logging.info("Ending simulation run at generation %s", simu.population(0).dvars().gen)
 

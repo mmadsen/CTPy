@@ -14,7 +14,7 @@ from richness_sample import sampleNumAlleles
 from trait_count_sample import sampleTraitCounts
 from individual_sample import sampleIndividuals
 from simulation_data import storeSimulationData
-from trait_lifetime import TraitLifetimeCache
+from trait_lifetime import TraitLifetimeCacheIAModels
 
 
 
@@ -24,7 +24,7 @@ from trait_lifetime import TraitLifetimeCache
 # of the data object being stored.  Ming configuration is then automatic so that simulation scripts need
 # include only two lines which are fully generic.
 
-modules = [individual_sample, trait_count_sample, richness_sample, simulation_data]
+modules = [individual_sample, trait_count_sample, richness_sample, simulation_data, trait_lifetime]
 
 
 def getMingConfiguration():
