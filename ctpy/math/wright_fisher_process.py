@@ -14,6 +14,8 @@
 
 """
 
+import math
+
 
 def expectedIAQuasiStationarityTimeHaploid(popsize,mutationrate):
     """Returns the expected time in generations for an infinite-alleles WF process to reach quasi-stationarity, as defined
@@ -40,7 +42,6 @@ def expectedIAQuasiStationarityTimeHaploid(popsize,mutationrate):
     theta = 2.0 * popsize * mutationrate
     time = (9.2 * popsize) / (theta + 1.0) # this is conservative given the original constant is for the diploid process
 
-
-    return int(round(time))
+    return int(math.ceil(time / 1000.0)) * 1000
 
 

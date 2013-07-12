@@ -127,12 +127,10 @@ simu.evolve(
     ],
 	matingScheme = sim.RandomSelection(),
 	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
-		#sim.Stat(alleleFreq=0, step=pars.stepsize,begin=beginCollectingData),
-		#sim.PyEval(r"'%d, ' % gen", step=pars.stepsize,begin=beginCollectingData,reps=0),
         sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=sampling.censusTraitCounts, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
-        #sim.PyOutput('\n', reps=-1, step = pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = totalSimulationLength,
 )
