@@ -5,5 +5,3 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
-
-__author__ = 'mark'

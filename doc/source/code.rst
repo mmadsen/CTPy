@@ -1,6 +1,16 @@
 CTPy Module Reference
 *********************
 
+coarsegraining
+==============
+
+classification_data
+-------------------
+
+.. automodule:: ctpy.coarsegraining.classification_data
+    :members:
+
+
 math
 ====
 
@@ -26,10 +36,22 @@ individual_sample
 .. automodule:: ctpy.sampling.individual_sample
     :members:
 
+individual_sample_classified
+----------------------------
+
+.. automodule:: ctpy.sampling.individual_sample_classified
+    :members:
+
 richness_sample
 ---------------
 
 .. automodule:: ctpy.sampling.richness_sample
+    :members:
+
+richness_population
+-------------------
+
+.. automodule:: ctpy.sampling.richness_population
     :members:
 
 simulation_data
@@ -42,6 +64,19 @@ trait_count_sample
 ------------------
 
 .. automodule:: ctpy.sampling.trait_count_sample
+    :members:
+
+trait_count_population
+----------------------
+
+.. automodule:: ctpy.sampling.trait_count_population
+    :members:
+
+
+trait_lifetime
+--------------
+
+.. automodule:: ctpy.sampling.trait_lifetime
     :members:
 
 strategies

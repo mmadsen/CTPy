@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from ctpy import sampling
+from ctpy import data
 
 class SamplingTest(unittest.TestCase):
 

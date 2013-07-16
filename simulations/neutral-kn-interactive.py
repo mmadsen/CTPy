@@ -7,7 +7,7 @@ import simuOpt, sys
 simuOpt.setOptions(alleleType='long',optimized=False,quiet=True)
 import simuPOP as sim
 import uuid
-import ctpy.sampling as sampling
+import ctpy.data as data
 import ctpy.utils as utils
 import ctpy.math as cpm
 import ming
@@ -23,7 +23,7 @@ population, and counts the number of alleles present in the population and in sa
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
-config = sampling.getMingConfiguration()
+config = data.getMingConfiguration()
 ming.configure(**config)
 
 sim_id = uuid.uuid4().urn
@@ -84,6 +84,13 @@ options = [
         'label' : 'Number of initial alleles in population',
         'type' : 'integer',
         'validator' : 'numalleles > 0'
+    },
+    {
+        'name' : 'maxalleles',
+        'default' : 1000000000,
+        'label' : 'Maximum number of alleles',
+        'type' : 'integer',
+        'validator' : 'numalleles > 0'
     }
 
 ]
@@ -112,7 +119,7 @@ logging.info("Simulation will sample %s generations after stationarity", pars.le
 
 
 
-sampling.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles)
+data.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles,pars.maxalleles)
 
 initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
 logging.info("Initial allelic distribution: %s", initial_distribution)
@@ -126,11 +133,12 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=100000000, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
-        sim.PyOperator(func=sampling.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOperator(func=sampling.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOperator(func=sampling.censusTraitCounts, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
-        sim.PyOperator(func=sampling.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
+	postOps = [sim.KAlleleMutator(k=pars.maxalleles, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
+        sim.PyOperator(func=data.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=data.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=data.censusTraitCounts, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=data.censusNumAlleles, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
+        sim.PyOperator(func=data.sampleIndividuals, param=(pars.samplesize, pars.mutationrate, pars.popsize, sim_id), step=pars.stepsize, begin=beginCollectingData),
 		],	
 	gen = totalSimulationLength,
 )

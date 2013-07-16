@@ -16,16 +16,18 @@ from individual_sample import sampleIndividuals
 from simulation_data import storeSimulationData
 from trait_lifetime import TraitLifetimeCacheIAModels
 from trait_count_population import censusTraitCounts
+from richness_population import censusNumAlleles
+from individual_sample_classified import storeIndividualSampleClassified
 
 
 
-# When a new module is added for sampling, the module's filename should be added to the module list below,
+# When a new module is added for data, the module's filename should be added to the module list below,
 # and the module must support a _get_dataobj_id() method which returns the string used in the Ming ORM
 # configuration for MongoDB.  This is defined in each module, and then used in the declarative definition
 # of the data object being stored.  Ming configuration is then automatic so that simulation simulations need
 # include only two lines which are fully generic.
 
-modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, simulation_data, trait_lifetime]
+modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population, simulation_data, trait_lifetime, individual_sample_classified]
 
 
 def getMingConfiguration():

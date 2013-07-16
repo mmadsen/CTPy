@@ -7,7 +7,7 @@ import simuOpt, sys
 simuOpt.setOptions(alleleType='long',optimized=False,quiet=True)
 import simuPOP as sim
 import uuid
-import ctpy.sampling as sampling
+import ctpy.data as data
 import ctpy.utils as utils
 import ctpy.math as cpm
 import ming
@@ -25,7 +25,7 @@ This process is performed for each combination of key model parameters, and the 
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
-config = sampling.getMingConfiguration()
+config = data.getMingConfiguration()
 ming.configure(**config)
 
 sim_id = uuid.uuid4().urn
@@ -55,6 +55,7 @@ sim_length = 10000
 numloci = 3
 gen_logging_interval = sim_length / 5
 numalleles = 10
+maxalleles = 1000000000
 
 
 
@@ -70,8 +71,8 @@ for param_combination in itertools.product(*state_space):
     ssize = param_combination[1]
     popsize = param_combination[2]
 
-    sampling.storeSimulationData(
-        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__,numalleles)
+    data.storeSimulationData(
+        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__,numalleles,maxalleles)
 
     time_start_stats = cpm.expectedIAQuasiStationarityTimeHaploid(popsize,mut)
     logging.info("...Starting data collection at generation: %s", time_start_stats)
@@ -88,11 +89,12 @@ for param_combination in itertools.product(*state_space):
             sim.PyOperator(func=utils.logGenerationCount, param=(), step=gen_logging_interval, reps=0),
         ],
         matingScheme = sim.RandomSelection(),
-        postOps = [sim.KAlleleMutator(k=100000000, rates=mut),
-                sim.Stat(alleleFreq=0, step=sampling_interval,begin=time_start_stats),
-                sim.PyOperator(func=sampling.sampleNumAlleles, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
-                sim.PyOperator(func=sampling.sampleTraitCounts, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
-                sim.PyOperator(func=sampling.sampleIndividuals, param=(ssize, mut, popsize, sim_id), step=sampling_interval, begin=time_start_stats),
+        postOps = [sim.KAlleleMutator(k=maxalleles, rates=mut),
+                    sim.PyOperator(func=data.sampleNumAlleles, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.sampleTraitCounts, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.censusTraitCounts, param=(mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.censusNumAlleles, param=(mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.sampleIndividuals, param=(ssize, mut, popsize, sim_id), step=sampling_interval, begin=time_start_stats),
                ],
         gen = totalSimulationLength,
     )

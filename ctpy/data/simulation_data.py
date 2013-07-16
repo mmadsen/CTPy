@@ -29,7 +29,7 @@ def _get_dataobj_id():
 
 
 
-def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script,numalleles):
+def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script,numalleles,maxalleles):
     """Stores the parameters and metadata for a simulation run in the database.
 
         Args:
@@ -63,7 +63,8 @@ def storeSimulationData(popsize,mutation,sim_id,ssize,replicates,num_loci,script
         sample_size=ssize,
         num_loci=num_loci,
         script_filename=script,
-        num_initial_alleles=numalleles
+        num_initial_alleles=numalleles,
+        max_alleles=maxalleles
     )).m.insert()
     return True
 
@@ -86,4 +87,5 @@ class SimulationRun(Document):
     mutation_rate = Field(float)
     simulation_run_id = Field(str)
     num_initial_alleles = Field(int)
+    max_alleles = Field(int)
 
