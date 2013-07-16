@@ -29,10 +29,10 @@ def _get_dataobj_id():
 
 
 
-def storeIndividualSampleClassified(popID, ssize, generation, mutation, popsize, sim_id, sample_list):
+def storeIndividualSampleClassified(generation, replication, ssize, popsize, mutation, sim_id, sample_list):
     IndividualSampleClassified(dict(
         simulation_time=generation,
-        replication=popID,
+        replication=replication,
         sample_size=ssize,
         population_size=popsize,
         mutation_rate=mutation,

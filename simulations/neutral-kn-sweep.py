@@ -36,9 +36,9 @@ sim_id = uuid.uuid4().urn
 # samplesizes = [10,20,30,50,75,100,250,500]
 # populationsizes = [500,1000,2000,5000,10000,25000,50000]
 
-mutationrates = [0.0001,0.00075,0.001,0.01]
-samplesizes = [10,50,250]
-populationsizes = [500,1000,2000,5000,10000]
+mutationrates = [0.00075,0.001,0.01]
+samplesizes = [10,50,100]
+populationsizes = [500,1000,2000,5000]
 
 
 state_space = [
@@ -49,9 +49,9 @@ state_space = [
 
 
 # other parameters
-replications_per_paramset = 10
+replications_per_paramset = 5
 sampling_interval = 100
-sim_length = 10000
+sim_length = 5000
 numloci = 3
 gen_logging_interval = sim_length / 5
 numalleles = 10

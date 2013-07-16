@@ -16,8 +16,7 @@
 import logging
 from ming import Session, Field, schema
 from ming.declarative import Document
-import simuPOP as sim
-from simuPOP.sampling import drawRandomSample
+
 
 __author__ = 'mark'
 

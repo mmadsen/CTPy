@@ -12,8 +12,8 @@ import logging
 
 from richness_sample import sampleNumAlleles
 from trait_count_sample import sampleTraitCounts
-from individual_sample import sampleIndividuals
-from simulation_data import storeSimulationData
+from individual_sample import sampleIndividuals, IndividualSample
+from simulation_data import storeSimulationData, SimulationRun
 from trait_lifetime import TraitLifetimeCacheIAModels
 from trait_count_population import censusTraitCounts
 from richness_population import censusNumAlleles
