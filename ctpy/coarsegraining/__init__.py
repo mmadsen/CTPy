@@ -5,3 +5,4 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
+import dimension_mode_builder as dmb

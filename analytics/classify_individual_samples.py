@@ -45,32 +45,38 @@ def identify_genotype_to_class(genotype, sim_param):
 
 
 
+# This function is temporary - will be factored out into a set of objects which produce
+# the mode boundaries for a given classification.  So that the main script can just get a list
+# of classifications to use, and then use all of this logic as-is, perhaps in parallel.
 
+# TODO:  Module which produces random mode boundaries from TF, given a specific number of modes
+# TODO:  Module which produces even mode boundaries, given a specific number of modes
+# TODO:  Modules should use unit interval partitions, and then chop maxalleles with it.
 
+def map_partition_to_boundaries(maxalleles,numdimensions):
+    dimensions = {}
+
+    # to start, we partition into quarters for each locus (dimension)
+    num_modes = 4
+    mode_width = maxalleles / 4.0
+
+    for dimension in range(0, numdimensions):
+        mode_boundaries_dict = {}
+        lower_val = 0.0
+        upper_val = 0.0
+        for mode in range(0,num_modes):
+            upper_val += mode_width
+            mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
+            lower_val = upper_val
+            dimensions[dimension] = mode_boundaries_dict
+    return dimensions
 
 
 
 
 def construct_dimension_boundaries(sim_id, sim_param):
     if sim_id not in simrun_dimension_cache:
-        # to start, we partition into quarters for each locus (dimension)
-        num_modes = 4
-        mode_width = sim_param["maxalleles"] / 4.0
-        numloci = sim_param["numloci"]
-
-        simrun_dimensions = {}
-
-        for dimension in range(0, numloci):
-            mode_boundaries_dict = {}
-            lower_val = 0.0
-            upper_val = 0.0
-            for mode in range(0,num_modes):
-                upper_val += mode_width
-                mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
-                lower_val = upper_val
-            simrun_dimensions[dimension] = mode_boundaries_dict
-
-        simrun_dimension_cache[sim_id] = simrun_dimensions
+        simrun_dimension_cache[sim_id] = map_partition_to_boundaries(sim_param["maxalleles"], sim_param["numloci"])
 
 def lookup_sim_run_parameters(sim_id):
     sim_param = dict()
@@ -122,6 +128,11 @@ pp.pprint(simrun_dimension_cache)
 
 
 
+cg.dmb.build_random_partitions_all_dimensions(6,sim_param)
 
+
+
+
+# TODO:  Are classifications data in the database, or code modules with names we refer to?
 
 
