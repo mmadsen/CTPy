@@ -15,7 +15,7 @@
 
 """
 
-import logging
+import logging as log
 
 
 def logGenerationCount(pop, param):
@@ -32,6 +32,6 @@ def logGenerationCount(pop, param):
     """
 
         gen = pop.dvars().gen
-        logging.info("Generation: %s", gen)
+        log.info("Generation: %s", gen)
         return True
 

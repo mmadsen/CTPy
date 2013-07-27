@@ -5,7 +5,7 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
-import logging
+import logging as log
 import simuPOP as sim
 
 
@@ -24,7 +24,7 @@ class KAlleleLifetimeTrackingMutator(sim.PyOperator):
     def mutate(self, pop):
         gen = pop.dvars().gen
         new_allele = sim.kAlleleMutate(pop,self.k, self.rates, self.loci)
-        #logging.debug("new allele: %s in gen: %s", new_allele, gen)
+        #log.debug("new allele: %s in gen: %s", new_allele, gen)
 
         # cache the new mutation and the generation
         return True

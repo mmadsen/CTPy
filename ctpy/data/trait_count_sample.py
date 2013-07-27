@@ -6,7 +6,7 @@
 .. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
 
 """
-import logging
+import logging as log
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
@@ -19,6 +19,13 @@ def _get_dataobj_id():
         Returns the short handle used for this data object in Ming configuration
     """
     return 'traitcounts'
+
+def _get_collection_id():
+    """
+    :return: returns the collection name for this data object
+    """
+    return 'ctpy_sim_rawdata'
+
 
 def sampleTraitCounts(pop, param):
     """Samples trait counts for all loci in a replicant population, and stores the counts  in the database.

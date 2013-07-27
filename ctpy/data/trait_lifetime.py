@@ -15,7 +15,7 @@ Trait (allele) lifetimes
 
 """
 
-import logging
+import logging as log
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
@@ -30,6 +30,11 @@ def _get_dataobj_id():
     return 'traitlifetime'
 
 
+def _get_collection_id():
+    """
+    :return: returns the collection name for this data object
+    """
+    return 'ctpy_sim_rawdata'
 
 
 
@@ -75,7 +80,7 @@ class TraitLifetimeCacheIAModels:
             if not line:  # handles trailing \n case
                 continue
             (gen,loc,ploidy,a1,a2) = line.split('\t')
-            #logging.debug("cacheNewAllele called for locus %s:  %s -> %s in gen %s", loc, a1, a2, gen)
+            #log.debug("cacheNewAllele called for locus %s:  %s -> %s in gen %s", loc, a1, a2, gen)
             self._cacheNewAllele(0,int(a2),int(loc),int(gen))
             #pp.pprint(self.origin_cache)
 
@@ -117,7 +122,7 @@ class TraitLifetimeCacheIAModels:
 
             for allele in alleles_in_use:
                 if allele in freq.keys():
-                    #logging.debug("allele %s still in population at freq %s", allele, freq[allele])
+                    #log.debug("allele %s still in population at freq %s", allele, freq[allele])
                     pass
                 else:
                     lifetime = self._getLifetimeForExitedAllele(rep,allele,locus,cur_gen)
@@ -130,7 +135,7 @@ class TraitLifetimeCacheIAModels:
     def _getLifetimeForExitedAllele(self, rep, allele, locus, gen):
         origin_gen = self.origin_cache[rep][locus][allele]
         lifetime = gen - origin_gen
-        #logging.debug("gen: %s locus %s: allele %s lifetime: %s", gen, locus, allele, lifetime)
+        #log.debug("gen: %s locus %s: allele %s lifetime: %s", gen, locus, allele, lifetime)
         del self.origin_cache[rep][locus][allele]
         return lifetime
 

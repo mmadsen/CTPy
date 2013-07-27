@@ -10,8 +10,9 @@ import uuid
 import ctpy.data as data
 import ctpy.utils as utils
 import ctpy.math as cpm
+import ctpy
 import ming
-import logging
+import logging as log
 import pprint as pp
 
 
@@ -21,7 +22,7 @@ population, and counts the number of alleles present in the population and in sa
 """
 
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 config = data.getMingConfiguration()
 ming.configure(**config)
@@ -84,15 +85,7 @@ options = [
         'label' : 'Number of initial alleles in population',
         'type' : 'integer',
         'validator' : 'numalleles > 0'
-    },
-    {
-        'name' : 'maxalleles',
-        'default' : 1000000000,
-        'label' : 'Maximum number of alleles',
-        'type' : 'integer',
-        'validator' : 'numalleles > 0'
     }
-
 ]
 
 
@@ -107,22 +100,22 @@ if not pars.getParam():
 
 
 
-logging.info("Beginning simulation run: %s", sim_id)
+log.info("Beginning simulation run: %s", sim_id)
 
 
 beginCollectingData = cpm.expectedIAQuasiStationarityTimeHaploid(pars.popsize,pars.mutationrate)
-logging.info("Starting data collection at generation: %s", beginCollectingData)
+log.info("Starting data collection at generation: %s", beginCollectingData)
 
 totalSimulationLength = beginCollectingData + pars.length
-logging.info("Simulation will sample %s generations after stationarity", pars.length)
+log.info("Simulation will sample %s generations after stationarity", pars.length)
 
 
 
 
-data.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles,pars.maxalleles)
+data.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles,ctpy.MAXALLELES)
 
 initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
-logging.info("Initial allelic distribution: %s", initial_distribution)
+log.info("Initial allelic distribution: %s", initial_distribution)
 
 pop = sim.Population(size=pars.popsize, ploidy=1, loci=pars.numloci)
 simu = sim.Simulator(pop, rep=pars.replications)
@@ -133,7 +126,7 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=pars.maxalleles, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
+	postOps = [sim.KAlleleMutator(k=ctpy.MAXALLELES, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
         sim.PyOperator(func=data.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=data.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=data.censusTraitCounts, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
@@ -143,7 +136,7 @@ simu.evolve(
 	gen = totalSimulationLength,
 )
 
-logging.info("Ending simulation run at generation %s", simu.population(0).dvars().gen)
+log.info("Ending simulation run at generation %s", simu.population(0).dvars().gen)
 
 
 

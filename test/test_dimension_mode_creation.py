@@ -9,7 +9,7 @@
 import unittest
 import ctpy.coarsegraining as cg
 import pprint as pp
-import logging
+import logging as log
 
 class DimensionModeCreationTest(unittest.TestCase):
 

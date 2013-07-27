@@ -22,14 +22,64 @@
 
 import random
 import pprint as pp
-import logging
+import logging as log
+import ctpy
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
+
+
+
+def build_even_dimension(num_modes):
+    mode_boundaries = []
+    mode_width = float(ctpy.MAXALLELES) / float(num_modes)
+    lower_val = 0.0
+    upper_val = 0.0
+    for mode in range(0, num_modes):
+        upper_val += mode_width
+        mode_boundaries.append(dict(lower=lower_val, upper=upper_val))
+        lower_val = upper_val
+    log.debug("boundaries: %s", mode_boundaries)
+    return mode_boundaries
+
+
+def build_random_dimension(num_modes):
+    iboundaries = []
+    mode_boundaries = []
+    num_internal_boundaries = num_modes - 1
+    for i in range(0, num_internal_boundaries):
+        random_variate = random.random()
+        iboundaries.append(random_variate)
+
+    # add the final upper boundary
+    iboundaries.append(1.0)
+
+    lower_val = 0.0
+    upper_val = 0.0
+    iboundaries.sort()
+
+    for mode in range(0, num_modes):
+        lower_val = lower_val * ctpy.MAXALLELES
+        upper_val = iboundaries[mode] * ctpy.MAXALLELES
+        mode_boundaries.append(dict(lower=lower_val, upper=upper_val))
+        lower_val = iboundaries[mode]
+
+    log.debug("boundaries: %s", mode_boundaries)
+    return mode_boundaries
+
+
 
 # TODO:  needs to deal with cases where maxalleles % num_modes leaves a remainder...
 
 
 def build_even_partitions_all_dimensions(num_modes, sim_param):
+    """
+
+
+    :param num_modes:
+    :param sim_param:
+    :return:
+    """
     dimensions = {}
 
     # to start, we partition into quarters for each locus (dimension)

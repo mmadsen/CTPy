@@ -22,6 +22,11 @@ simrun_param_cache = dict()
 simrun_dimension_cache = dict()
 
 
+num_modes_list = [2,4,8,16]
+
+
+
+
 def identify_genotype_to_class(genotype, sim_param):
     sim_id = sim_param["simid"]
     numloci = sim_param["numloci"]
@@ -52,6 +57,13 @@ def identify_genotype_to_class(genotype, sim_param):
 # TODO:  Module which produces random mode boundaries from TF, given a specific number of modes
 # TODO:  Module which produces even mode boundaries, given a specific number of modes
 # TODO:  Modules should use unit interval partitions, and then chop maxalleles with it.
+
+
+
+# going to construct mode boundaries for each sim_id and num_modes combo, that's the simplest way to go.
+# but it would be nice to have a classification which didn't refer to the sim_id and was generic, for
+# analytic purposes....
+
 
 
 

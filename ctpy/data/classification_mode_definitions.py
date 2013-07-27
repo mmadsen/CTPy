@@ -6,7 +6,7 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 """
-.. module:: classification_data
+.. module:: classification_mode_definitions
     :platform: Unix, Windows
     :synopsis: Data object for storing metadata and parameter about a classification in MongoDB, via the Ming ORM.
 
@@ -18,14 +18,15 @@ from ming import Session, Field, schema
 from ming.declarative import Document
 
 
-__author__ = 'mark'
+MODETYPE_EVEN = "EVEN"
+MODETYPE_RANDOM = "RANDOM"
+
 
 def _get_dataobj_id():
     """
         Returns the short handle used for this data object in Ming configuration
     """
-    return 'classifications'
-
+    return 'classification_modes'
 
 def _get_collection_id():
     """
@@ -34,7 +35,8 @@ def _get_collection_id():
     return 'ctpy_configuration'
 
 
-def storeClassificationData(modetype, maxalleles, num_loci, modemap):
+
+def storeClassificationModeDefinition(modetype, maxalleles, nummodes, boundary_map):
     """Stores the parameters and metadata for a simulation run in the database.
 
         Args:
@@ -43,38 +45,41 @@ def storeClassificationData(modetype, maxalleles, num_loci, modemap):
 
             maxalleles (int):  max alleles allowed, fixed for classification and a sim run
 
-            num_loci (int):  number of dimensions or loci in the classification and sim runs
+            nummodes (int):  number of modes in this partition
 
-            modemap (dict): a dicts, with dimension indices as keys, and a reference to a mode as value
+            partition (list):  a list of dicts which give upper and lower mode boundaries
 
         Returns:
 
             Boolean true:  all PyOperators need to return true.
 
     """
-    ClassificationData(dict(
+    ClassificationModeDefinitions(dict(
+        mode_type=modetype,
         maxalleles=maxalleles,
-        dimensions=num_loci,
-        modes_for_dimensions=modemap,
+        num_modes=nummodes,
+        boundary_map=boundary_map,
     )).m.insert()
     return True
 
 
 
 
-
-class ClassificationData(Document):
+class ClassificationModeDefinitions(Document):
     """
-    A classification is represented by a dict of dimensions, each of which points to a mode definition
+    A classification dimension is defined by a set of modes which partition the
+    space of the dimension.
 
     """
     class __mongometa__:
         session = Session.by_name(_get_dataobj_id())
-        name = 'classifications'
-
-    _id = Field(schema.ObjectId)
-    maxalleles = Field(int) # a given classification is relative to maxalleles
-    dimensions = Field(int) # i.e., numloci
-    modes_for_dimensions = Field( dict(dim=int, mode_id=str))
+        name = 'classification_modes'
+        _id = Field(schema.ObjectId)
+        mode_type = Field(str)
+        maxalleles = Field(int)
+        num_modes = Field(int)
+        boundary_map = Field([
+            dict(lower=float, upper=float)
+        ])
 
 

@@ -13,7 +13,7 @@
 
 """
 
-import logging
+import logging as log
 from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
@@ -27,10 +27,18 @@ def _get_dataobj_id():
     return 'individuals_classified'
 
 
+def _get_collection_id():
+    """
+    :return: returns the collection name for this data object
+    """
+    return 'ctpy_sim_classified'
 
 
-def storeIndividualSampleClassified(generation, replication, ssize, popsize, mutation, sim_id, sample_list):
+
+
+def storeIndividualSampleClassified(generation, classification_id, replication, ssize, popsize, mutation, sim_id, sample_list):
     IndividualSampleClassified(dict(
+        classification_id=classification_id,
         simulation_time=generation,
         replication=replication,
         sample_size=ssize,
@@ -50,6 +58,7 @@ class IndividualSampleClassified(Document):
         session = Session.by_name(_get_dataobj_id())
         name = 'individual_samples_classified'
         _id = Field(schema.ObjectId)
+        classification_id = Field(str)
         simulation_time = Field(int)
         replication = Field(int)
         sample_size = Field(int)

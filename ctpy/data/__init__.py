@@ -5,7 +5,7 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 
-import logging
+import logging as log
 
 
 
@@ -18,6 +18,8 @@ from trait_lifetime import TraitLifetimeCacheIAModels
 from trait_count_population import censusTraitCounts
 from richness_population import censusNumAlleles
 from individual_sample_classified import storeIndividualSampleClassified
+from classification_data import storeClassificationData
+from classification_mode_definitions import storeClassificationModeDefinition
 
 
 
@@ -27,19 +29,21 @@ from individual_sample_classified import storeIndividualSampleClassified
 # of the data object being stored.  Ming configuration is then automatic so that simulation simulations need
 # include only two lines which are fully generic.
 
-modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population, simulation_data, trait_lifetime, individual_sample_classified]
+modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population, simulation_data, trait_lifetime, classification_data, classification_mode_definitions, individual_sample_classified]
 
 
 def getMingConfiguration():
     config = {}
-    urlstring = 'mongodb://localhost:27017/sim_raw_samples'
     for module in modules:
+        urlstring = 'mongodb://localhost:27017/'
         key = ''
         key += 'ming.'
         key += module._get_dataobj_id()
         key += '.uri'
+        collection = module._get_collection_id()
+        urlstring += collection
+        log.debug("Configuring %s module as %s", module, urlstring)
         config[key] = urlstring
-    logging.debug(config)
     return config
 
 __author__ = 'mark'
