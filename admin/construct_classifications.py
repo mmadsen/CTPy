@@ -13,6 +13,8 @@ The initialization first constructs a series of EVEN dimension/mode definitions 
 variety of numbers of modes.
 
 Second, the script constructs a set of random dimension/mode definitions, for each value of num_modes.
+
+Third, we construct
 """
 
 import logging as log

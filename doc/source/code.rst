@@ -1,13 +1,19 @@
 CTPy Module Reference
 *********************
 
+ctpy
+====
+
+.. automodule:: ctpy
+    :members:
+
 coarsegraining
 ==============
 
-classification_data
--------------------
+dimension_mode_builder
+----------------------
 
-.. automodule:: ctpy.coarsegraining.classification_data
+.. automodule:: ctpy.cg.dimension_mode_builder
     :members:
 
 
@@ -24,10 +30,29 @@ wright_fisher_process
    :members:
 
 
+simulation_calculations
+-----------------------
+
+.. automodule:: ctpy.math.simulation_calculations
+    :members:
+
+
 sampling
 ========
 
 .. automodule:: ctpy.sampling
+    :members:
+
+classification_data
+-------------------
+
+.. automodule:: ctpy.sampling.classification_data
+    :members:
+
+classification_mode_definitions
+-------------------------------
+
+.. automodule:: ctpy.sampling.classification_mode_definitions
     :members:
 
 individual_sample
