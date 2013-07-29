@@ -137,6 +137,16 @@ def compute_total_number_samples_simple_models():
     return ctpy.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH * compute_total_sample_paths_ssize_dim_class_taduration()
 
 
+def compute_total_number_samples_notimeavg_simple_models():
+    """
+    For analyses with just raw samples, and no time averaging, this is the number of "samples"
+    (sets of observations at a given level of ssize, dim, class, simparams, replicated N times).
+    :return: number of sets of distinct observations including replication at each "combination" of treatments, without any time averaging
+    """
+    return compute_total_replicates_ssize_dimensionality_classifications() * ctpy.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH
+
+
+
 ################# metapopulation models #####################
 
 
@@ -188,4 +198,23 @@ def compute_total_simulation_replicates_metapopulation():
     """
     return compute_total_simulation_runs_metapopulation() * ctpy.REPLICATIONS_PER_PARAM_SET
 
+def compute_replicates_ssize_dimensionality_metapop():
+    """
 
+    :return:
+    """
+    return compute_total_simulation_replicates_metapopulation() * len(ctpy.SAMPLE_SIZES_STUDIED) * len(ctpy.DIMENSIONS_STUDIED)
+
+def compute_replicates_ssize_dim_classified_metapop():
+    """
+
+    :return:
+    """
+    return compute_replicates_ssize_dimensionality_metapop() * compute_total_classifications()
+
+def compute_replicates_ssize_dim_classified_timeaveraged():
+    """
+
+    :return:
+    """
+    return compute_replicates_ssize_dim_classified_metapop() * len(ctpy.TIME_AVERAGING_DURATIONS_STUDIED)

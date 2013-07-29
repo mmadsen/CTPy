@@ -17,11 +17,13 @@ log.info("Number of sim replications: %s", sc.compute_total_simulation_replicate
 log.info("Number of replications (repl x ssize x simparam): %s", sc.compute_total_sample_size_replicates_simple())
 log.info("Number of replications (repl x dimensionality x ssize x simparam): %s", sc.compute_total_replicates_ssize_dimensionality())
 log.info("Total number of classifications: %s", sc.compute_total_classifications())
-log.info("Total sample paths (repl x dimensionality x ssize x classification x simparams): %s",sc.compute_total_replicates_ssize_dimensionality_classifications())
-log.info("Total sample paths (repl x dim x ssize x class x simparams x taduration): %s", sc.compute_total_sample_paths_ssize_dim_class_taduration())
+log.info("Total sample paths (repl x dimensionality x ssize x classification x simparams): %s","{:,}".format(sc.compute_total_replicates_ssize_dimensionality_classifications()))
+log.info("Total sample paths (repl x dim x ssize x class x simparams x taduration): %s", "{:,}".format(sc.compute_total_sample_paths_ssize_dim_class_taduration()))
 log.info("Number of samples per sample path per TA duration: %s", ctpy.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH)
 log.info("    ")
-log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL: %s", sc.compute_total_number_samples_simple_models() )
+log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL WITH TA: %s", "{:,}".format(sc.compute_total_number_samples_simple_models()))
+log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL NO TA: %s","{:,}".format(sc.compute_total_number_samples_notimeavg_simple_models()))
+
 log.info("======= END SINGLE POPULATION MODELS ======")
 log.info("    ")
 log.info("============= METAPOPULATION MODELS ===========")
@@ -30,6 +32,7 @@ log.info("Number of network realizations: %s", sc.compute_total_network_realizat
 log.info("Number of sim execution runs for metapopulation models: %s", sc.compute_total_simulation_runs_metapopulation())
 log.info("Number of sim replications for metapopulation models: %s", sc.compute_total_simulation_replicates_metapopulation())
 
+log.info("----ANALYSIS OF METAPOP MODELS IS INCOMPLETE---------")
 
 log.info("=========== END METAPOPULATION MODELS ===========")
 
