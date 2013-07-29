@@ -16,6 +16,7 @@
 
 import ctpy
 
+########## Common Values #############
 
 def compute_sim_param_combinations():
     """
@@ -31,6 +32,112 @@ def compute_sim_param_combinations():
     innov_param = len(ctpy.INNOVATION_RATES_STUDIED)
     pop_param = len(ctpy.POPULATION_SIZES_STUDIED)
     return innov_param * pop_param
+
+
+
+######### Classification Combinations #############
+
+def compute_even_dimension_classifications():
+    """
+    For each dimensionality, we will have one classification per level of mode
+    partitioning (i.e., a classification which chops dimensions into 2 modes, one
+    which chops dimensions into 4 modes, etc).
+    TODO:  We might also want classifications which are even, but different levels of partitioning for different dimensions...?
+    :return: number of classifications with even dimensions
+    """
+    return len(ctpy.DIMENSION_PARTITIONS)
+
+def compute_random_dimension_classifications():
+    """
+    For each dimensionality, we have R classifications per level of mode partitioning M.  For each
+    of the R classifications, the M modes have random boundaries chosen uniformly.
+    TODO:  We might want classifications which have different levels of M per dimension, but random mode boundaries....?
+    :return: number of classifications with M mode partitions, given R randomly generated partitions per value of M
+    """
+    return ctpy.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES * len(ctpy.DIMENSION_PARTITIONS)
+
+def compute_total_classifications():
+    """
+    Since dimensionality is a property of subsampling the simulation output into separate
+    data samples, any given data sample stream has a specific dimensionality (and other
+    configuration parameters).  We want, then, to identify the sample stream through each
+    of the even and random classifications we pre-define.
+    :return: number of total even and random classifications
+    """
+    return compute_even_dimension_classifications() + compute_random_dimension_classifications()
+
+
+
+######### Single Population Models (Simple Models) ############
+
+def compute_total_simulation_runs_simple():
+    """
+    For single population models, the number of simulation runs is just the number
+    of simulation parameter combinations, so this is a pass through.
+    :return: number of simulation runs for a single population model
+    """
+    return compute_sim_param_combinations()
+
+
+def compute_total_simulation_replicates_simple():
+    """
+    For single population models, the number of simulation replicates is just the number of
+    simulation parameter combinations times the number of simuPOP replicates.
+    :return: number of simulation replicates for a single population model
+    """
+    return compute_total_simulation_runs_simple() * ctpy.REPLICATIONS_PER_PARAM_SET
+
+def compute_total_sample_size_replicates_simple():
+    """
+    For each simulation replicate in each run, we're also taking a variety of sample sizes of
+    individuals for recording aggregate statistics and capturing genotypes for classification.
+    This increases the total number of sample "streams" by a factor.
+    :return: number of simulation replicates for each sample size factor
+    """
+    return compute_total_simulation_replicates_simple() * len(ctpy.SAMPLE_SIZES_STUDIED)
+
+def compute_total_replicates_ssize_dimensionality():
+    """
+    From the raw sim runs, we also study different dimensionality by subsampling.  This leads
+    to genotype and statistics which are distinct for each level of dimensionality, at each
+    sample size, FOR each combination of simulation parameters, by the number of replicates at
+    each sim param combination...
+
+    :return: number of replicates at each dimensionality and sample size and param combo, given replication level
+    """
+    return compute_total_sample_size_replicates_simple() * len(ctpy.DIMENSIONS_STUDIED)
+
+
+def compute_total_replicates_ssize_dimensionality_classifications():
+    """
+    If we identify every replicate (given level of dimensionality, sample size, and combination
+    of simulation parameters) with every even and random classification applicable to the given
+    level of dimensionality, we end up with this many separate data stream samples.
+    :return: number of data sample streams given classification, dimensionality, ssize, sim params
+    """
+    return compute_total_replicates_ssize_dimensionality() * compute_total_classifications()
+
+
+def compute_total_sample_paths_ssize_dim_class_taduration():
+    """
+    If we aggregate raw sample paths at a variety of durations, and classify the results in
+    addition to the raw unaggregated samples paths, this is the number of total sample paths
+    that results.
+    :return: number of data sample streams given class, dim, ssize, simparam, taduration
+    """
+    return compute_total_replicates_ssize_dimensionality_classifications() * len(ctpy.TIME_AVERAGING_DURATIONS_STUDIED)
+
+
+def compute_total_number_samples_simple_models():
+    """
+    The total number of "samples" (sets of observations at a given level of ssize, dim, class,
+    TA duration, simparams, replicated N times).
+    :return: number of sets of distinct observations including replication at each "combination" of treatments
+    """
+    return ctpy.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH * compute_total_sample_paths_ssize_dim_class_taduration()
+
+
+################# metapopulation models #####################
 
 
 def compute_network_param_combinations():
@@ -57,9 +164,11 @@ def compute_total_network_realizations():
     return compute_network_param_combinations() * ctpy.NUMBER_RANDOM_MIGRATION_MATRICES_STUDIED
 
 
-def compute_total_simulation_runs():
+
+
+def compute_total_simulation_runs_metapopulation():
     """
-    The number of simulation runs (i.e., execution runs) is the product of the number
+    Applicable to metapopulation models with networks of demes.  The number of simulation runs (i.e., execution runs) is the product of the number
     of simulation parameter combinations and the number of network realizations against
     which we want to test.  Note that each execution run can generate multiple independent
     replicates of those parameters in simuPOP, so this is NOT the number of independent data
@@ -69,13 +178,14 @@ def compute_total_simulation_runs():
     """
     return compute_sim_param_combinations() * compute_total_network_realizations()
 
-def compute_total_simulation_replicates():
+def compute_total_simulation_replicates_metapopulation():
     """
-    The number of simulation replicates is the number of simulation execution runs,
+    Applicable to metapopulation models with networks of demes.  The number of simulation replicates is the number of simulation execution runs,
     times the number of replications we ask simuPOP to do for every parameter combination
     and network realization (i.e., configuration).
 
     :return: number of total simulation replicates across all parameter and network combinations
     """
-    return compute_total_simulation_runs() * ctpy.REPLICATIONS_PER_PARAM_SET
+    return compute_total_simulation_runs_metapopulation() * ctpy.REPLICATIONS_PER_PARAM_SET
+
 

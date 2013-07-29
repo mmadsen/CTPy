@@ -26,7 +26,7 @@ When creating random dimensions for classification, we want this many random cho
 of mode boundaries for each choice of mode count (e.g., 2 modes per dimension, 3 modes...)
 """
 
-DIMENSION_PARTITIONS = [2,3,4,6,8,12,16,32]
+DIMENSION_PARTITIONS = [2,3,4,8,16,32]
 """
 Classifications with 32 modes per dimension are rare in archaeological practice
 when classes are discrete/nominal categories, but we want to see scaling of
@@ -64,6 +64,24 @@ window.  Making this a derived value from TA would be desirable.
 """
 
 
+TIME_AVERAGING_DURATIONS_STUDIED = [1000,500,250,125,63,32,16,8,1]
+"""
+We want to be able to examine the effects of temporal aggregation AND classification, in addition
+to just classification.
+"""
+
+
+NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH = 10
+"""
+Each simulation parameter combination is analyzed with different sample sizes, dimensionality,
+classifications, and levels of time averaging.  At the maximum level of TA (1000?), with 10K
+raw steps in the simulation post-stationarity, we'll end up wtih 10 samples of the coarsest duration.
+We'll want to have the same number of samples at finer durations as well, even though we could have
+1250 samples of duration 8, or 10K samples of duration 1.
+"""
+
+
+
 INITIAL_TRAIT_NUMBER = 10
 """
 This constant sets the number of initial traits to which the population is initialized at time zero.
@@ -74,7 +92,7 @@ alleles at a locus.
 """
 
 
-SAMPLING_INTERVAL = 100
+SAMPLING_INTERVAL = 1
 """
 Interval, in simulation ticks or generations, between samples of the population which are taken
 and stored in the database.  For testing and development, this is usually larger (e.g., 100).
@@ -91,7 +109,7 @@ different population and random seed.
 """
 
 
-SAMPLE_SIZES_STUDIED = [25,50,100,200,400]
+SAMPLE_SIZES_STUDIED = [25,50,100,200]
 """
 At each sampling interval, we take samples of the population and either calculate a statistic,
 or store the actual "genotype" values of sampled individuals in the database.  We want to do that
@@ -99,7 +117,7 @@ for a number of different sample sizes, to determine how the various coarse-grai
 vary by sample size AND the underlying model.
 """
 
-POPULATION_SIZES_STUDIED = [100,250,500,1000,2000]
+POPULATION_SIZES_STUDIED = [500,1000,2500,5000]
 """
 In most of the CT models we study, the absolute amount of variation we might expect to see is
 partially a function of the number of individuals doing the transmitting.  This is *total* population
