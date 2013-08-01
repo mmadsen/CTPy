@@ -66,7 +66,13 @@ def compute_total_classifications():
     """
     return compute_even_dimension_classifications() + compute_random_dimension_classifications()
 
-
+def compute_total_classifications_across_dimensionality():
+    """
+    Sometimes we want to know how many classifications there are, across all the levels of
+     dimensionality.
+    :return: number of total classifications across all dimensions
+    """
+    return compute_total_classifications() * len(ctpy.DIMENSIONS_STUDIED)
 
 ######### Single Population Models (Simple Models) ############
 

@@ -18,8 +18,8 @@ from trait_lifetime import TraitLifetimeCacheIAModels
 from trait_count_population import censusTraitCounts
 from richness_population import censusNumAlleles
 from individual_sample_classified import storeIndividualSampleClassified
-from classification_data import storeClassificationData
-from classification_mode_definitions import storeClassificationModeDefinition
+from classification_data import storeClassificationData, ClassificationData
+from classification_mode_definitions import storeClassificationModeDefinition, ClassificationModeDefinitions
 
 
 
@@ -29,7 +29,9 @@ from classification_mode_definitions import storeClassificationModeDefinition
 # of the data object being stored.  Ming configuration is then automatic so that simulation simulations need
 # include only two lines which are fully generic.
 
-modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population, simulation_data, trait_lifetime, classification_data, classification_mode_definitions, individual_sample_classified]
+modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population,
+           simulation_data, trait_lifetime, classification_data, classification_mode_definitions,
+           individual_sample_classified]
 
 
 def getMingConfiguration():

@@ -34,18 +34,18 @@ def _get_collection_id():
     return 'ctpy_configuration'
 
 
-def storeClassificationData(modetype, maxalleles, num_loci, modemap):
+def storeClassificationData(class_type, maxalleles, num_loci, dimlist):
     """Stores the parameters and metadata for a simulation run in the database.
 
         Args:
 
-            modetype (str):  EVEN or RANDOM for type of mode boundaries
+            classification_type (str):  EVEN or RANDOM for type of mode boundaries
 
             maxalleles (int):  max alleles allowed, fixed for classification and a sim run
 
             num_loci (int):  number of dimensions or loci in the classification and sim runs
 
-            modemap (dict): a dicts, with dimension indices as keys, and a reference to a mode as value
+            dimlist (list): a dicts, with dimension indices as keys, and a reference to a mode as value
 
         Returns:
 
@@ -53,9 +53,10 @@ def storeClassificationData(modetype, maxalleles, num_loci, modemap):
 
     """
     ClassificationData(dict(
+        classification_type=class_type,
         maxalleles=maxalleles,
         dimensions=num_loci,
-        modes_for_dimensions=modemap,
+        modes_for_dimensions=dimlist,
     )).m.insert()
     return True
 
@@ -73,8 +74,9 @@ class ClassificationData(Document):
         name = 'classifications'
 
     _id = Field(schema.ObjectId)
+    classification_type = Field(str)
     maxalleles = Field(int) # a given classification is relative to maxalleles
     dimensions = Field(int) # i.e., numloci
-    modes_for_dimensions = Field( dict(dim=int, mode_id=str))
+    modes_for_dimensions = Field([schema.ObjectId])
 
 
