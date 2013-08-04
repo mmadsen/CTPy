@@ -34,6 +34,7 @@ from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
+import ctpy.data
 
 def _get_dataobj_id():
     """
@@ -45,7 +46,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_sim_rawdata'
+    return ctpy.data.generate_collection_id("_samples_raw")
 
 def sampleNumAlleles(pop, param):
     """Samples allele richness for all loci in a replicant population, and stores the richness of the sample in the database.

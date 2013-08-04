@@ -19,6 +19,7 @@ from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
 import pprint as pp
+import ctpy.data
 
 def _get_dataobj_id():
     """
@@ -31,7 +32,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_sim_classified'
+    return ctpy.data.generate_collection_id("_samples_postclassification")
 
 
 

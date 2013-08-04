@@ -11,6 +11,7 @@ from ming import Session, Field, schema
 from ming.declarative import Document
 import simuPOP as sim
 from simuPOP.sampling import drawRandomSample
+import ctpy.data
 
 
 
@@ -24,7 +25,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_sim_rawdata'
+    return ctpy.data.generate_collection_id("_samples_raw")
 
 
 def censusTraitCounts(pop, param):

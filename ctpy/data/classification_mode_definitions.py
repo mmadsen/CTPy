@@ -16,7 +16,7 @@
 import logging as log
 from ming import Session, Field, schema
 from ming.declarative import Document
-
+import ctpy.data
 
 MODETYPE_EVEN = "EVEN"
 MODETYPE_RANDOM = "RANDOM"
@@ -32,7 +32,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_configuration'
+    return ctpy.data.generate_collection_id("_configuration")
 
 
 

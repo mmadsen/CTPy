@@ -6,10 +6,6 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 import logging as log
-
-
-
-
 from richness_sample import sampleNumAlleles
 from trait_count_sample import sampleTraitCounts
 from individual_sample import sampleIndividuals, IndividualSample
@@ -17,11 +13,13 @@ from simulation_data import storeSimulationData, SimulationRun
 from trait_lifetime import TraitLifetimeCacheIAModels
 from trait_count_population import censusTraitCounts
 from richness_population import censusNumAlleles
-from individual_sample_classified import storeIndividualSampleClassified
+from individual_sample_classified import storeIndividualSampleClassified, IndividualSampleClassified
 from classification_data import storeClassificationData, ClassificationData
 from classification_mode_definitions import storeClassificationModeDefinition, ClassificationModeDefinitions
+from individual_sample_fulldataset import storeIndividualSample, IndividualSampleFullDataset
 
-
+# This should be changed for any real uses
+experiment_name = "default"
 
 # When a new module is added for data, the module's filename should be added to the module list below,
 # and the module must support a _get_dataobj_id() method which returns the string used in the Ming ORM
@@ -31,7 +29,7 @@ from classification_mode_definitions import storeClassificationModeDefinition, C
 
 modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population,
            simulation_data, trait_lifetime, classification_data, classification_mode_definitions,
-           individual_sample_classified]
+           individual_sample_classified, individual_sample_fulldataset]
 
 
 def getMingConfiguration():
@@ -48,4 +46,18 @@ def getMingConfiguration():
         config[key] = urlstring
     return config
 
-__author__ = 'mark'
+
+def set_experiment_name(name):
+    """
+    Takes the name of the experiment currently being run, for use as a prefix to database collection names
+
+    :param name:
+    :return: none
+    """
+    experiment_name = name
+
+
+def generate_collection_id(suffix):
+    collection_id = experiment_name
+    collection_id += suffix
+    return collection_id

@@ -16,6 +16,7 @@
 import logging as log
 from ming import Session, Field, schema
 from ming.declarative import Document
+import ctpy.data
 
 
 __author__ = 'mark'
@@ -31,7 +32,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_configuration'
+    return ctpy.data.generate_collection_id("_configuration")
 
 
 def storeClassificationData(class_type, maxalleles, num_loci, dimlist):

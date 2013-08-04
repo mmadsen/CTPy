@@ -21,6 +21,7 @@ from ming.declarative import Document
 import simuPOP as sim
 import pprint as pp
 from collections import defaultdict
+import ctpy.data
 
 
 def _get_dataobj_id():
@@ -34,7 +35,7 @@ def _get_collection_id():
     """
     :return: returns the collection name for this data object
     """
-    return 'ctpy_sim_rawdata'
+    return ctpy.data.generate_collection_id("_samples_raw")
 
 
 

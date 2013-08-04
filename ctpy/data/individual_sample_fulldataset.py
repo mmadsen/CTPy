@@ -5,11 +5,14 @@
 # For detailed license terms, see:
 # http://creativecommons.org/licenses/GPL/2.0/
 """
-.. module:: individual_sample
+.. module:: individual_sample_fulldataset
     :platform: Unix, Windows
     :synopsis: Data object for storing a sample of N individuals (and their genotypes) in MongoDB, via the Ming ORM.
 
 .. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+This data object and database collection holds individual samples that have been constructed from raw individual_samples
+by subsampling, to fill out every desired level of dimensionality and sample size.
 
 """
 
@@ -25,7 +28,7 @@ def _get_dataobj_id():
     """
         Returns the short handle used for this data object in Ming configuration
     """
-    return 'individuals'
+    return 'individuals_subsampled'
 
 def _get_collection_id():
     """
@@ -35,39 +38,9 @@ def _get_collection_id():
 
 
 
-def sampleIndividuals(pop, param):
-    """Samples individuals from each replicant population, and stores the genotypes of that sample in the database.
-
-        Args:
-
-            pop (Population):  simuPOP population replicate.
-
-            params (list):  list of parameters (sample size, mutation rate, population size, simulation ID)
-
-        Returns:
-
-            Boolean true:  all PyOperators need to return true.
-
-    """
-    (ssize, mutation, popsize, sim_id, num_loci) = param
-    popID = pop.dvars().rep
-    gen = pop.dvars().gen
-    sample = drawRandomSample(pop, sizes=ssize)
-    samplelist = []
-
-    for idx in range(ssize):
-        genotype_list = list(sample.individual(idx).genotype())
-        indiv = dict(id=idx, genotype=genotype_list)
-        samplelist.append(indiv)
-
-    _storeIndividualSample(popID,num_loci,ssize,gen,mutation,popsize,sim_id,samplelist)
-
-    return True
 
 
-
-
-def _storeIndividualSample(popID, dim, ssize, generation, mutation, popsize, sim_id, sample):
+def storeIndividualSample(popID, dim, ssize, generation, mutation, popsize, sim_id, sample):
     IndividualSample(dict(
         simulation_time=generation,
         replication=popID,
@@ -83,11 +56,11 @@ def _storeIndividualSample(popID, dim, ssize, generation, mutation, popsize, sim
 
 
 
-class IndividualSample(Document):
+class IndividualSampleFullDataset(Document):
 
     class __mongometa__:
         session = Session.by_name(_get_dataobj_id())
-        name = 'individual_samples'
+        name = 'individual_samples_fulldataset'
         _id = Field(schema.ObjectId)
         simulation_time = Field(int)
         replication = Field(int)

@@ -80,7 +80,8 @@ def lookup_sim_run_parameters(sim_id):
 #### main program ####
 
 
-samples = data.IndividualSample.m.find().all()
+samples = data.IndividualSample.m.find().all()  # TODO - find() returns a cursor, which is critical if we have lots of data.  Use it!
+
 
 for s in samples:
     classified_list = []

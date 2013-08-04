@@ -37,25 +37,24 @@ sim_id = uuid.uuid4().urn
 # samplesizes = [10,20,30,50,75,100,250,500]
 # populationsizes = [500,1000,2000,5000,10000,25000,50000]
 
-mutationrates = [0.00075,0.001,0.01]
-samplesizes = [10,50,100]
-populationsizes = [500,1000,2000,5000]
+mutationrates = ctpy.INNOVATION_RATES_STUDIED
+populationsizes = ctpy.POPULATION_SIZES_STUDIED
 
 
 state_space = [
     mutationrates,
-    samplesizes,
     populationsizes
 ]
 
 
 # other parameters
-replications_per_paramset = 5
-sampling_interval = 100
-sim_length = 5000
-numloci = 3
+sample_size = max(ctpy.SAMPLE_SIZES_STUDIED)
+replications_per_paramset = ctpy.REPLICATIONS_PER_PARAM_SET
+sampling_interval = ctpy.SAMPLING_INTERVAL
+sim_length = ctpy.SIMULATION_LENGTH_AFTER_STATIONARITY
+numloci = max(ctpy.DIMENSIONS_STUDIED)
 gen_logging_interval = sim_length / 5
-numalleles = 10
+numalleles = ctpy.INITIAL_TRAIT_NUMBER
 
 
 
@@ -69,11 +68,10 @@ for param_combination in itertools.product(*state_space):
     sim_id = uuid.uuid4().urn
     log.info("Beginning run: %s params: %s", sim_id, param_combination)
     mut = param_combination[0]
-    ssize = param_combination[1]
-    popsize = param_combination[2]
+    popsize = param_combination[1]
 
     data.storeSimulationData(
-        popsize,mut,sim_id,ssize,replications_per_paramset,numloci,__file__,numalleles,ctpy.MAXALLELES)
+        popsize,mut,sim_id,sample_size,replications_per_paramset,numloci,__file__,numalleles,ctpy.MAXALLELES)
 
     time_start_stats = cpm.expectedIAQuasiStationarityTimeHaploid(popsize,mut)
     log.info("...Starting data collection at generation: %s", time_start_stats)
@@ -91,11 +89,11 @@ for param_combination in itertools.product(*state_space):
         ],
         matingScheme = sim.RandomSelection(),
         postOps = [sim.KAlleleMutator(k=ctpy.MAXALLELES, rates=mut),
-                    sim.PyOperator(func=data.sampleNumAlleles, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
-                    sim.PyOperator(func=data.sampleTraitCounts, param=(ssize, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.sampleNumAlleles, param=(sample_size, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
+                    sim.PyOperator(func=data.sampleTraitCounts, param=(sample_size, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                     sim.PyOperator(func=data.censusTraitCounts, param=(mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                     sim.PyOperator(func=data.censusNumAlleles, param=(mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
-                    sim.PyOperator(func=data.sampleIndividuals, param=(ssize, mut, popsize, sim_id), step=sampling_interval, begin=time_start_stats),
+                    sim.PyOperator(func=data.sampleIndividuals, param=(sample_size, mut, popsize, sim_id,numloci), step=sampling_interval, begin=time_start_stats),
                ],
         gen = totalSimulationLength,
     )
