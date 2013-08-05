@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (c) 2013.  Mark E. Madsen <mark@madsenlab.org>
 #
 # This work is licensed under the terms of the Apache Software License, Version 2.0.  See the file LICENSE for details.
@@ -25,11 +26,18 @@ This process is performed for each combination of key model parameters, and the 
 
 """
 
-log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+## setup
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
+parser.add_argument("--debug", help="turn on debugging output")
 args = parser.parse_args()
+
+if args.debug:
+    log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+else:
+    log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
 if args.experiment:
     log.debug("experiment name: %s", args.experiment)
     data.set_experiment_name(args.experiment)

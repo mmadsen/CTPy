@@ -4,6 +4,8 @@
 #
 # This work is licensed under the terms of the Apache Software License, Version 2.0.  See the file LICENSE for details.
 """
+For a specific experiment name, we subsample raw data into a "full dataset".
+
 Given a collection of individual samples, raw from a simuPOP/CTPy simulation, which have
 been done at maximum levels of individual sample size and trait dimensionality, subsample
 for smaller sample sizes and dimensionalities.
@@ -28,17 +30,28 @@ import ctpy.data as data
 
 
 ## setup
-log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
+parser.add_argument("--debug", help="turn on debugging output")
 args = parser.parse_args()
+
+if args.debug:
+    log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+else:
+    log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+
 if args.experiment:
     log.debug("experiment name: %s", args.experiment)
     data.set_experiment_name(args.experiment)
 
 #### main program ####
 log.info("SUBSAMPLE_INDIVIDUAL_SAMPLES - Starting program")
+log.info("Performing subsampling for experiment named: %s", data.experiment_name)
+
+
+
 config = data.getMingConfiguration()
 ming.configure(**config)
 
