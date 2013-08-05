@@ -7,5 +7,6 @@
 
 from simlogging import logGenerationCount
 from allele_distribution import constructUniformAllelicDistribution
+from script_args import ScriptArgs
 
 __author__ = 'mark'

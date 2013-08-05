@@ -18,6 +18,7 @@ one worker, or duplicate records will occur.
 import ctpy.data as data
 import ctpy # for constants
 import ctpy.coarsegraining as cg
+import ctpy.utils as utils
 import ming
 import logging as log
 import pprint as pp
@@ -28,20 +29,17 @@ from bson.objectid import ObjectId
 
 
 def setup():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
-    parser.add_argument("--debug", help="turn on debugging output")
-    args = parser.parse_args()
+    sargs = utils.ScriptArgs()
 
-    if args.debug:
+    if sargs.debug:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
-
-    if args.experiment:
-        log.debug("experiment name: %s", args.experiment)
-        data.set_experiment_name(args.experiment)
+    log.debug("experiment name: %s", sargs.experiment_name)
+    data.set_experiment_name(sargs.experiment_name)
+    data.set_database_hostname(sargs.database_hostname)
+    data.set_database_port(sargs.database_port)
 
     log.info("CLASSIFY_INDIVIDUAL_SAMPLES_WORKER - Starting program")
     config = data.getMingConfiguration()

@@ -18,8 +18,12 @@ from classification_data import storeClassificationData, ClassificationData
 from classification_mode_definitions import storeClassificationModeDefinition, ClassificationModeDefinitions
 from individual_sample_fulldataset import storeIndividualSampleFullDataset, IndividualSampleFullDataset
 
-# This should be changed for any real uses
-experiment_name = "default"
+
+experiment_name = "test"
+# the following *should* be overridden by command line processing, even by defaults.
+# bogus values are to ensure that CLI processing and configuration is working without bugs
+dbhost = "override"
+dbport = "override"
 
 # When a new module is added for data, the module's filename should be added to the module list below,
 # and the module must support a _get_dataobj_id() method which returns the string used in the Ming ORM
@@ -35,7 +39,12 @@ modules = [individual_sample, trait_count_population, trait_count_sample, richne
 def getMingConfiguration():
     config = {}
     for module in modules:
-        urlstring = 'mongodb://localhost:27017/'
+        urlstring = 'mongodb://'
+        urlstring += dbhost
+        urlstring += ":"
+        urlstring += dbport
+        urlstring += "/"
+
         key = ''
         key += 'ming.'
         key += module._get_dataobj_id()
@@ -46,6 +55,14 @@ def getMingConfiguration():
         config[key] = urlstring
     return config
 
+
+def set_database_hostname(name):
+    global dbhost
+    dbhost = name
+
+def set_database_port(port):
+    global dbport
+    dbport = port
 
 def set_experiment_name(name):
     """
