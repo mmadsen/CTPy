@@ -32,8 +32,8 @@ parser.add_argument("--experiment", help="provide name for experiment, to be use
 args = parser.parse_args()
 if args.experiment:
     log.debug("experiment name: %s", args.experiment)
+    data.set_experiment_name(args.experiment)
 
-data.set_experiment_name(args.experiment)
 config = data.getMingConfiguration()
 ming.configure(**config)
 

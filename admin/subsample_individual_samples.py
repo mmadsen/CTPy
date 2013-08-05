@@ -20,6 +20,25 @@ individual_sample_fulldataset.  This collection is then usable for further data 
 as classification, time averaging, or other statistical analysis.
 
 """
+import logging as log
+import argparse
+import ming
+import ctpy
+import ctpy.data as data
 
 
+## setup
+log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
+args = parser.parse_args()
+if args.experiment:
+    log.debug("experiment name: %s", args.experiment)
+    data.set_experiment_name(args.experiment)
+
+#### main program ####
+log.info("SUBSAMPLE_INDIVIDUAL_SAMPLES - Starting program")
+config = data.getMingConfiguration()
+ming.configure(**config)
 

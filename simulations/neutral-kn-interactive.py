@@ -22,8 +22,6 @@ population, and counts the number of alleles present in the population and in sa
 """
 
 
-
-
 options = [
     {
         'name':'popsize',
@@ -88,7 +86,6 @@ options = [
         'type' : 'string',
     }
 ]
-
 
 
 # get all parameters
