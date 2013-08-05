@@ -40,8 +40,8 @@ def _get_collection_id():
 
 
 
-def storeIndividualSample(popID, dim, ssize, generation, mutation, popsize, sim_id, sample):
-    IndividualSample(dict(
+def storeIndividualSampleFullDataset(popID, dim, ssize, generation, mutation, popsize, sim_id, sample):
+    IndividualSampleFullDataset(dict(
         simulation_time=generation,
         replication=popID,
         dimensionality=dim,

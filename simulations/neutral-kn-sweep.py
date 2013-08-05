@@ -14,6 +14,7 @@ import ctpy
 import ming
 import itertools
 import logging as log
+import argparse
 
 
 """
@@ -26,6 +27,13 @@ This process is performed for each combination of key model parameters, and the 
 
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
+args = parser.parse_args()
+if args.experiment:
+    log.debug("experiment name: %s", args.experiment)
+
+data.set_experiment_name(args.experiment)
 config = data.getMingConfiguration()
 ming.configure(**config)
 

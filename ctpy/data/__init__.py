@@ -16,7 +16,7 @@ from richness_population import censusNumAlleles
 from individual_sample_classified import storeIndividualSampleClassified, IndividualSampleClassified
 from classification_data import storeClassificationData, ClassificationData
 from classification_mode_definitions import storeClassificationModeDefinition, ClassificationModeDefinitions
-from individual_sample_fulldataset import storeIndividualSample, IndividualSampleFullDataset
+from individual_sample_fulldataset import storeIndividualSampleFullDataset, IndividualSampleFullDataset
 
 # This should be changed for any real uses
 experiment_name = "default"
@@ -54,6 +54,7 @@ def set_experiment_name(name):
     :param name:
     :return: none
     """
+    global experiment_name
     experiment_name = name
 
 

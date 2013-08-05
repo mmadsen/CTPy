@@ -36,10 +36,17 @@ import ctpy.data as data
 import ctpy.coarsegraining as cg
 import ctpy.math.simulation_calculations as sc
 import ming
-
+import argparse
 
 ## setup
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--experiment", help="provide name for experiment, to be used as prefix for database collections")
+args = parser.parse_args()
+if args.experiment:
+    log.debug("experiment name: %s", args.experiment)
+
 
 
 
@@ -47,7 +54,7 @@ log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s'
 
 log.info("CONSTRUCT CLASSIFICATIONS - Starting program")
 
-
+data.set_experiment_name(args.experiment)
 config = data.getMingConfiguration()
 ming.configure(**config)
 

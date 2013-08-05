@@ -22,12 +22,7 @@ population, and counts the number of alleles present in the population and in sa
 """
 
 
-log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
-config = data.getMingConfiguration()
-ming.configure(**config)
-
-sim_id = uuid.uuid4().urn
 
 options = [
     {
@@ -85,6 +80,12 @@ options = [
         'label' : 'Number of initial alleles in population',
         'type' : 'integer',
         'validator' : 'numalleles > 0'
+    },
+    {
+        'name' : 'experiment_name',
+        'default' : 'default',
+        'label' : 'Name of experiment to prefix database tables',
+        'type' : 'string',
     }
 ]
 
@@ -97,6 +98,15 @@ if not pars.getParam():
     sys.exit(1)
 
 
+log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+
+log.debug("experiment name: %s", pars.experiment_name)
+
+data.set_experiment_name(pars.experiment_name)
+config = data.getMingConfiguration()
+ming.configure(**config)
+
+sim_id = uuid.uuid4().urn
 
 
 

@@ -24,56 +24,68 @@ import argparse
 import sys
 from bson.objectid import ObjectId
 
-log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-
-config = data.getMingConfiguration()
-ming.configure(**config)
 
 
+def setup():
+    log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    config = data.getMingConfiguration()
+    ming.configure(**config)
+
+def process_classification_ids():
+    """
+    Process list of classification id's from sys.argv - there should be only classification id's
+    past argv[0].
+
+    :return: list of classification dicts from the database
+    """
+    classification_list = []
+    for i in range(1, len(sys.argv)):
+        log.debug("%s", sys.argv[i])
+        classification_list.append(sys.argv[i])
+
+    clist = []
+    for c in classification_list:
+        clist.append(ObjectId(c))
+
+    classifications = data.ClassificationData.m.find(dict(_id={'$in':clist})).all()
+    log.debug("%s", classifications)
+    return classifications
 
 
-# Process the list of classification id's from the command line
-# There should be no other arguments beyond the script path at sys.argv[0]
+def get_individual_cursor_for_dimensionality(dimensionality):
+    sample_cursor = data.IndividualSample.m.find(dict(dimensionality=dimensionality))
+    return sample_cursor
 
-classification_list = []
 
+def identify_genotype_to_class_for_classification(genotype,classification):
+    """
 
-for i in range(1, len(sys.argv)):
-    log.debug("%s", sys.argv[i])
-    classification_list.append(sys.argv[i])
-
-clist = []
-for c in classification_list:
-    clist.append(ObjectId(c))
-
-classifications = data.ClassificationData.m.find(dict(_id={'$in':clist})).all()
-
-log.debug("%s", classifications)
-
-num_loci_values = []
-for classification in classifications:
+    :param genotype:
+    :param classification:
+    :return:
+    """
+    pass
 
 
 
 ### Main Loop ###
 
+if __name__ == "__main__":
+    setup()
+    classifications = process_classification_ids()
+    for classification in classifications:
+        dimensionality = classification["dimensions"]
+        indiv_samples = get_individual_cursor_for_dimensionality(dimensionality)
+        for s in indiv_samples:
+            # each database sample records ssize individuals, so we loop through the "sample" list
+            classified_indiv = []
+            for sample in s.sample:
 
+                identified_class = identify_genotype_to_class_for_classification(sample.genotype,classification)
+                indiv = dict(id=sample.id,classid=identified_class)
+                classified_indiv.append(indiv)
 
-
-
-sample_cursor = data.IndividualSample.m.find().all()
-for classification in classifications:
-    dimensionality = classification["dimensions"]
-    for s in sample_cursor:
-        # each database sample records ssize individuals, so we loop through those
-        classified_indiv = []
-        for sample in s.sample:
-
-            identified_class = identify_genotype_to_class_for_classification(sample.genotype,classification)
-            indiv = dict(id=sample.id,classid=identified_class)
-            classified_indiv.append(indiv)
-
-        data.storeIndividualSampleClassified()
+            data.storeIndividualSampleClassified()
 
 
 
