@@ -99,6 +99,7 @@ if not pars.getParam():
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 log.debug("experiment name: %s", pars.experiment_name)
+log.debug("NOTE:  This interactive simulation always sends data to MongoDB instance on localhost")
 
 data.set_experiment_name(pars.experiment_name)
 config = data.getMingConfiguration()

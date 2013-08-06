@@ -28,28 +28,67 @@ import ming
 import ctpy
 import ctpy.data as data
 import ctpy.utils as utils
+import datetime as datetime
 
 
 ## setup
 
-sargs = utils.ScriptArgs()
+def setup():
+    global sargs, config
+    sargs = utils.ScriptArgs()
+    if sargs.debug:
+        log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+    else:
+        log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+    log.debug("experiment name: %s", sargs.experiment_name)
+    data.set_experiment_name(sargs.experiment_name)
+    data.set_database_hostname(sargs.database_hostname)
+    data.set_database_port(sargs.database_port)
+    #### main program ####
+    log.info("SUBSAMPLE_INDIVIDUAL_SAMPLES - Starting program")
+    log.info("Performing subsampling for experiment named: %s", data.experiment_name)
+    config = data.getMingConfiguration()
+    ming.configure(**config)
 
-if sargs.debug:
-    log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
-else:
-    log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
-log.debug("experiment name: %s", sargs.experiment_name)
-data.set_experiment_name(sargs.experiment_name)
-data.set_database_hostname(sargs.database_hostname)
-data.set_database_port(sargs.database_port)
-
-#### main program ####
-log.info("SUBSAMPLE_INDIVIDUAL_SAMPLES - Starting program")
-log.info("Performing subsampling for experiment named: %s", data.experiment_name)
-
+def check_prior_completion():
+    """
+    We do not want to run this subsampling if we've done it previously to the same raw
+    data collection, because we'll be creating duplicate data sets.
+    :return: boolean
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    if experiment_record["subsampling_complete"] == True:
+        return True
+    else:
+        return False
 
 
-config = data.getMingConfiguration()
-ming.configure(**config)
+def record_completion():
+    """
+    Once subsampling is complete, we want to record it in the database so we don't do it
+    again for the same data set.
+    :return: none
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    experiment_record["subsampling_complete"] = True
+    experiment_record["subsampling_tstamp"] = datetime.datetime.utcnow()
+    experiment_record.m.save()
+
+
+
+####### main loop #######
+
+if __name__ == "__main__":
+    setup()
+    if check_prior_completion() == True:
+        log.info("Subsampling of experiment %s already complete -- exiting", sargs.experiment_name)
+        exit(1)
+
+    # do the subsampling
+
+
+    # log completion of the subsampling
+    record_completion()
+
 
