@@ -29,6 +29,7 @@ import ctpy
 import ctpy.data as data
 import ctpy.utils as utils
 import datetime as datetime
+import itertools
 
 
 ## setup
@@ -76,6 +77,28 @@ def record_completion():
     experiment_record.m.save()
 
 
+def record_full_subsample(s,new_dimen,new_ssize,new_sample):
+    data.storeIndividualSampleFullDataset(s.replication,
+                                          new_dimen,
+                                          new_ssize,
+                                          s.simulation_time,
+                                          s.mutation_rate,
+                                          s.population_size,
+                                          s.simulation_run_id,
+                                          new_sample
+                                          )
+
+def subsample_for_dimension(dimension, sample_id, genotype_list):
+    """
+    Takes a list of genotypes and the desired number of loci to subsample, and returns
+    that number of loci from the list
+    :param dimension:
+    :param genotype_list:
+    :return: list of genotypes
+    """
+    return dict(id=sample_id,genotype=genotype_list[:dimension])
+
+
 
 ####### main loop #######
 
@@ -86,7 +109,51 @@ if __name__ == "__main__":
         exit(1)
 
     # do the subsampling
+    # one caveat is that we already have a sample from max(DIMENSIONS_STUDIED) and
+    # max(SAMPLE_SIZES_STUDIED) so we need to skip doing that one, and just insert the
+    # original data sample into the fulldataset collection.
+    existing_dimensionality = max(ctpy.DIMENSIONS_STUDIED)
+    existing_sample_size = max(ctpy.SAMPLE_SIZES_STUDIED)
 
+    state_space = [
+        ctpy.SAMPLE_SIZES_STUDIED,
+        ctpy.DIMENSIONS_STUDIED
+    ]
+
+
+    individual_samples =  data.IndividualSample.m.find()
+    # each "individual_sample" has a field called "sample" which is an array of individuals's genotypes
+    for s in individual_samples:
+        for param_combination in itertools.product(*state_space):
+            ssize = param_combination[0]
+            dimen = param_combination[1]
+
+            log.debug("subsampling for ssize %s and dim %s", ssize, dimen)
+
+            # this is the original sample document
+            if ssize == existing_sample_size and dimen == existing_dimensionality:
+                # record original document into the full sample data set
+                log.debug("Skipping subsampling for documents with existing ssize and dim, just copying")
+                record_full_subsample(s,s.dimensionality,s.sample_size,s.sample)
+                continue
+
+            # we subsample each id in the samples array, and then construct a new overall
+            # "individual_sample_fulldataset" document from the original "individual_sample"
+            # document, inserting "subsampled_indiv" in place of the original list.
+            dim_subsampled = []
+
+            for sample in s.sample:
+
+                dim_subsampled.append(subsample_for_dimension(dimen, sample.id, sample.genotype))
+
+            log.debug("dim_subsampled: %s", dim_subsampled)
+
+            # now dim_subsampled contains the dimension-reduced samples, so we just have
+            # to reduce it by ssize, and the result is our completely subsampled sample.
+            final_subsample = dim_subsampled[:ssize]
+            log.debug("final subsample: %s", final_subsample)
+
+            record_full_subsample(s,dimen,ssize,final_subsample)
 
     # log completion of the subsampling
     record_completion()

@@ -102,6 +102,8 @@ log.debug("experiment name: %s", pars.experiment_name)
 log.debug("NOTE:  This interactive simulation always sends data to MongoDB instance on localhost")
 
 data.set_experiment_name(pars.experiment_name)
+data.set_database_hostname("localhost")
+data.set_database_port("27017")
 config = data.getMingConfiguration()
 ming.configure(**config)
 
