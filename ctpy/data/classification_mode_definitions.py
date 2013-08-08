@@ -64,6 +64,8 @@ def storeClassificationModeDefinition(modetype, maxalleles, nummodes, boundary_m
 
 
 
+mode_boundary = dict(lower=float, upper=float)
+
 
 class ClassificationModeDefinitions(Document):
     """
@@ -78,8 +80,6 @@ class ClassificationModeDefinitions(Document):
         mode_type = Field(str)
         maxalleles = Field(int)
         num_modes = Field(int)
-        boundary_map = Field([
-            dict(lower=float, upper=float)
-        ])
+        boundary_map = Field([mode_boundary])
 
 

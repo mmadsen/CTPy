@@ -13,6 +13,7 @@ class ScriptArgs:
     experiment_name = "default"
     database_hostname = "localhost"
     database_port = "27017"
+    classification_list = []
 
     def __init__(self):
         parser = argparse.ArgumentParser()
@@ -20,6 +21,7 @@ class ScriptArgs:
         parser.add_argument("--debug", help="turn on debugging output")
         parser.add_argument("--dbhost", help="database hostname, defaults to localhost")
         parser.add_argument("--dbport", help="database port, defaults to 27017")
+        parser.add_argument("--classifications", help="list of classification id's", nargs="*")
 
         args = parser.parse_args()
         if args.debug:
@@ -34,5 +36,6 @@ class ScriptArgs:
         if args.dbport:
             self.database_port = args.dbport
 
-
+        if args.classifications:
+            self.classification_list = args.classifications
 

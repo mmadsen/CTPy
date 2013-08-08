@@ -35,7 +35,7 @@ def _get_collection_id():
     return ctpy.data.generate_collection_id("_configuration")
 
 
-def storeClassificationData(class_type, maxalleles, num_loci, dimlist):
+def storeClassificationData(class_type, maxalleles, num_loci, coarseness, dimlist):
     """Stores the parameters and metadata for a simulation run in the database.
 
         Args:
@@ -57,6 +57,7 @@ def storeClassificationData(class_type, maxalleles, num_loci, dimlist):
         classification_type=class_type,
         maxalleles=maxalleles,
         dimensions=num_loci,
+        mean_coarseness=coarseness,
         modes_for_dimensions=dimlist,
     )).m.insert()
     return True
@@ -78,6 +79,7 @@ class ClassificationData(Document):
     classification_type = Field(str)
     maxalleles = Field(int) # a given classification is relative to maxalleles
     dimensions = Field(int) # i.e., numloci
+    mean_coarseness = Field(float)
     modes_for_dimensions = Field([schema.ObjectId])
 
 

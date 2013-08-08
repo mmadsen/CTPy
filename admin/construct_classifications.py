@@ -98,7 +98,7 @@ for dim in ctpy.DIMENSIONS_STUDIED:
             dimensions.append(dimension_record["_id"])
 
         #log.debug("classification modemap: %s", dimensions)
-        data.storeClassificationData(ctpy.MODETYPE_EVEN,ctpy.MAXALLELES,dim,dimensions)
+        data.storeClassificationData(ctpy.MODETYPE_EVEN,ctpy.MAXALLELES,dim,nmodes,dimensions)
 
 
 log.info("Constructing classifications for random dimensions")
@@ -116,7 +116,7 @@ for dim in ctpy.DIMENSIONS_STUDIED:
                 rand_dimension = random.choice(dimension_list)
                 dimensions.append(rand_dimension["_id"])
                 #log.debug("classification modemap: %s", dimensions)
-            data.storeClassificationData(ctpy.MODETYPE_RANDOM,ctpy.MAXALLELES,dim,dimensions)
+            data.storeClassificationData(ctpy.MODETYPE_RANDOM,ctpy.MAXALLELES,dim,nmodes,dimensions)
 
 
 log.info("Building %s classifications", sc.compute_total_classifications_across_dimensionality())

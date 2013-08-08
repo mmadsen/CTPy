@@ -79,3 +79,9 @@ def generate_collection_id(suffix):
     collection_id = experiment_name
     collection_id += suffix
     return collection_id
+
+
+
+###### Definitions for reuse aross Ming class boundaries
+
+mode_boundary = dict(lower=float, upper=float)
