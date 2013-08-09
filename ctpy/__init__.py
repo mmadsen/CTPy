@@ -45,7 +45,7 @@ systems with differing values for num_loci, and thus classifications
 with the same number of dimensions
 """
 
-INNOVATION_RATES_STUDIED = [0.0001,0.0005,0.001,0.005,0.01]
+INNOVATION_RATES_STUDIED = [0.0001,0.00025,0.0005,0.001,0.0025,0.005,0.01,0.025]
 """
 We examine a range of innovation rates, from slow innovation rates that would imply one innovation
 every ten "generations" for a population of 1000 individuals, to rates which imply that at least
