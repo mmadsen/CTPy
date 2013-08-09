@@ -27,6 +27,7 @@ import sys
 from bson.objectid import ObjectId
 import os
 from subprocess import Popen
+import datetime
 
 # speed things up by caching mode definitions so we hit the DB a minimal number of times
 mode_definition_cache = dict()
@@ -58,6 +59,17 @@ def batch(iterable, n = 1):
    for ndx in range(0, l, n):
        yield iterable[ndx:min(ndx+n, l)]
 
+
+def record_completion():
+    """
+    Once subsampling is complete, we want to record it in the database so we don't do it
+    again for the same data set.
+    :return: none
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    experiment_record["classification_complete"] = True
+    experiment_record["classification_tstamp"] = datetime.datetime.utcnow()
+    experiment_record.m.save()
 
 
 ### Main Loop ###
@@ -98,3 +110,4 @@ if __name__ == "__main__":
         log.debug("args: %s", args)
         retcode = os.system(" ".join(args))
 
+    record_completion()
