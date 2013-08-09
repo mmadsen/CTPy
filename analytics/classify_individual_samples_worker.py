@@ -24,24 +24,28 @@ import logging as log
 import pprint as pp
 import argparse
 import sys
+import os
 from bson.objectid import ObjectId
 
 # speed things up by caching mode definitions so we hit the DB a minimal number of times
 mode_definition_cache = dict()
 classification_dimension_cache = dict()
 classification_list = []
+global sargs
 
 def setup():
+    #log.debug("Executing in %s", os.getcwd())
+    #log.debug("Arguments: %s", sys.argv)
     sargs = utils.ScriptArgs()
 
-    if sargs.debug:
+    if sargs.debug == 1:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
     classification_list.extend(sargs.classification_list)
 
-    log.debug("experiment name: %s", sargs.experiment_name)
+    #log.debug("experiment name: %s", sargs.experiment_name)
     data.set_experiment_name(sargs.experiment_name)
     data.set_database_hostname(sargs.database_hostname)
     data.set_database_port(sargs.database_port)
@@ -68,7 +72,7 @@ def process_classification_ids():
         clist.append(ObjectId(c))
 
     classifications = data.ClassificationData.m.find(dict(_id={'$in':clist})).all()
-    log.debug("%s", classifications)
+    #log.debug("%s", classifications)
     return classifications
 
 
@@ -112,7 +116,7 @@ def identify_genotype_to_class_for_classification(genotype,classification):
         mode_boundaries = get_and_cache_mode_definition(dimension_id)
         trait_for_dim = genotype[dim_num]
 
-        log.debug("mode_boundaries: %s", mode_boundaries)
+        #log.debug("mode_boundaries: %s", mode_boundaries)
 
         for mode_num in range(0, coarseness):
             mode_defn = mode_boundaries[mode_num]
@@ -124,7 +128,7 @@ def identify_genotype_to_class_for_classification(genotype,classification):
 
         # at the end of looping through the dimensions, we ought to have an ordered list of
     # which modes the alleles each identified to given the mode boundaries
-    log.debug("identified modes: %s", identified_modes)
+    #log.debug("identified modes: %s", identified_modes)
     return '-'.join([`num` for num in identified_modes])
 
 ### Main Loop ###
@@ -138,7 +142,7 @@ if __name__ == "__main__":
         coarseness = classification["mean_coarseness"]
         class_type = classification["classification_type"]
 
-        log.info("Processing samples for classification: %s", class_id)
+        #log.info("Processing samples for classification: %s", class_id)
 
         indiv_samples = get_individual_cursor_for_dimensionality(dimensionality)
         for s in indiv_samples:
