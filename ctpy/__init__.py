@@ -92,7 +92,7 @@ alleles at a locus.
 """
 
 
-SAMPLING_INTERVAL = 100
+SAMPLING_INTERVAL = 1
 """
 Interval, in simulation ticks or generations, between samples of the population which are taken
 and stored in the database.  For testing and development, this is usually larger (e.g., 100).
