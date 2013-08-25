@@ -14,7 +14,7 @@ Uses workerpool to create a number of parallel threads to speed processing
 """
 
 import ctpy.data as data
-import ctpy # for constants
+import ctpy
 import ctpy.coarsegraining as cg
 import ctpy.utils as utils
 import ming
@@ -47,8 +47,22 @@ def setup():
     ming.configure(**config)
 
 
+
+
 if __name__ == "__main__":
     setup()
     pool = workerpool.WorkerPool(size=sargs.parallelization)
-    # read up on workerpool, how do we iterate through the individual samples, passing batches to the
-    # worker pool?
+
+    # get all classification ID's
+    classification_id_list = []
+    classifications = data.ClassificationData.m.find()
+
+
+    log.info("number of classifications: %s", len(classifications))
+
+    for classification in classifications:
+        classifier = cg.ClassIdentifier(classification)
+
+
+    pool.shutdown()
+    pool.wait()
