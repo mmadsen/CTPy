@@ -11,7 +11,6 @@ import uuid
 import ctpy.data as data
 import ctpy.utils as utils
 import ctpy.math as cpm
-import ctpy
 import ming
 import itertools
 import logging as log
@@ -35,6 +34,8 @@ if sargs.debug:
 else:
     log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
+simconfig = utils.CTPyConfiguration(sargs.configuration)
+
 log.debug("experiment name: %s", sargs.experiment_name)
 data.set_experiment_name(sargs.experiment_name)
 data.set_database_hostname(sargs.database_hostname)
@@ -51,8 +52,8 @@ sim_id = uuid.uuid4().urn
 # samplesizes = [10,20,30,50,75,100,250,500]
 # populationsizes = [500,1000,2000,5000,10000,25000,50000]
 
-mutationrates = ctpy.INNOVATION_RATES_STUDIED
-populationsizes = ctpy.POPULATION_SIZES_STUDIED
+mutationrates = simconfig.INNOVATION_RATES_STUDIED
+populationsizes = simconfig.POPULATION_SIZES_STUDIED
 
 
 state_space = [
@@ -62,13 +63,13 @@ state_space = [
 
 
 # other parameters
-sample_size = max(ctpy.SAMPLE_SIZES_STUDIED)
-replications_per_paramset = ctpy.REPLICATIONS_PER_PARAM_SET
-sampling_interval = ctpy.SAMPLING_INTERVAL
-sim_length = ctpy.SIMULATION_LENGTH_AFTER_STATIONARITY
-numloci = max(ctpy.DIMENSIONS_STUDIED)
+sample_size = max(simconfig.SAMPLE_SIZES_STUDIED)
+replications_per_paramset = simconfig.REPLICATIONS_PER_PARAM_SET
+sampling_interval = simconfig.SAMPLING_INTERVAL
+sim_length = simconfig.SIMULATION_LENGTH_AFTER_STATIONARITY
+numloci = max(simconfig.DIMENSIONS_STUDIED)
 gen_logging_interval = sim_length / 5
-numalleles = ctpy.INITIAL_TRAIT_NUMBER
+numalleles = simconfig.INITIAL_TRAIT_NUMBER
 
 
 
@@ -85,7 +86,7 @@ for param_combination in itertools.product(*state_space):
     popsize = param_combination[1]
 
     data.storeSimulationData(
-        popsize,mut,sim_id,sample_size,replications_per_paramset,numloci,__file__,numalleles,ctpy.MAXALLELES)
+        popsize,mut,sim_id,sample_size,replications_per_paramset,numloci,__file__,numalleles,simconfig.MAXALLELES)
 
     time_start_stats = cpm.expectedIAQuasiStationarityTimeHaploid(popsize,mut)
     log.info("...Starting data collection at generation: %s", time_start_stats)
@@ -102,7 +103,7 @@ for param_combination in itertools.product(*state_space):
             sim.PyOperator(func=utils.logGenerationCount, param=(), step=gen_logging_interval, reps=0),
         ],
         matingScheme = sim.RandomSelection(),
-        postOps = [sim.KAlleleMutator(k=ctpy.MAXALLELES, rates=mut),
+        postOps = [sim.KAlleleMutator(k=simconfig.MAXALLELES, rates=mut),
                     sim.PyOperator(func=data.sampleNumAlleles, param=(sample_size, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                     sim.PyOperator(func=data.sampleTraitCounts, param=(sample_size, mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),
                     sim.PyOperator(func=data.censusTraitCounts, param=(mut, popsize,sim_id,numloci), step=sampling_interval,begin=time_start_stats),

@@ -15,6 +15,7 @@ class ScriptArgs:
     database_port = "27017"
     classification_list = []
     parallelization = 5
+    configuration = None  # test for existence via:  if sargs.configuration is None:
 
     def __init__(self):
         parser = argparse.ArgumentParser()

@@ -16,8 +16,6 @@ one worker, or duplicate records will occur.
 """
 
 import ctpy.data as data
-import ctpy # for constants
-import ctpy.coarsegraining as cg
 import ctpy.utils as utils
 import ming
 import logging as log

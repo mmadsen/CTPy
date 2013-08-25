@@ -17,11 +17,11 @@ Second, the script constructs a set of random dimension/mode definitions, for ea
 
 Third, we construct classifications as a combination of these dimensions, using the following algorithm:
 
-1.  We construct classifications for all dimensions D listed in ctpy.DIMENSIONS_STUDIED.
+1.  We construct classifications for all dimensions D listed in simconfig.DIMENSIONS_STUDIED.
 2.  We construct even dimensions by combining D copies of each even dimension partition size (e.g., 2-modes, 3-modes).
-3.  For each D, we construct ctpy.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES classifications by selecting D random dimensions
+3.  For each D, we construct simconfig.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES classifications by selecting D random dimensions
     from the database of dimensions.
-4.  This procedure results in ctpy.math.simulation_calculations.compute_total_classifications() pre-built classifications
+4.  This procedure results in simconfig.math.simulation_calculations.compute_total_classifications() pre-built classifications
     in the database.
 
 At this time, I am not constructing classifications with different sized dimension/modes (e.g., a 3-mode and 2-mode classification).
@@ -32,7 +32,6 @@ Although this might be highly useful after first examining the equal sized parti
 import logging as log
 import random
 # provides system-wide constants
-import ctpy
 import ctpy.data as data
 import ctpy.coarsegraining as cg
 import ctpy.math.simulation_calculations as sc
@@ -47,6 +46,8 @@ if sargs.debug:
     log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 else:
     log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+simconfig = utils.CTPyConfiguration(sargs.configuration)
 
 log.debug("experiment name: %s", sargs.experiment_name)
 data.set_experiment_name(sargs.experiment_name)
@@ -70,27 +71,27 @@ log.info("Records for classifications: %s", data.ClassificationData.m.count())
 
 log.info("Constructing even partitions")
 
-for nmodes in ctpy.DIMENSION_PARTITIONS:
+for nmodes in simconfig.DIMENSION_PARTITIONS:
     boundaries = cg.dmb.build_even_dimension(nmodes)
-    data.storeClassificationModeDefinition(ctpy.MODETYPE_EVEN,ctpy.MAXALLELES,nmodes,boundaries)
+    data.storeClassificationModeDefinition(simconfig.MODETYPE_EVEN,simconfig.MAXALLELES,nmodes,boundaries)
 
 
-log.info("Constructing random partitions: %s replicates per partition size", ctpy.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES)
+log.info("Constructing random partitions: %s replicates per partition size", simconfig.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES)
 
 
-for nmodes in ctpy.DIMENSION_PARTITIONS:
-    for i in range(0, ctpy.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES):
+for nmodes in simconfig.DIMENSION_PARTITIONS:
+    for i in range(0, simconfig.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES):
         boundaries = cg.dmb.build_random_dimension(nmodes)
-        data.storeClassificationModeDefinition(ctpy.MODETYPE_RANDOM, ctpy.MAXALLELES, nmodes, boundaries)
+        data.storeClassificationModeDefinition(simconfig.MODETYPE_RANDOM, simconfig.MAXALLELES, nmodes, boundaries)
 
 
 log.info("Constructing classifications for even dimensions")
 
-for dim in ctpy.DIMENSIONS_STUDIED:
+for dim in simconfig.DIMENSIONS_STUDIED:
     log.debug("constructing classifications with even for dimensionality: %s", dim)
-    for nmodes in ctpy.DIMENSION_PARTITIONS:
+    for nmodes in simconfig.DIMENSION_PARTITIONS:
         #log.debug("constructing classifications for num_modes: %s", nmodes)
-        query = dict(num_modes=nmodes, mode_type=ctpy.MODETYPE_EVEN)
+        query = dict(num_modes=nmodes, mode_type=simconfig.MODETYPE_EVEN)
         dimension_record = data.ClassificationModeDefinitions.m.find(query).one()
         dimensions = []
         # each of the classification dimensions uses the same partition in this case
@@ -98,17 +99,17 @@ for dim in ctpy.DIMENSIONS_STUDIED:
             dimensions.append(dimension_record["_id"])
 
         #log.debug("classification modemap: %s", dimensions)
-        data.storeClassificationData(ctpy.MODETYPE_EVEN,ctpy.MAXALLELES,dim,nmodes,dimensions)
+        data.storeClassificationData(simconfig.MODETYPE_EVEN,simconfig.MAXALLELES,dim,nmodes,dimensions)
 
 
 log.info("Constructing classifications for random dimensions")
 
-for dim in ctpy.DIMENSIONS_STUDIED:
+for dim in simconfig.DIMENSIONS_STUDIED:
     log.debug("constructing classifications for random with dimensionality: %s", dim)
-    for nmodes in ctpy.DIMENSION_PARTITIONS:
-        for j in range(0, ctpy.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES):
+    for nmodes in simconfig.DIMENSION_PARTITIONS:
+        for j in range(0, simconfig.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES):
             #log.debug("constructing classifications for num_modes: %s", nmodes)
-            query = dict(num_modes=nmodes, mode_type=ctpy.MODETYPE_RANDOM)
+            query = dict(num_modes=nmodes, mode_type=simconfig.MODETYPE_RANDOM)
             dimension_list = data.ClassificationModeDefinitions.m.find(query).all()
             #log.debug("Num_mode: %s Num defns %s ", nmodes, len(dimension_list))
             dimensions = []
@@ -116,7 +117,7 @@ for dim in ctpy.DIMENSIONS_STUDIED:
                 rand_dimension = random.choice(dimension_list)
                 dimensions.append(rand_dimension["_id"])
                 #log.debug("classification modemap: %s", dimensions)
-            data.storeClassificationData(ctpy.MODETYPE_RANDOM,ctpy.MAXALLELES,dim,nmodes,dimensions)
+            data.storeClassificationData(simconfig.MODETYPE_RANDOM,simconfig.MAXALLELES,dim,nmodes,dimensions)
 
 
 log.info("Building %s classifications", sc.compute_total_classifications_across_dimensionality())

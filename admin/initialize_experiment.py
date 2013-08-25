@@ -12,12 +12,16 @@ import datetime
 
 
 def setup():
-    global sargs, config
+    global sargs, config, simconfig
+
     sargs = utils.ScriptArgs()
     if sargs.debug:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+    simconfig = utils.CTPyConfiguration(sargs.configuration)
+
     log.debug("experiment name: %s", sargs.experiment_name)
     data.set_experiment_name(sargs.experiment_name)
     data.set_database_hostname(sargs.database_hostname)

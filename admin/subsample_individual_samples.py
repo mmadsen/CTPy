@@ -25,7 +25,6 @@ as classification, time averaging, or other statistical analysis.
 import logging as log
 import argparse
 import ming
-import ctpy
 import ctpy.data as data
 import ctpy.utils as utils
 import datetime as datetime
@@ -35,12 +34,15 @@ import itertools
 ## setup
 
 def setup():
-    global sargs, config
+    global sargs, config, simconfig
     sargs = utils.ScriptArgs()
     if sargs.debug:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+    simconfig = utils.CTPyConfiguration(sargs.configuration)
+
     log.debug("experiment name: %s", sargs.experiment_name)
     data.set_experiment_name(sargs.experiment_name)
     data.set_database_hostname(sargs.database_hostname)
@@ -112,12 +114,12 @@ if __name__ == "__main__":
     # one caveat is that we already have a sample from max(DIMENSIONS_STUDIED) and
     # max(SAMPLE_SIZES_STUDIED) so we need to skip doing that one, and just insert the
     # original data sample into the fulldataset collection.
-    existing_dimensionality = max(ctpy.DIMENSIONS_STUDIED)
-    existing_sample_size = max(ctpy.SAMPLE_SIZES_STUDIED)
+    existing_dimensionality = max(simconfig.DIMENSIONS_STUDIED)
+    existing_sample_size = max(simconfig.SAMPLE_SIZES_STUDIED)
 
     state_space = [
-        ctpy.SAMPLE_SIZES_STUDIED,
-        ctpy.DIMENSIONS_STUDIED
+        simconfig.SAMPLE_SIZES_STUDIED,
+        simconfig.DIMENSIONS_STUDIED
     ]
 
 

@@ -9,6 +9,7 @@
 import unittest
 import ctpy.math as cpm
 import pprint as pp
+import math
 
 class MathTest(unittest.TestCase):
 
@@ -17,10 +18,11 @@ class MathTest(unittest.TestCase):
         mutation = 0.001
         theta = 2.0 * popsize * mutation
 
-        expected = int(round((9.2 * popsize) / (theta + 1.0)))
-        print expected
+        val = (9.2 * popsize) / (theta + 1.0)
+        expected = int(math.ceil(val / 1000)) * 1000
+        print "expected stationary time: %s" % expected
         obs = cpm.expectedIAQuasiStationarityTimeHaploid(popsize,mutation)
-        print obs
+        print "observed stationary time: %s" % obs
         self.assertEqual(expected,obs)
 
 if __name__ == "__main__":

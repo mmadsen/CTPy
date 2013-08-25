@@ -8,5 +8,6 @@
 from simlogging import logGenerationCount
 from allele_distribution import constructUniformAllelicDistribution
 from script_args import ScriptArgs
+from configuration import CTPyConfiguration
 
 __author__ = 'mark'

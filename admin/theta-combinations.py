@@ -7,14 +7,21 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 
-import ctpy
 import itertools
 import logging as log
+import ctpy.utils as utils
 
 log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
-mutationrates = ctpy.INNOVATION_RATES_STUDIED
-populationsizes = ctpy.POPULATION_SIZES_STUDIED
+sargs = utils.ScriptArgs()
+if sargs.debug:
+    log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
+else:
+    log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+simconfig = utils.CTPyConfiguration(sargs.configuration)
+mutationrates = simconfig.INNOVATION_RATES_STUDIED
+populationsizes = simconfig.POPULATION_SIZES_STUDIED
 
 state_space = [
     mutationrates,

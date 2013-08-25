@@ -14,7 +14,6 @@ Uses workerpool to create a number of parallel threads to speed processing
 """
 
 import ctpy.data as data
-import ctpy
 import ctpy.coarsegraining as cg
 import ctpy.utils as utils
 import ming

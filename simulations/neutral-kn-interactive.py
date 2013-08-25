@@ -11,7 +11,6 @@ import uuid
 import ctpy.data as data
 import ctpy.utils as utils
 import ctpy.math as cpm
-import ctpy
 import ming
 import logging as log
 import pprint as pp
@@ -95,6 +94,10 @@ pars = simuOpt.Params(options, doc='This program simulates the Wright-Fisher mod
 if not pars.getParam():
     sys.exit(1)
 
+# we're not loading a config file here, taking defaults
+config_file = None
+simconfig = utils.CTPyConfiguration(config_file)
+
 
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
@@ -123,7 +126,7 @@ log.info("Simulation will sample %s generations after stationarity", pars.length
 
 
 
-data.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles,ctpy.MAXALLELES)
+data.storeSimulationData(pars.popsize,pars.mutationrate,sim_id,pars.samplesize,pars.replications,pars.numloci,__file__,pars.numalleles,simconfig.MAXALLELES)
 
 initial_distribution = utils.constructUniformAllelicDistribution(pars.numalleles)
 log.info("Initial allelic distribution: %s", initial_distribution)
@@ -137,7 +140,7 @@ simu.evolve(
         sim.PyOperator(func=utils.logGenerationCount, param=(), step=1000, reps=0),
     ],
 	matingScheme = sim.RandomSelection(),
-	postOps = [sim.KAlleleMutator(k=ctpy.MAXALLELES, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
+	postOps = [sim.KAlleleMutator(k=simconfig.MAXALLELES, rates=pars.mutationrate, loci=sim.ALL_AVAIL),
         sim.PyOperator(func=data.sampleNumAlleles, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=data.sampleTraitCounts, param=(pars.samplesize, pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
         sim.PyOperator(func=data.censusTraitCounts, param=(pars.mutationrate, pars.popsize,sim_id,pars.numloci), step=pars.stepsize,begin=beginCollectingData),
