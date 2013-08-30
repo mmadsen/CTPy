@@ -4,10 +4,12 @@
 # This work is licensed under the terms of the Apache Software License, Version 2.0.  See the file LICENSE for details.
 
 import logging as log
-import ctpy.math.simulation_calculations as sc
+import ctpy.math.simulation_calculations as calc
 import ctpy.utils as utils
 
 simconfig = utils.CTPyConfiguration(None)
+
+sc = calc.SimulationCalculations(simconfig)
 
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 

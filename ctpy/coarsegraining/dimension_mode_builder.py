@@ -28,11 +28,9 @@ import ctpy
 log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 
-
-
-def build_even_dimension(num_modes):
+def build_even_dimension(simconfig, num_modes):
     mode_boundaries = []
-    mode_width = float(ctpy.MAXALLELES) / float(num_modes)
+    mode_width = float(simconfig.MAXALLELES) / float(num_modes)
     lower_val = 0.0
     upper_val = 0.0
     for mode in range(0, num_modes):
@@ -43,7 +41,7 @@ def build_even_dimension(num_modes):
     return mode_boundaries
 
 
-def build_random_dimension(num_modes):
+def build_random_dimension(simconfig, num_modes):
     iboundaries = []
     mode_boundaries = []
     num_internal_boundaries = num_modes - 1
@@ -59,8 +57,8 @@ def build_random_dimension(num_modes):
     iboundaries.sort()
 
     for mode in range(0, num_modes):
-        lower_val = lower_val * ctpy.MAXALLELES
-        upper_val = iboundaries[mode] * ctpy.MAXALLELES
+        lower_val = lower_val * simconfig.MAXALLELES
+        upper_val = iboundaries[mode] * simconfig.MAXALLELES
         mode_boundaries.append(dict(lower=lower_val, upper=upper_val))
         lower_val = iboundaries[mode]
 
@@ -69,87 +67,87 @@ def build_random_dimension(num_modes):
 
 
 
-# TODO:  needs to deal with cases where maxalleles % num_modes leaves a remainder...
-
-
-def build_even_partitions_all_dimensions(num_modes, sim_param):
-    """
-
-
-    :param num_modes:
-    :param sim_param:
-    :return:
-    """
-    dimensions = {}
-
-    # to start, we partition into quarters for each locus (dimension)
-    mode_width = sim_param["maxalleles"] / num_modes
-
-    for dimension in range(0, sim_param["numloci"]):
-        mode_boundaries_dict = {}
-        lower_val = 0.0
-        upper_val = 0.0
-        for mode in range(0,num_modes):
-            upper_val += mode_width
-            mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
-            lower_val = upper_val
-            dimensions[dimension] = mode_boundaries_dict
-    return dimensions
-
-
-def build_random_partitions_all_dimensions(num_modes, sim_param):
-    """
-    For k desired modes, generate random mode boundaries within maxalleles.
-    Algorithm generates k-1 "internal" boundaries on the unit interval [0,1]
-    and then scales maxalleles by the unit interval partitions.  Upper
-    and lower internal boundaries are equivalent, since they will be
-    interpreted with open/closed interval semantics.
-
-
-    :param num_modes:
-    :param sim_param:
-    :return: dict of dimension-specific dicts, within each of which a mode maps to a dict of upper and lower boundaries
-    """
-    dimensions = {}
-    num_internal_boundaries = num_modes - 1
-
-    for dimension in range(0, sim_param["numloci"]):
-        tempboundary = list()
-        mode_boundaries_dict = {}
-        maxalleles = sim_param["maxalleles"]
-
-        for i in range(0, num_internal_boundaries):
-            random_variate = random.random()
-            tempboundary.append(random_variate)
-
-        # add the final upper boundary
-        tempboundary.append(1.0)
-
-        lower_val = 0.0
-        upper_val = 0.0
-        tempboundary.sort()
-
-        for mode in range(0, num_modes):
-            lower_val = int(lower_val * maxalleles)
-            upper_val = int(tempboundary[mode] * maxalleles)
-            mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
-            lower_val = tempboundary[mode]
-
-        dimensions[dimension] = mode_boundaries_dict
-        # TODO:  missing logic for scaling to maxalleles, need to debug this first...
-    return dimensions
-
-
-if __name__ == "__main__":
-    sim_param = {}
-    sim_param["numloci"] = 3
-    sim_param["maxalleles"] = 100000000
-
-
-    print "Testing random partitions for 3 dimensions, 4 modes"
-    result_dict = build_random_partitions_all_dimensions(4, sim_param)
-    pp.pprint(result_dict)
-
-    print "Testing even partitions for 3 dimensions, 4 modes"
-    result_dict = build_even_partitions_all_dimensions(4, sim_param)
-    pp.pprint(result_dict)
+# # TODO:  needs to deal with cases where maxalleles % num_modes leaves a remainder...
+#
+#
+# def build_even_partitions_all_dimensions(num_modes, sim_param):
+#     """
+#
+#
+#     :param num_modes:
+#     :param sim_param:
+#     :return:
+#     """
+#     dimensions = {}
+#
+#     # to start, we partition into quarters for each locus (dimension)
+#     mode_width = sim_param["maxalleles"] / num_modes
+#
+#     for dimension in range(0, sim_param["numloci"]):
+#         mode_boundaries_dict = {}
+#         lower_val = 0.0
+#         upper_val = 0.0
+#         for mode in range(0,num_modes):
+#             upper_val += mode_width
+#             mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
+#             lower_val = upper_val
+#             dimensions[dimension] = mode_boundaries_dict
+#     return dimensions
+#
+#
+# def build_random_partitions_all_dimensions(num_modes, sim_param):
+#     """
+#     For k desired modes, generate random mode boundaries within maxalleles.
+#     Algorithm generates k-1 "internal" boundaries on the unit interval [0,1]
+#     and then scales maxalleles by the unit interval partitions.  Upper
+#     and lower internal boundaries are equivalent, since they will be
+#     interpreted with open/closed interval semantics.
+#
+#
+#     :param num_modes:
+#     :param sim_param:
+#     :return: dict of dimension-specific dicts, within each of which a mode maps to a dict of upper and lower boundaries
+#     """
+#     dimensions = {}
+#     num_internal_boundaries = num_modes - 1
+#
+#     for dimension in range(0, sim_param["numloci"]):
+#         tempboundary = list()
+#         mode_boundaries_dict = {}
+#         maxalleles = sim_param["maxalleles"]
+#
+#         for i in range(0, num_internal_boundaries):
+#             random_variate = random.random()
+#             tempboundary.append(random_variate)
+#
+#         # add the final upper boundary
+#         tempboundary.append(1.0)
+#
+#         lower_val = 0.0
+#         upper_val = 0.0
+#         tempboundary.sort()
+#
+#         for mode in range(0, num_modes):
+#             lower_val = int(lower_val * maxalleles)
+#             upper_val = int(tempboundary[mode] * maxalleles)
+#             mode_boundaries_dict[mode] = dict(lower=lower_val, upper=upper_val)
+#             lower_val = tempboundary[mode]
+#
+#         dimensions[dimension] = mode_boundaries_dict
+#         # TODO:  missing logic for scaling to maxalleles, need to debug this first...
+#     return dimensions
+#
+#
+# if __name__ == "__main__":
+#     sim_param = {}
+#     sim_param["numloci"] = 3
+#     sim_param["maxalleles"] = 100000000
+#
+#
+#     print "Testing random partitions for 3 dimensions, 4 modes"
+#     result_dict = build_random_partitions_all_dimensions(4, sim_param)
+#     pp.pprint(result_dict)
+#
+#     print "Testing even partitions for 3 dimensions, 4 modes"
+#     result_dict = build_even_partitions_all_dimensions(4, sim_param)
+#     pp.pprint(result_dict)

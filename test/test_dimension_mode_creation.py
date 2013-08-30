@@ -8,17 +8,19 @@
 
 import unittest
 import ctpy.coarsegraining as cg
+import ctpy.utils as utils
 import pprint as pp
 import logging as log
 
 class DimensionModeCreationTest(unittest.TestCase):
 
-    def test_random_creation(self):
-        sim_param = {}
-        sim_param["numloci"] = 3
-        sim_param["maxalleles"] = 100000
+    def setUp(self):
+        self.config = utils.CTPyConfiguration(None)
 
-        result_dict = cg.dmb.build_random_partitions_all_dimensions(4, sim_param)
+    def test_random_creation(self):
+
+        result_dict = cg.dmb.build_random_dimension(self.config,4)
+
 
 if __name__ == "__main__":
     unittest.main()

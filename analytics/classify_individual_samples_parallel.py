@@ -29,12 +29,14 @@ import workerpool
 
 def setup():
     sargs = utils.ScriptArgs()
-    global sargs
+    global sargs, config, simconfig
 
     if sargs.debug == 1:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
+
+    simconfig = utils.CTPyConfiguration(sargs.configuration)
 
     log.debug("experiment name: %s", sargs.experiment_name)
     data.set_experiment_name(sargs.experiment_name)
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     log.info("number of classifications: %s", len(classifications))
 
     for classification in classifications:
-        classifier = cg.ClassIdentifier(classification)
+        classifier = cg.ClassIdentifier(simconfig, classification)
 
 
     pool.shutdown()

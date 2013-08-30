@@ -72,7 +72,7 @@ log.info("Records for classifications: %s", data.ClassificationData.m.count())
 log.info("Constructing even partitions")
 
 for nmodes in simconfig.DIMENSION_PARTITIONS:
-    boundaries = cg.dmb.build_even_dimension(nmodes)
+    boundaries = cg.dmb.build_even_dimension(simconfig, nmodes)
     data.storeClassificationModeDefinition(simconfig.MODETYPE_EVEN,simconfig.MAXALLELES,nmodes,boundaries)
 
 
@@ -81,7 +81,7 @@ log.info("Constructing random partitions: %s replicates per partition size", sim
 
 for nmodes in simconfig.DIMENSION_PARTITIONS:
     for i in range(0, simconfig.NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES):
-        boundaries = cg.dmb.build_random_dimension(nmodes)
+        boundaries = cg.dmb.build_random_dimension(simconfig, nmodes)
         data.storeClassificationModeDefinition(simconfig.MODETYPE_RANDOM, simconfig.MAXALLELES, nmodes, boundaries)
 
 
@@ -120,7 +120,6 @@ for dim in simconfig.DIMENSIONS_STUDIED:
             data.storeClassificationData(simconfig.MODETYPE_RANDOM,simconfig.MAXALLELES,dim,nmodes,dimensions)
 
 
-log.info("Building %s classifications", sc.compute_total_classifications_across_dimensionality())
 
 count = data.ClassificationData.m.count()
 log.info("Constructed %s classifications and stored in database", count)
