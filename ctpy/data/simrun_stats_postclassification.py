@@ -38,15 +38,16 @@ def _get_collection_id():
 
 
 def storeSimrunStatsPostclassification(generation, classification_id, class_type, class_dim,
-                                    coarseness, replication, ssize,
+                                    coarseness, num_classes, replication, ssize,
                                     popsize, mutation, sim_id, moderichness, classrichness,
-                                    mode_iqv, class_iqv, design_space_occupation, class_innovation_interval_times):
+                                    mode_iqv, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times):
     SimrunStatsPostclassification(dict(
         simulation_time=generation,
         classification_id=classification_id,
         classification_type=class_type,
         classification_dim=class_dim,
         classification_coarseness=coarseness,
+        classification_num_classes=num_classes,
         replication=replication,
         sample_size=ssize,
         population_size=popsize,
@@ -56,6 +57,7 @@ def storeSimrunStatsPostclassification(generation, classification_id, class_type
         class_richness=classrichness,
         mode_evenness_iqv=mode_iqv,
         class_evenness_iqv=class_iqv,
+        class_shannon_entropy=class_entropy,
         design_space_occupation=design_space_occupation,
         class_innovation_interval_times=class_innovation_interval_times
     )).m.insert()
@@ -81,6 +83,7 @@ class SimrunStatsPostclassification(Document):
         classification_type = Field(str)
         classification_dim = Field(int)
         classification_coarseness = Field(float)
+        classification_num_classes = Field(int)
 
         # fields pertaining to simulation run
         simulation_time = Field(int)
@@ -95,5 +98,6 @@ class SimrunStatsPostclassification(Document):
         class_richness = Field(int)         # a single value, for the population in this generation of this sim run
         mode_evenness_iqv = Field([float])  # a list of evenness values, in order of locus ID
         class_evenness_iqv = Field(float)   # a single value, for the population in this generation of this sim run
+        class_shannon_entropy = Field(float)
         design_space_occupation = Field(float)  # a single value, denoting the fraction of occupied classes
         class_innovation_interval_times = Field([int])   # a list of intervals between appearances of a new class
