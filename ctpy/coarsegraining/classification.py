@@ -58,6 +58,7 @@ class ClassIdentifier:
             mode_counts_by_dimension = {}
             class_counts = defaultdict(int)
 
+
             for dim_num in range(0, self.dimensionality):
                 # initialize a cache
                 mode_counts_by_dimension[dim_num] = defaultdict(int)
@@ -78,14 +79,15 @@ class ClassIdentifier:
 
             class_freq = [float(count)/float(s.sample_size) for class_id, count in class_counts.items() ]
             shannon_entropy = m.diversity_shannon_entropy(class_freq)
+            class_iqv = m.diversity_iqv(class_freq)
 
-            log.debug("class freq: %s  shannon entropy: %s", class_freq, shannon_entropy)
+            log.debug("class freq: %s  shannon entropy: %s   iqv: %s", class_freq, shannon_entropy, class_iqv)
             stats = self._calc_postclassification_stats()
             log.debug("class richness %s", len(class_counts))
             data.storeSimrunStatsPostclassification(s.simulation_time,ObjectId(self.class_id),self.class_type,self.dimensionality,
                                                         self.coarseness,self.classification_size,s.replication,s.sample_size,s.population_size,s.mutation_rate,
                                                         s.simulation_run_id,stats["mode_richness_list"],stats["class_richness"],
-                                                        None,None,shannon_entropy,stats["design_space_occupation"],None)
+                                                        None,class_iqv,shannon_entropy,stats["design_space_occupation"],None)
 
             if self.save_indiv:
                     data.storeIndividualSampleClassified(s.simulation_time,ObjectId(self.class_id),self.class_type,self.dimensionality,

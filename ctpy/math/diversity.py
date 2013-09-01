@@ -8,6 +8,7 @@
 
 import logging as logger
 from math import log
+import numpy as np
 
 
 
@@ -18,8 +19,29 @@ def diversity_shannon_entropy(freq_list):
         sw += freq_list[i] * log(freq_list[i])
     return sw * -1.0
 
-def diversity_iqv(freq_list, num_classes_possible):
-    pass
+
+
+
+def diversity_iqv(freq_list):
+    k = len(freq_list)
+
+    if k <= 1:
+        return 0.0
+
+    isum = 1.0 - _sum_squares(freq_list)
+    factor = float(k) / (float(k) - 1.0)
+    iqv = factor * isum
+
+    logger.debug("k: %s  isum: %s  factor: %s  iqv:  %s", k, isum, factor, iqv)
+    return iqv
 
 def diversity_neiman_tf(freq_list, num_classes_possible):
     pass
+
+
+
+def _sum_squares(freq_list):
+    ss = 0.0
+    for p in freq_list:
+        ss += p ** 2.0
+    return ss
