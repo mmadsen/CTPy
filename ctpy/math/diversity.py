@@ -17,7 +17,10 @@ def diversity_shannon_entropy(freq_list):
     sw = 0.0
     for i in range(0, k):
         sw += freq_list[i] * log(freq_list[i])
-    return sw * -1.0
+    if sw == 0:
+        return 0.0
+    else:
+        return sw * -1.0
 
 
 

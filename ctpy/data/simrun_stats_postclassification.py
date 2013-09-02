@@ -40,7 +40,7 @@ def _get_collection_id():
 def storeSimrunStatsPostclassification(generation, classification_id, class_type, class_dim,
                                     coarseness, num_classes, replication, ssize,
                                     popsize, mutation, sim_id, moderichness, classrichness,
-                                    mode_iqv, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times):
+                                    mode_iqv, mode_entropy, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times):
     SimrunStatsPostclassification(dict(
         simulation_time=generation,
         classification_id=classification_id,
@@ -56,6 +56,7 @@ def storeSimrunStatsPostclassification(generation, classification_id, class_type
         mode_richness=moderichness,
         class_richness=classrichness,
         mode_evenness_iqv=mode_iqv,
+        mode_evenness_shannon_entropy=mode_entropy,
         class_evenness_iqv=class_iqv,
         class_shannon_entropy=class_entropy,
         design_space_occupation=design_space_occupation,
@@ -97,6 +98,7 @@ class SimrunStatsPostclassification(Document):
         mode_richness = Field([int])        # a list of richness values, in order of locus ID
         class_richness = Field(int)         # a single value, for the population in this generation of this sim run
         mode_evenness_iqv = Field([float])  # a list of evenness values, in order of locus ID
+        mode_evenness_shannon_entropy = Field([float])
         class_evenness_iqv = Field(float)   # a single value, for the population in this generation of this sim run
         class_shannon_entropy = Field(float)
         design_space_occupation = Field(float)  # a single value, denoting the fraction of occupied classes

@@ -28,8 +28,8 @@ import workerpool
 
 
 def setup():
-    sargs = utils.ScriptArgs()
     global sargs, config, simconfig
+    sargs = utils.ScriptArgs()
 
     if sargs.debug == 1:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
