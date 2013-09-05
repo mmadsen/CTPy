@@ -4,10 +4,8 @@
 # This work is licensed under the terms of the Apache Software License, Version 2.0.  See the file LICENSE for details.
 
 """
-Given a given a set of classification id's, run through the individual_sample database,
-identifying all samples to all of the classifications (matching samples of dimensionality D
-to classifications of the same dimensionality).  Insert the results into
-individual_sample_classified.
+Iterates over individual simulation runs, instead of just taking jumbled samples from the database,
+and calculating any statistics that need to be aggregated over a whole simulation run, recording it in the database.
 
 Uses workerpool to create a number of parallel threads to speed processing
 
@@ -43,7 +41,7 @@ def setup():
     data.set_database_hostname(sargs.database_hostname)
     data.set_database_port(sargs.database_port)
 
-    log.info("CLASSIFY_INDIVIDUAL_SAMPLES_PARALLEL - Starting program")
+    log.info("CALCULATE_PERSIMRUN_STATISTICS - Starting program")
     config = data.getMingConfiguration()
     ming.configure(**config)
 
@@ -54,16 +52,17 @@ if __name__ == "__main__":
     setup()
     #pool = workerpool.WorkerPool(size=sargs.parallelization)
 
-    # get all classification ID's
-    classification_id_list = []
-    classifications = data.ClassificationData.m.find()
+    # get all simulation run id's
+    res = data.SimulationRun.m.find(dict(),dict(simulation_run_id=1)).all()
 
 
-    log.info("number of classifications: %s", len(classifications))
 
-    for classification in classifications:
-        classifier = cg.ClassificationStatsPerSample(simconfig, classification, save_identified_indiv=True)
-        classifier.identify_individual_samples()
+
+    simruns = set([run.simulation_run_id for run in [x for x in res ]])
+    log.debug("%s", simruns)
+    stats_processor = cg.ClassificationStatsPerSimrun(simconfig)
+    for run_id in simruns:
+        stats_processor.process_simulation_run(run_id)
 
     #pool.shutdown()
     #pool.wait()

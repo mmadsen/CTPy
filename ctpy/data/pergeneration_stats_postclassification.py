@@ -25,7 +25,7 @@ def _get_dataobj_id():
     """
         Returns the short handle used for this data object in Ming configuration
     """
-    return 'simrun_stats_postclassification'
+    return 'pergeneration_stats_postclassification'
 
 
 def _get_collection_id():
@@ -37,11 +37,11 @@ def _get_collection_id():
 
 
 
-def storeSimrunStatsPostclassification(generation, classification_id, class_type, class_dim,
+def storePerGenerationStatsPostclassification(generation, classification_id, class_type, class_dim,
                                     coarseness, num_classes, replication, ssize,
                                     popsize, mutation, sim_id, moderichness, classrichness,
                                     mode_iqv, mode_entropy, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times):
-    SimrunStatsPostclassification(dict(
+    PerGenerationStatsPostclassification(dict(
         simulation_time=generation,
         classification_id=classification_id,
         classification_type=class_type,
@@ -65,19 +65,19 @@ def storeSimrunStatsPostclassification(generation, classification_id, class_type
     return True
 
 
-def updateFieldSimrunStatsPostclassification(record_id, field_name, value):
-    record = SimrunStatsPostclassification.m.find(dict(_id=record_id)).one()
+def updateFieldPerGenerationStatsPostclassification(record_id, field_name, value):
+    record = PerGenerationStatsPostclassification.m.find(dict(_id=record_id)).one()
     record[field_name] = value
     record.m.save()
 
 
 
 
-class SimrunStatsPostclassification(Document):
+class PerGenerationStatsPostclassification(Document):
 
     class __mongometa__:
         session = Session.by_name(_get_dataobj_id())
-        name = 'simrun_stats_postclassification'
+        name = 'pergeneration_stats_postclassification'
         _id = Field(schema.ObjectId)
         # fields pertaining to classification
         classification_id = Field(str)

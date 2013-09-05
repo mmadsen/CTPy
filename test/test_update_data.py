@@ -24,7 +24,7 @@ class TestUpdateData(unittest.TestCase):
         ming.configure(**config)
 
         # clean out the collection
-        data.SimrunStatsPostclassification.m.remove()
+        data.PerGenerationStatsPostclassification.m.remove()
 
         self.data = dict(
             simulation_time=1000,
@@ -47,16 +47,16 @@ class TestUpdateData(unittest.TestCase):
 
     def test_update(self):
         updateValue = 5000
-        data.SimrunStatsPostclassification(self.data).m.save()
+        data.PerGenerationStatsPostclassification(self.data).m.save()
 
-        record = data.SimrunStatsPostclassification.m.find().first()
+        record = data.PerGenerationStatsPostclassification.m.find().first()
         data.updateFieldSimrunStatsPostclassification(record._id, "sample_size", updateValue)
 
 
         #record["sample_size"] = 5000
         #record.m.save()
 
-        record2 = data.SimrunStatsPostclassification.m.find().first()
+        record2 = data.PerGenerationStatsPostclassification.m.find().first()
         self.assertEqual(updateValue, record2.sample_size)
 
 

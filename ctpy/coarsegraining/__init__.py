@@ -6,4 +6,4 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 import dimension_mode_builder as dmb
-from classification import ClassIdentifier
+from classification import ClassificationStatsPerSample, ClassificationStatsPerSimrun
