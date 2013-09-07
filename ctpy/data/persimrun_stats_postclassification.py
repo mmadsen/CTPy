@@ -85,6 +85,6 @@ class PerSimrunStatsPostclassification(Document):
         classification_coarseness = Field(float)
 
 
-        class_time_first_appearance = Field(dict(id=str,time=int))
+        class_time_first_appearance = Field([dict(classid=str,time=int)])
         class_innovation_interval_mean = Field(float)
         class_innovation_interval_sd = Field(float)

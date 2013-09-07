@@ -50,7 +50,7 @@ class TestUpdateData(unittest.TestCase):
         data.PerGenerationStatsPostclassification(self.data).m.save()
 
         record = data.PerGenerationStatsPostclassification.m.find().first()
-        data.updateFieldSimrunStatsPostclassification(record._id, "sample_size", updateValue)
+        data.updateFieldPerGenerationStatsPostclassification(record._id, "sample_size", updateValue)
 
 
         #record["sample_size"] = 5000

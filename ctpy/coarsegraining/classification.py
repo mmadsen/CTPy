@@ -12,12 +12,16 @@ from bson.objectid import ObjectId
 import ming
 import logging as log
 from collections import defaultdict
+import numpy as np
 
 
 class ClassificationStatsPerSimrun:
 
+
     def __init__(self, simconfig):
         self.simconfig = simconfig
+        self.simrun_param_cache = None
+        self.param_cached = False
 
 
     def process_simulation_run(self, simrun_id):
@@ -27,12 +31,15 @@ class ClassificationStatsPerSimrun:
 
         :return:
         """
-        log.debug("Starting analysis of simulation run %s", simrun_id)
+        #log.debug("Starting analysis of simulation run %s", simrun_id)
 
         records = self._get_samples_for_simulation_run(simrun_id)
         if len(records) < 1:
             log.info("No samples in the database for simulation run: %s", simrun_id)
             return
+        else:
+            log.info("Samples found for simulation run: %s", simrun_id)
+
 
 
         class_time_cache = {}
@@ -41,8 +48,16 @@ class ClassificationStatsPerSimrun:
 
 
         for s in records:
-            log.debug("starting analysis of record")
-            log.debug("record: %s", s)
+            #log.debug("starting analysis of record")
+            #log.debug("record: %s", s)
+
+            # Only do this once - keep one of the records around so we can snag parameters from it later,
+            # outside the processing loop
+            if self.param_cached is False:
+                self.simrun_param_cache = s
+                self.param_cached = True
+
+
 
             gen = s.simulation_time
 
@@ -57,21 +72,49 @@ class ClassificationStatsPerSimrun:
                         class_time_cache[class_id] = gen
 
         # the cache now contains the earliest time of appearance of all classes in the simulation run
-        log.debug("cache: %s", class_time_cache)
-
+        #log.debug("cache: %s", class_time_cache)
+        class_time_appeared = [dict(classid=k,time=v) for k,v in class_time_cache.items()]
+        #log.debug("%s", class_time_appeared)
 
         # calculate other stats...
+        stats = self._innovation_interval_stats(class_time_cache)
 
 
-        data.storePerSimrunStatsPostclassification()
+        # save the results
+        s = self.simrun_param_cache
+        data.storePerSimrunStatsPostclassification(s.classification_id,s.classification_type,s.classification_dim,
+                                                   s.classification_coarseness,s.replication,s.sample_size,
+                                                   s.population_size,s.mutation_rate,s.simulation_run_id,class_time_appeared,
+                                                   stats[0],stats[1])
 
-    # private methods
+
+
+
+
     def _get_samples_for_simulation_run(self, simrun_id):
         """
 
         :return:
         """
         return data.IndividualSampleClassified.m.find(dict(simulation_run_id=simrun_id))
+
+
+    def _innovation_interval_stats(self,cache):
+        """
+        Takes a dict of class_id and generation of first appearance, and calculates the
+        intervals between class appearances
+        :return:  tuple of mean, sd
+        """
+        sorted_times = np.array(sorted(cache.values()))
+        #log.debug("sorted times: %s", sorted_times)
+        intervals = np.diff(sorted_times)
+        #log.debug("intervals: %s", intervals)
+        mean = np.mean(intervals)
+        # ddof = 1 is required to give the standard statistical definition, with n-1 in the denominator
+        sd = np.std(intervals, ddof=1)
+        #log.debug("mean: %s  sd: %s", mean, sd)
+        return (mean,sd)
+
 
 
 
@@ -90,8 +133,8 @@ class ClassificationStatsPerSample:
         self.save_indiv = save_identified_indiv
         self.classification_size = self._calc_num_classes()
 
-        log.debug("initializing ClassIdentifier for classification %s", self.class_id)
-        log.debug("    Saving identified individuals, in addition to stats? %s", self.save_indiv)
+        #log.debug("initializing ClassIdentifier for classification %s", self.class_id)
+        #log.debug("    Saving identified individuals, in addition to stats? %s", self.save_indiv)
 
 
     def identify_individual_samples(self):
@@ -111,7 +154,7 @@ class ClassificationStatsPerSample:
         log.info("Starting identification of individuals to classification %s", self.class_id)
         records = self._get_individual_cursor_for_dimensionality(self.dimensionality)
 
-        log.debug("record length: %s", len(records))
+        #log.debug("record length: %s", len(records))
 
         for s in records:
             log.debug("Starting analysis of record")
@@ -142,9 +185,9 @@ class ClassificationStatsPerSample:
             shannon_entropy = m.diversity_shannon_entropy(class_freq)
             class_iqv = m.diversity_iqv(class_freq)
 
-            log.debug("class freq: %s  shannon entropy: %s   iqv: %s", class_freq, shannon_entropy, class_iqv)
+            #log.debug("class freq: %s  shannon entropy: %s   iqv: %s", class_freq, shannon_entropy, class_iqv)
             stats = self._calc_postclassification_stats(s)
-            log.debug("class richness %s", len(class_counts))
+            #log.debug("class richness %s", len(class_counts))
             data.storePerGenerationStatsPostclassification(s.simulation_time,ObjectId(self.class_id),self.class_type,self.dimensionality,
                                                         self.coarseness,self.classification_size,s.replication,s.sample_size,s.population_size,s.mutation_rate,
                                                         s.simulation_run_id,stats["mode_richness_list"],stats["class_richness"],
@@ -160,6 +203,7 @@ class ClassificationStatsPerSample:
 
 
     # private analytic methods
+
 
     def _calc_postclassification_stats(self,s):
         mode_richness_list = []

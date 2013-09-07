@@ -52,7 +52,6 @@ def setup():
 
 if __name__ == "__main__":
     setup()
-    #pool = workerpool.WorkerPool(size=sargs.parallelization)
 
     # get all classification ID's
     classification_id_list = []
@@ -64,6 +63,3 @@ if __name__ == "__main__":
     for classification in classifications:
         classifier = cg.ClassificationStatsPerSample(simconfig, classification, save_identified_indiv=True)
         classifier.identify_individual_samples()
-
-    #pool.shutdown()
-    #pool.wait()
