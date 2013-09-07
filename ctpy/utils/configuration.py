@@ -69,14 +69,7 @@ class CTPyConfiguration:
     to just classification.
     """
 
-    NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH = 10
-    """
-    Each simulation parameter combination is analyzed with different sample sizes, dimensionality,
-    classifications, and levels of time averaging.  At the maximum level of TA (1000?), with 10K
-    raw steps in the simulation post-stationarity, we'll end up wtih 10 samples of the coarsest duration.
-    We'll want to have the same number of samples at finer durations as well, even though we could have
-    1250 samples of duration 8, or 10K samples of duration 1.
-    """
+
 
     INITIAL_TRAIT_NUMBER = 10
     """
@@ -142,6 +135,17 @@ class CTPyConfiguration:
     TODO:  needs tuning, look at how we'll generate networks with this amount of clustering first.
     """
 
+    NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH = 1
+    """
+    Each simulation parameter combination is analyzed with different sample sizes, dimensionality,
+    classifications, and levels of time averaging.  At the maximum level of TA (1000?), with 10K
+    raw steps in the simulation post-stationarity, we'll end up wtih 10 samples of the coarsest duration.
+    We'll want to have the same number of samples at finer durations as well, even though we could have
+    1250 samples of duration 8, or 10K samples of duration 1.
+
+    This value ideally is *calculated* but I have to declare it and set a value here....
+    """
+
     def __init__(self, config_file):
         # if we don't give a configuration file on the command line, then we
         # just return a Configuration object, which has the default values specified above.
@@ -165,7 +169,22 @@ class CTPyConfiguration:
         for variable,value in self.config.iteritems():
             setattr(self, variable, value)
 
+        self._calc_derived_values()
+
+        # now finalize any calculated or derived values
+
+
     def __repr__(self):
         attrs = vars(self)
         rep = '\n'.join("%s: %s" % item for item in attrs.items() if item[0] != "config")
         return rep
+
+    def _calc_derived_values(self):
+        """
+        Each simulation parameter combination is analyzed with different sample sizes, dimensionality,
+        classifications, and levels of time averaging.  At the maximum level of TA (1000?), with 10K
+        raw steps in the simulation post-stationarity, we'll end up wtih 10 samples of the coarsest duration.
+        We'll want to have the same number of samples at finer durations as well, even though we could have
+        1250 samples of duration 8, or 10K samples of duration 1.
+        """
+        self.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH = int(self.SIMULATION_LENGTH_AFTER_STATIONARITY / self.SAMPLING_INTERVAL)

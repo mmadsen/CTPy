@@ -7,24 +7,30 @@ import logging as log
 import ctpy.math.simulation_calculations as calc
 import ctpy.utils as utils
 
-simconfig = utils.CTPyConfiguration(None)
+global sargs, config, simconfig
+sargs = utils.ScriptArgs()
+
+simconfig = utils.CTPyConfiguration(sargs.configuration)
+log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
 sc = calc.SimulationCalculations(simconfig)
 
-log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 log.info("========== SINGLE POPULATION MODELS ==============")
 log.info("Number of sim execution runs: %s", sc.compute_total_simulation_runs_simple())
-log.info("Number of sim replications: %s", sc.compute_total_simulation_replicates_simple())
-log.info("Number of replications (repl x ssize x simparam): %s", sc.compute_total_sample_size_replicates_simple())
-log.info("Number of replications (repl x dimensionality x ssize x simparam): %s", sc.compute_total_replicates_ssize_dimensionality())
+log.info("Number of replications per param set: %s", simconfig.REPLICATIONS_PER_PARAM_SET)
+log.info("Number of total replicates - trepl (repl x runs): %s", sc.compute_total_simulation_replicates_simple())
+log.info("Number of replications (trepl x ssize x simparam): %s", sc.compute_total_sample_size_replicates_simple())
+log.info("Number of replications (trepl x dimensionality x ssize x simparam): %s", sc.compute_total_replicates_ssize_dimensionality())
 log.info("Total number of classifications: %s", sc.compute_total_classifications())
-log.info("Total sample paths (repl x dimensionality x ssize x classification x simparams): %s","{:,}".format(sc.compute_total_replicates_ssize_dimensionality_classifications()))
-log.info("Total sample paths (repl x dim x ssize x class x simparams x taduration): %s", "{:,}".format(sc.compute_total_sample_paths_ssize_dim_class_taduration()))
-log.info("Number of samples per sample path per TA duration: %s", simconfig.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH)
-log.info("    ")
-log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL WITH TA: %s", "{:,}".format(sc.compute_total_number_samples_simple_models()))
+log.info("Total sample paths (trepl x dimensionality x ssize x classification x simparams): %s","{:,}".format(sc.compute_total_replicates_ssize_dimensionality_classifications()))
+log.info("Number of samples per full sample path (sim length after stationary / sampling interval): %s", simconfig.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH)
 log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL NO TA: %s","{:,}".format(sc.compute_total_number_samples_notimeavg_simple_models()))
+log.info("    ")
+log.info("Number of samples per sample path per TA duration: %s", simconfig.NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH)
+log.info("Total sample paths (trepl x dim x ssize x class x simparams x taduration): %s", "{:,}".format(sc.compute_total_sample_paths_ssize_dim_class_taduration()))
+log.info("TOTAL NUMBER OF FINAL SAMPLES FOR EACH SIMPLE MODEL WITH TA: %s", "{:,}".format(sc.compute_total_number_samples_simple_models()))
+
 
 log.info("======= END SINGLE POPULATION MODELS ======")
 log.info("    ")
