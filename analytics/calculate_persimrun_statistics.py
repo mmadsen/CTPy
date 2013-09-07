@@ -16,12 +16,7 @@ import ctpy.coarsegraining as cg
 import ctpy.utils as utils
 import ming
 import logging as log
-import pprint as pp
-import argparse
-import sys
-from bson.objectid import ObjectId
-import os
-import workerpool
+import datetime as datetime
 
 
 
@@ -45,11 +40,37 @@ def setup():
     config = data.getMingConfiguration()
     ming.configure(**config)
 
+def check_prior_completion():
+    """
+    We do not want to run this subsampling if we've done it previously to the same raw
+    data collection, because we'll be creating duplicate data sets.
+    :return: boolean
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    if experiment_record["postclassification_simrun_stats_complete"] == True:
+        return True
+    else:
+        return False
+
+
+def record_completion():
+    """
+    Once subsampling is complete, we want to record it in the database so we don't do it
+    again for the same data set.
+    :return: none
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    experiment_record["postclassification_simrun_stats_complete"] = True
+    experiment_record["postclassification_simrun_stats_tstamp"] = datetime.datetime.utcnow()
+    experiment_record.m.save()
 
 
 
 if __name__ == "__main__":
     setup()
+    if check_prior_completion() == True:
+        log.info("Classification identification of experiment %s already complete -- exiting", sargs.experiment_name)
+        exit(1)
 
     # get all simulation run id's
     res = data.SimulationRun.m.find(dict(),dict(simulation_run_id=1)).all()
@@ -63,3 +84,5 @@ if __name__ == "__main__":
     stats_processor = cg.ClassificationStatsPerSimrun(simconfig)
     for run_id in simruns:
         stats_processor.process_simulation_run(run_id)
+
+    record_completion()

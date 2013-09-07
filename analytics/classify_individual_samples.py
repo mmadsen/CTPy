@@ -9,54 +9,49 @@ identifying all samples to all of the classifications (matching samples of dimen
 to classifications of the same dimensionality).  Insert the results into
 individual_sample_classified.
 
-Everything this worker does is independent, and thus multiple workers can run in parallel to
-speed up processing.  The only caveat is that classification id's must only be given to
-one worker, or duplicate records will occur.
+Uses workerpool to create a number of parallel threads to speed processing
 
 """
 
 import ctpy.data as data
+import ctpy.coarsegraining as cg
 import ctpy.utils as utils
 import ming
 import logging as log
-import pprint as pp
-import argparse
-import sys
-from bson.objectid import ObjectId
-import os
-from subprocess import Popen
-import datetime
-
-# speed things up by caching mode definitions so we hit the DB a minimal number of times
-mode_definition_cache = dict()
-classification_dimension_cache = dict()
-
-class_worker_script = "analytics/classify_individual_samples_worker.py"
+import datetime as datetime
 
 
 def setup():
+    global sargs, config, simconfig
     sargs = utils.ScriptArgs()
-    global sargs
 
     if sargs.debug == 1:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
     else:
         log.basicConfig(level=log.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
+    simconfig = utils.CTPyConfiguration(sargs.configuration)
+
     log.debug("experiment name: %s", sargs.experiment_name)
     data.set_experiment_name(sargs.experiment_name)
     data.set_database_hostname(sargs.database_hostname)
     data.set_database_port(sargs.database_port)
 
-    log.info("CLASSIFY_INDIVIDUAL_SAMPLES_WORKER - Starting program")
+    log.info("CLASSIFY_INDIVIDUAL_SAMPLES_PARALLEL - Starting program")
     config = data.getMingConfiguration()
     ming.configure(**config)
 
-def batch(iterable, n = 1):
-   l = len(iterable)
-   for ndx in range(0, l, n):
-       yield iterable[ndx:min(ndx+n, l)]
-
+def check_prior_completion():
+    """
+    We do not want to run this subsampling if we've done it previously to the same raw
+    data collection, because we'll be creating duplicate data sets.
+    :return: boolean
+    """
+    experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
+    if experiment_record["classification_complete"] == True:
+        return True
+    else:
+        return False
 
 def record_completion():
     """
@@ -70,42 +65,21 @@ def record_completion():
     experiment_record.m.save()
 
 
-### Main Loop ###
-
 if __name__ == "__main__":
     setup()
+    if check_prior_completion() == True:
+        log.info("Classification identification of experiment %s already complete -- exiting", sargs.experiment_name)
+        exit(1)
 
     # get all classification ID's
     classification_id_list = []
     classifications = data.ClassificationData.m.find()
+
+
+    log.info("number of classifications: %s", len(classifications))
+
     for classification in classifications:
-        classification_id_list.append(str(classification["_id"]))
-
-    log.info("number of classifications: %s", len(classification_id_list))
-
-    # set up path for child process execution
-    wd = os.getcwd()
-    sys.path.append(wd)
-
-    # for b in batch(classification_id_list, 6):
-    #     print b
-
-
-    for classification_id in classification_id_list:
-        args = []
-        args.append(class_worker_script)
-        args.append("--experiment ")
-        args.append(sargs.experiment_name)
-        args.append("--dbhost ")
-        args.append(sargs.database_hostname)
-        args.append("--dbport ")
-        args.append(sargs.database_port)
-        args.append("--classifications ")
-        args.append(classification_id)
-        args.append("--debug")
-        args.append("1")
-
-        log.debug("args: %s", args)
-        retcode = os.system(" ".join(args))
+        classifier = cg.ClassificationStatsPerSample(simconfig, classification, save_identified_indiv=True)
+        classifier.identify_individual_samples()
 
     record_completion()

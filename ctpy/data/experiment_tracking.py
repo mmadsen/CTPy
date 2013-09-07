@@ -39,7 +39,7 @@ def _get_collection_id():
 
 
 def storeCompleteExperimentRecord(name,exp_start_time,description,sim_data_complete,sim_data_time,subsampling_complete,subsampling_time,
-    classification_complete,classification_time,timeaveraging_complete,timeaveraging_time,ta_classification_complete,
+    classification_complete,classification_time,postclass_stats,postclass_stats_time,timeaveraging_complete,timeaveraging_time,ta_classification_complete,
     ta_classification_time,exp_end_proc_time):
     """
     Provides tracking information for an experiment in the database
@@ -55,6 +55,8 @@ def storeCompleteExperimentRecord(name,exp_start_time,description,sim_data_compl
         subsampling_tstamp = subsampling_time,
         classification_complete = classification_complete,
         classification_tstamp = classification_time,
+        postclassification_simrun_stats_complete = postclass_stats,
+        postclassification_simrun_stats_tstamp = postclass_stats_time,
         timeaveraging_complete = timeaveraging_complete,
         timeaveraging_tstamp = timeaveraging_time,
         ta_classification_complete = ta_classification_complete,
@@ -88,6 +90,8 @@ class ExperimentTracking(Document):
     subsampling_tstamp = Field(datetime)
     classification_complete = Field(bool)
     classification_tstamp = Field(datetime)
+    postclassification_simrun_stats_complete = Field(bool)
+    postclassification_simrun_stats_tstamp = Field(datetime)
     timeaveraging_complete = Field(bool)
     timeaveraging_tstamp = Field(datetime)
     ta_classification_complete = Field(bool)
