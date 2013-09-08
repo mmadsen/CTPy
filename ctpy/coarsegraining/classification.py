@@ -9,7 +9,6 @@
 import ctpy.data as data
 import ctpy.math as m
 from bson.objectid import ObjectId
-import ming
 import logging as log
 from collections import defaultdict
 import numpy as np
@@ -27,76 +26,78 @@ class ClassificationStatsPerSimrun:
     def process_simulation_run(self, simrun_id):
         """
         Process the individual samples for a single simulation run, calculating any statistics that
-        require aggregation over the simulation run, saving the results to the database.
+        require aggregation over the simulation run, saving the results to the database.  This requires
+        that we process each "replication" separately, so that we do not mix them together.
 
         :return:
         """
         #log.debug("Starting analysis of simulation run %s", simrun_id)
 
-        records = self._get_samples_for_simulation_run(simrun_id)
-        if len(records) < 1:
-            log.info("No samples in the database for simulation run: %s", simrun_id)
-            return
-        else:
-            log.info("Samples found for simulation run: %s", simrun_id)
+        for replication in range(0,self.simconfig.REPLICATIONS_PER_PARAM_SET):
+            records = self._get_samples_for_simulation_run(simrun_id, replication)
+            if len(records) < 1:
+                log.info("No samples in the database for simulation run: %s", simrun_id)
+                return
+            else:
+                log.info("Samples found for simulation run: %s", simrun_id)
 
 
 
-        class_time_cache = {}
+            class_time_cache = {}
 
-        # classification info
-
-
-        for s in records:
-            #log.debug("starting analysis of record")
-            #log.debug("record: %s", s)
-
-            # Only do this once - keep one of the records around so we can snag parameters from it later,
-            # outside the processing loop
-            if self.param_cached is False:
-                self.simrun_param_cache = s
-                self.param_cached = True
+            # classification info
 
 
+            for s in records:
+                #log.debug("starting analysis of record")
+                #log.debug("record: %s", s)
 
-            gen = s.simulation_time
+                # Only do this once - keep one of the records around so we can snag parameters from it later,
+                # outside the processing loop
+                if self.param_cached is False:
+                    self.simrun_param_cache = s
+                    self.param_cached = True
 
-            for indiv in s.sample:
-                class_id = indiv.classid
 
-                # if we find an instance of the class showing up earlier than the cached time, record the earlier time
-                if class_id not in class_time_cache:
-                    class_time_cache[class_id] = gen
-                else:
-                    if class_time_cache[class_id] > gen:
+
+                gen = s.simulation_time
+
+                for indiv in s.sample:
+                    class_id = indiv.classid
+
+                    # if we find an instance of the class showing up earlier than the cached time, record the earlier time
+                    if class_id not in class_time_cache:
                         class_time_cache[class_id] = gen
+                    else:
+                        if class_time_cache[class_id] > gen:
+                            class_time_cache[class_id] = gen
 
-        # the cache now contains the earliest time of appearance of all classes in the simulation run
-        #log.debug("cache: %s", class_time_cache)
-        class_time_appeared = [dict(classid=k,time=v) for k,v in class_time_cache.items()]
-        #log.debug("%s", class_time_appeared)
+            # the cache now contains the earliest time of appearance of all classes in the simulation run
+            #log.debug("cache: %s", class_time_cache)
+            class_time_appeared = [dict(classid=k,time=v) for k,v in class_time_cache.items()]
+            #log.debug("%s", class_time_appeared)
 
-        # calculate other stats...
-        stats = self._innovation_interval_stats(class_time_cache)
-
-
-        # save the results
-        s = self.simrun_param_cache
-        data.storePerSimrunStatsPostclassification(s.classification_id,s.classification_type,s.classification_dim,
-                                                   s.classification_coarseness,s.replication,s.sample_size,
-                                                   s.population_size,s.mutation_rate,s.simulation_run_id,class_time_appeared,
-                                                   stats[0],stats[1])
+            # calculate other stats...
+            stats = self._innovation_interval_stats(class_time_cache)
 
 
+            # save the results
+            s = self.simrun_param_cache
+            data.storePerSimrunStatsPostclassification(s.classification_id,s.classification_type,s.classification_dim,
+                                                       s.classification_coarseness,s.replication,s.sample_size,
+                                                       s.population_size,s.mutation_rate,s.simulation_run_id,class_time_appeared,
+                                                       stats[0],stats[1])
 
 
 
-    def _get_samples_for_simulation_run(self, simrun_id):
+
+
+    def _get_samples_for_simulation_run(self, simrun_id, replication):
         """
 
         :return:
         """
-        return data.IndividualSampleClassified.m.find(dict(simulation_run_id=simrun_id))
+        return data.IndividualSampleClassified.m.find(dict(simulation_run_id=simrun_id,replication=replication))
 
 
     def _innovation_interval_stats(self,cache):
