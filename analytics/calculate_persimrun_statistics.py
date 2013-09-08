@@ -68,9 +68,9 @@ def record_completion():
 
 if __name__ == "__main__":
     setup()
-    if check_prior_completion() == True:
-        log.info("Classification identification of experiment %s already complete -- exiting", sargs.experiment_name)
-        exit(1)
+    # if check_prior_completion() == True:
+    #     log.info("Classification identification of experiment %s already complete -- exiting", sargs.experiment_name)
+    #     exit(1)
 
     # get all simulation run id's
     res = data.SimulationRun.m.find(dict(),dict(simulation_run_id=1)).all()
@@ -79,8 +79,6 @@ if __name__ == "__main__":
 
 
     simruns = set([run.simulation_run_id for run in [x for x in res ]])
-    #log.debug("%s", simruns)
-    log.info("Processing %s simulation runs for experiment: %s", len(simruns), sargs.experiment_name)
     stats_processor = cg.ClassificationStatsPerSimrun(simconfig)
     for run_id in simruns:
         stats_processor.process_simulation_run(run_id)

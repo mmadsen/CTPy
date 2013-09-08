@@ -12,7 +12,7 @@ from bson.objectid import ObjectId
 import logging as log
 from collections import defaultdict
 import numpy as np
-
+import itertools
 
 class ClassificationStatsPerSimrun:
 
@@ -33,9 +33,17 @@ class ClassificationStatsPerSimrun:
         """
         #log.debug("Starting analysis of simulation run %s", simrun_id)
 
-        for replication in range(0,self.simconfig.REPLICATIONS_PER_PARAM_SET):
-            records = self._get_samples_for_simulation_run(simrun_id, replication)
-            if len(records) < 1:
+        combinations = [
+            range(0,self.simconfig.REPLICATIONS_PER_PARAM_SET),
+            self._get_classification_ids()
+        ]
+
+        for par in itertools.product(*combinations):
+            repl = par[0]
+            classif = par[1]
+            log.debug("Processing combination %s - %s", repl, classif)
+            records = self._get_samples_for_simulation_run(simrun_id, repl, classif)
+            if records.count() < 1:
                 log.info("No samples in the database for simulation run: %s", simrun_id)
                 return
             else:
@@ -78,26 +86,38 @@ class ClassificationStatsPerSimrun:
             #log.debug("%s", class_time_appeared)
 
             # calculate other stats...
-            stats = self._innovation_interval_stats(class_time_cache)
+            #stats = self._innovation_interval_stats(class_time_cache)
 
 
             # save the results
+
+            # TODO:  Removed interval statistics 9/8/2013 in 1.0.2.  Need to rethink the strategy given lots of zeros and sampling intervals
+
+
             s = self.simrun_param_cache
             data.storePerSimrunStatsPostclassification(s.classification_id,s.classification_type,s.classification_dim,
                                                        s.classification_coarseness,s.replication,s.sample_size,
                                                        s.population_size,s.mutation_rate,s.simulation_run_id,class_time_appeared,
-                                                       stats[0],stats[1])
+                                                       None,None)
 
 
 
 
 
-    def _get_samples_for_simulation_run(self, simrun_id, replication):
+    def _get_samples_for_simulation_run(self, simrun_id, replication, classification):
         """
 
         :return:
         """
-        return data.IndividualSampleClassified.m.find(dict(simulation_run_id=simrun_id,replication=replication))
+        return data.IndividualSampleClassified.m.find(dict(simulation_run_id=simrun_id,replication=replication,classification_id=classification))
+
+    def _get_classification_ids(self):
+        res = data.ClassificationData.m.find().all()
+        id_list = []
+        for classification in res:
+            id_list.append(classification["_id"])
+        return id_list
+
 
 
     def _innovation_interval_stats(self,cache):
@@ -106,14 +126,20 @@ class ClassificationStatsPerSimrun:
         intervals between class appearances
         :return:  tuple of mean, sd
         """
-        sorted_times = np.array(sorted(cache.values()))
+
+        vals = sorted(cache.values())
+        log.debug("num class time values: %s", len(vals))
+
+
+        sorted_times = np.array(vals)
+        log.debug("num class time values: %s", len(sorted_times))
         #log.debug("sorted times: %s", sorted_times)
         intervals = np.diff(sorted_times)
-        #log.debug("intervals: %s", intervals)
+        log.debug("num intervals: %s  intervals: %s", len(intervals), intervals)
         mean = np.mean(intervals)
         # ddof = 1 is required to give the standard statistical definition, with n-1 in the denominator
         sd = np.std(intervals, ddof=1)
-        #log.debug("mean: %s  sd: %s", mean, sd)
+        log.debug("mean: %s  sd: %s", mean, sd)
         return (mean,sd)
 
 

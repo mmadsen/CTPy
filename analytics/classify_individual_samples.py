@@ -76,8 +76,6 @@ if __name__ == "__main__":
     classifications = data.ClassificationData.m.find()
 
 
-    log.info("number of classifications: %s", len(classifications))
-
     for classification in classifications:
         classifier = cg.ClassificationStatsPerSample(simconfig, classification, save_identified_indiv=True)
         classifier.identify_individual_samples()
