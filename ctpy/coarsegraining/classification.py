@@ -272,7 +272,7 @@ class ClassificationStatsPerSample:
         :param dimensionality:
         :return: returns a Ming/pymongo cursor for the result set, in batches
         """
-        sample_cursor = data.IndividualSampleFullDataset.m.find(dict(dimensionality=dimensionality)).batch_size(1000)
+        sample_cursor = data.IndividualSampleFullDataset.m.find(dict(dimensionality=dimensionality), timeout=False)
         return sample_cursor
 
 
