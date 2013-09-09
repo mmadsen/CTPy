@@ -24,6 +24,18 @@ from datetime import datetime
 
 __author__ = 'mark'
 
+stage_map = {
+    "description" : "description",
+    "simulation" : "sim_data_collected",
+    "subsampling" : "subsampling_complete",
+    "classification" : "classification_complete",
+    "postclassification-stats" : "postclassification_simrun_stats_complete",
+    "timeaveraging" : "timeaveraging_complete",
+    "timeaveraging-classified" : "ta_classification_complete"
+}
+
+
+
 def _get_dataobj_id():
     """
         Returns the short handle used for this data object in Ming configuration
@@ -72,6 +84,22 @@ def initializeExperimentRecord(name,exp_start_time):
         experiment_begin_tstamp = exp_start_time
     )).m.insert()
 
+
+def get_experiment_stage_tags():
+    """
+    Get a set of keys that can be used outside the module for selection (e.g., on CLI switches) of
+    fields for updating.
+
+    :return: dict of strings
+    """
+    return stage_map.keys()
+
+
+def update_field_by_stage_tag(experiment_name, tag_name, new_value):
+    db_field = stage_map[tag_name]
+    record = ExperimentTracking.m.find(dict(experiment_name = experiment_name)).one()
+    record[db_field] = new_value
+    record.m.save()
 
 
 class ExperimentTracking(Document):

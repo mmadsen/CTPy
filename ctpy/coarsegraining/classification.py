@@ -263,7 +263,16 @@ class ClassificationStatsPerSample:
 
 
     def _get_individual_cursor_for_dimensionality(self, dimensionality):
-        sample_cursor = data.IndividualSampleFullDataset.m.find(dict(dimensionality=dimensionality))
+        """
+        Returns all records in the "fulldataset" collection that have the same dimensionality as the classification
+        we're processing.  In order to prevent the mongodb timeout from occurring, we process the records in a batch
+        size of 1000, forcing the pymongo driver to go back to the database before the server times out the cursor.
+        This is helpful for datasets with a very large number of samples.
+
+        :param dimensionality:
+        :return: returns a Ming/pymongo cursor for the result set, in batches
+        """
+        sample_cursor = data.IndividualSampleFullDataset.m.find(dict(dimensionality=dimensionality)).batch_size(1000)
         return sample_cursor
 
 

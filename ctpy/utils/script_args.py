@@ -25,6 +25,9 @@ class ScriptArgs:
         parser.add_argument("--dbport", help="database port, defaults to 27017")
         parser.add_argument("--parallelization", help="Number of worker threads to employ in a parallel task")
         parser.add_argument("--configuration", help="Path to configuration file")
+
+
+
         parser.add_argument("--classifications", help="list of classification id's", nargs="*")
 
 
