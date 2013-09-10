@@ -73,7 +73,8 @@ if __name__ == "__main__":
 
     # get all classification ID's
     classification_id_list = []
-    classifications = data.ClassificationData.m.find()
+    # The runtime on this cursor might be extremely long, and we don't want the server timing out, so snag all the data at once.
+    classifications = data.ClassificationData.m.find().all()
 
 
     for classification in classifications:
