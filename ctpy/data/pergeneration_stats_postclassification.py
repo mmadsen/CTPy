@@ -71,6 +71,24 @@ def updateFieldPerGenerationStatsPostclassification(record_id, field_name, value
     record.m.save()
 
 
+def columns_to_export_for_analysis():
+    cols = [
+        "classification_type",
+        "classification_dim",
+        "classification_coarseness",
+        "simulation_time",
+        "replication",
+        "sample_size",
+        "population_size",
+        "mutation_rate",
+        "simulation_run_id",
+        "class_richness",
+        "class_evenness_iqv",
+        "class_shannon_entropy",
+        "design_space_occupation",
+    ]
+    return cols
+
 
 
 class PerGenerationStatsPostclassification(Document):
