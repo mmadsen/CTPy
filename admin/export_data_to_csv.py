@@ -15,7 +15,7 @@ import tempfile
 # Prototype:
 # mongoexport --db f-test_samples_postclassification --collection pergeneration_stats_postclassification --csv --out pgstats.csv --fieldFile fieldlist
 
-mongoexport = "/usr/local/mongodb/bin/mongoexport "
+mongoexport = "mongoexport "
 
 
 
