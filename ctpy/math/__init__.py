@@ -16,3 +16,4 @@
 
 from wright_fisher_process import expectedIAQuasiStationarityTimeHaploid
 from diversity import diversity_shannon_entropy, diversity_iqv, diversity_neiman_tf
+from trait_statistics import TraitStatisticsPerSample

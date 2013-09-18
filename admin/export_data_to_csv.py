@@ -85,7 +85,9 @@ if __name__ == "__main__":
                              data.pergeneration_stats_postclassification.columns_to_export_for_analysis())
 
 
-
+    export_collection_to_csv(data.pergeneration_stats_traits._get_collection_id(),
+                             "pergeneration_stats_traits",
+                             data.pergeneration_stats_traits.columns_to_export_for_analysis())
 
 
 

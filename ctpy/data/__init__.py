@@ -20,6 +20,7 @@ from individual_sample_fulldataset import storeIndividualSampleFullDataset, Indi
 from experiment_tracking import initializeExperimentRecord, storeCompleteExperimentRecord, ExperimentTracking, update_field_by_stage_tag, get_experiment_stage_tags
 from pergeneration_stats_postclassification import storePerGenerationStatsPostclassification, PerGenerationStatsPostclassification, updateFieldPerGenerationStatsPostclassification, columns_to_export_for_analysis
 from persimrun_stats_postclassification import storePerSimrunStatsPostclassification, updateFieldPerSimrunStatsPostclassification, PerSimrunStatsPostclassification, columns_to_export_for_analysis
+from pergeneration_stats_traits import storePerGenerationStatsTraits, updateFieldPerGenerationStatsTraits, columns_to_export_for_analysis, PerGenerationStatsTraits
 
 experiment_name = "test"
 # the following *should* be overridden by command line processing, even by defaults.
@@ -36,7 +37,7 @@ dbport = "override"
 modules = [individual_sample, trait_count_population, trait_count_sample, richness_sample, richness_population,
            simulation_data, trait_lifetime, classification_data, classification_mode_definitions,
            individual_sample_classified, individual_sample_fulldataset, experiment_tracking,
-           pergeneration_stats_postclassification,persimrun_stats_postclassification]
+           pergeneration_stats_postclassification,persimrun_stats_postclassification,pergeneration_stats_traits]
 
 
 def getMingConfiguration():

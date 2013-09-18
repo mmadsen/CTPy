@@ -31,7 +31,8 @@ stage_map = {
     "classification" : "classification_complete",
     "postclassification-stats" : "postclassification_simrun_stats_complete",
     "timeaveraging" : "timeaveraging_complete",
-    "timeaveraging-classified" : "ta_classification_complete"
+    "timeaveraging-classified" : "ta_classification_complete",
+    "trait-stats" : "trait_statistics_complete",
 }
 
 
@@ -52,7 +53,7 @@ def _get_collection_id():
 
 def storeCompleteExperimentRecord(name,exp_start_time,description,sim_data_complete,sim_data_time,subsampling_complete,subsampling_time,
     classification_complete,classification_time,postclass_stats,postclass_stats_time,timeaveraging_complete,timeaveraging_time,ta_classification_complete,
-    ta_classification_time,exp_end_proc_time):
+    ta_classification_time,trait_stat_complete,trait_stat_time,exp_end_proc_time):
     """
     Provides tracking information for an experiment in the database
     The complete record will rarely be used in production, this is mainly for testing and building tools.
@@ -73,6 +74,8 @@ def storeCompleteExperimentRecord(name,exp_start_time,description,sim_data_compl
         timeaveraging_tstamp = timeaveraging_time,
         ta_classification_complete = ta_classification_complete,
         ta_classification_tstamp = ta_classification_time,
+        trait_statistics_complete = trait_stat_complete,
+        trait_statistics_tstamp = trait_stat_time,
         experiment_end_processing_time = exp_end_proc_time,
     )).m.insert()
     return True
@@ -97,8 +100,12 @@ def get_experiment_stage_tags():
 
 def update_field_by_stage_tag(experiment_name, tag_name, new_value):
     db_field = stage_map[tag_name]
-    record = ExperimentTracking.m.find(dict(experiment_name = experiment_name)).one()
-    record[db_field] = new_value
+    _update_field(experiment_name, db_field, new_value)
+
+
+def _update_field(record_id, field_name, value):
+    record = ExperimentTracking.m.find(dict(experiment_name = record_id)).one()
+    record[field_name] = value
     record.m.save()
 
 
@@ -124,5 +131,7 @@ class ExperimentTracking(Document):
     timeaveraging_tstamp = Field(datetime)
     ta_classification_complete = Field(bool)
     ta_classification_tstamp = Field(datetime)
+    trait_statistics_complete = Field(bool)
+    trait_statistics_tstamp = Field(datetime)
     experiment_end_processing_time = Field(datetime)
 

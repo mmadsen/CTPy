@@ -4,17 +4,14 @@
 # This work is licensed under the terms of the Apache Software License, Version 2.0.  See the file LICENSE for details.
 
 """
-Given a given a set of classification id's, run through the individual_sample database,
-identifying all samples to all of the classifications (matching samples of dimensionality D
-to classifications of the same dimensionality).  Insert the results into
-individual_sample_classified.
-
-Uses workerpool to create a number of parallel threads to speed processing
+Process the fulldataset for trait-level statistics.  This is independent of classify_individual_samples,
+and neither affects the original data set.
 
 """
 
 import ctpy.data as data
 import ctpy.coarsegraining as cg
+import ctpy.math as m
 import ctpy.utils as utils
 import ming
 import logging as log
@@ -37,7 +34,7 @@ def setup():
     data.set_database_hostname(sargs.database_hostname)
     data.set_database_port(sargs.database_port)
 
-    log.info("CLASSIFY_INDIVIDUAL_SAMPLES_PARALLEL - Starting program")
+    log.info("CALCULATE_TRAIT_STATISTICS - Starting program")
     config = data.getMingConfiguration()
     ming.configure(**config)
 
@@ -48,7 +45,7 @@ def check_prior_completion():
     :return: boolean
     """
     experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
-    if experiment_record["classification_complete"] == True:
+    if experiment_record["trait_statistics_complete"] == True:
         return True
     else:
         return False
@@ -60,25 +57,23 @@ def record_completion():
     :return: none
     """
     experiment_record = data.ExperimentTracking.m.find(dict(experiment_name=sargs.experiment_name)).one()
-    experiment_record["classification_complete"] = True
-    experiment_record["classification_tstamp"] = datetime.datetime.utcnow()
+    experiment_record["trait_statistics_complete"] = True
+    experiment_record["trait_statistics_tstamp"] = datetime.datetime.utcnow()
     experiment_record.m.save()
 
 
 if __name__ == "__main__":
     setup()
     if check_prior_completion() == True:
-        log.info("Classification of experiment %s already complete -- exiting", sargs.experiment_name)
+        log.info("Trait statistics of experiment %s already complete -- exiting", sargs.experiment_name)
         exit(1)
 
-    # get all classification ID's
-    classification_id_list = []
-    # The runtime on this cursor might be extremely long, and we don't want the server timing out, so snag all the data at once.
-    classifications = data.ClassificationData.m.find().all()
+    # Result set for the fulldataset, with no cursor timeout in case it's very large
+    sample_cursor = data.IndividualSampleFullDataset.m.find(dict(),dict(timeout=False))
 
 
-    for classification in classifications:
-        classifier = cg.ClassificationStatsPerSample(simconfig, classification, save_identified_indiv=True)
-        classifier.identify_individual_samples()
+    for sample in sample_cursor:
+        stat = m.TraitStatisticsPerSample(simconfig, sample)
+        stat.process_trait_statistics()
 
     record_completion()
