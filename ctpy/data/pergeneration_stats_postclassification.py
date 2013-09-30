@@ -73,6 +73,7 @@ def updateFieldPerGenerationStatsPostclassification(record_id, field_name, value
 
 def columns_to_export_for_analysis():
     cols = [
+        "classification_id",
         "classification_type",
         "classification_dim",
         "classification_coarseness",
