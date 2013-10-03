@@ -6,8 +6,13 @@
 # http://creativecommons.org/licenses/GPL/2.0/
 
 import json
+from operator import itemgetter
+import pprint as pp
+
 
 class CTPyConfiguration:
+
+
     MODETYPE_EVEN = str("EVEN")
     MODETYPE_RANDOM = str('RANDOM')
 
@@ -146,6 +151,29 @@ class CTPyConfiguration:
     This value ideally is *calculated* but I have to declare it and set a value here....
     """
 
+    parameter_labels = {
+        'NUM_SAMPLES_ANALYZED_PER_FINAL_SAMPLE_PATH' : 'Num samples taken after stationarity, per run',
+        'POPULATION_SIZES_STUDIED' : 'Population sizes',
+        'SAMPLE_SIZES_STUDIED' : 'Sample sizes taken at each sampling interval',
+        'REPLICATIONS_PER_PARAM_SET' : 'Replicate simulation runs at each parameter combination',
+        'SAMPLING_INTERVAL' : 'Interval in generations for samples after stationarity',
+        'INITIAL_TRAIT_NUMBER' : 'Number of traits per dimension for initializing population',
+        'SIMULATION_LENGTH_AFTER_STATIONARITY' : 'Length of simulation run after stationarity',
+        'INNOVATION_RATES_STUDIED' : 'Innovation rates',
+        'DIMENSIONS_STUDIED' : 'Trait and classification dimensionalities',
+        'DIMENSION_PARTITIONS' : 'Classification coarseness levels (modes per dimension)',
+        'NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES' : 'Replicate random classifications per coarseness level',
+    }
+
+
+    vars_to_filter = ['config', 'TIME_AVERAGING_DURATIONS_STUDIED', 'MODETYPE_EVEN','MODETYPE_RANDOM','MAXALLELES','DEME_NUMBERS_STUDIED','NUMBER_RANDOM_MIGRATION_MATRICES_STUDIED','DENSITY_SMALL_WORLD_LINKS_STUDIED','CLUSTERING_COEFFICIENTS_STUDIED']
+    """
+    List of variables which are never (or at least currently) pretty-printed into summary tables using the latex or markdown/pandoc methods
+
+    Some variables might be here because they're currently unused or unimplemented....
+    """
+
+
     def __init__(self, config_file):
         # if we don't give a configuration file on the command line, then we
         # just return a Configuration object, which has the default values specified above.
@@ -178,6 +206,96 @@ class CTPyConfiguration:
         attrs = vars(self)
         rep = '\n'.join("%s: %s" % item for item in attrs.items() if item[0] != "config")
         return rep
+
+
+    def to_latex_table(self, experiment):
+        """
+        Constructs a LaTeX table and tabular environment for the simulation parameters and
+        control variable settings.  A list of "internal" or unimplemented variables are
+        filtered out of this list, and actual variable names are translated to human-readable
+        phrases with a lookup table.
+
+        :return: A string comprising the LaTeX representation for the parameters.
+
+        """
+        t = []
+        t.append('\\begin{table}[h]\n')
+        t.append('\\begin{tabular}{|l|c|}\n')
+        t.append('\\hline\n')
+        t.append('Simulation Parameter & Value or Values \\\\ \n')
+        t.append('\\hline\n')
+
+        for var in self._get_public_variables():
+            s = self.parameter_labels[var[0]]
+            s += ' & '
+
+
+            # need to know if var[1] is a single integer, or a list
+            if hasattr(var[1], '__iter__'):
+                s += ', '.join(map(str, var[1]))
+            else:
+                s += str(var[1])
+
+            s += '\\\\ \n'
+            t.append(s)
+
+
+        t.append('\\hline\n')
+        t.append('\\end{tabular}\n')
+        caption = "\\caption{Parameters for CTPy Simulations for Experiment Name: "
+        caption += experiment
+        caption += '}\n'
+        t.append(caption)
+        t.append('\\label{tab:ctpy-sim-parameters}\n')
+        t.append('\\end{table}\n')
+
+        return ''.join(t)
+
+
+
+
+    def to_pandoc_table(self, experiment):
+        """
+
+        Constructs a Markdown table (in pandoc format) for the simulation parameters and
+        control variable settings.  A list of "internal" or unimplemented variables are
+        filtered out of this list, and actual variable names are translated to human-readable
+        phrases with a lookup table.
+
+        :return: Text string representing a Pandoc table
+        """
+        t = []
+
+
+        t.append('| Simulation Parameter                   | Value or Values                                   |\n')
+        t.append('|:---------------------------------------|:--------------------------------------------------|\n')
+
+        for var in self._get_public_variables():
+            s = '|    '
+            s += self.parameter_labels[var[0]]
+            s += '   |   '
+
+
+            # need to know if var[1] is a single integer, or a list
+            if hasattr(var[1], '__iter__'):
+                s += ', '.join(map(str, var[1]))
+            else:
+                s += str(var[1])
+
+            s += '  | \n'
+            t.append(s)
+
+
+
+
+        return ''.join(t)
+
+    def _get_public_variables(self):
+        attrs = vars(self)
+        filtered = [item for item in attrs.items() if item[0] not in self.vars_to_filter]
+        filtered.sort(key=itemgetter(0))
+        return filtered
+
 
     def _calc_derived_values(self):
         """

@@ -13,9 +13,9 @@ import tempfile
 class ConfigurationTest(unittest.TestCase):
     filename = "test"
 
-    def test_configuration(self):
-        tf = tempfile.NamedTemporaryFile(dir="/tmp", delete=False)
-        tf.write("""
+    def setUp(self):
+        self.tf = tempfile.NamedTemporaryFile(dir="/tmp", delete=False)
+        self.tf.write("""
         {
     "MODETYPE_EVEN" : "EVEN",
     "MODETYPE_RANDOM" : "RANDOM",
@@ -38,14 +38,36 @@ class ConfigurationTest(unittest.TestCase):
     "CLUSTERING_COEFFICIENTS_STUDIED" : [0.0,0.1,0.25,0.5,0.75]
 }
         """)
-        tf.flush()
+        self.tf.flush()
 
-        print "tempfile: %s" % tf.name
+    def tearDown(self):
+        os.remove(self.tf.name)
 
-        config = utils.CTPyConfiguration(tf.name)
+
+    def test_configuration(self):
+
+
+        print "tempfile: %s" % self.tf.name
+
+        config = utils.CTPyConfiguration(self.tf.name)
         print "configured MAXALLELES: %s" % config.MAXALLELES
         self.assertEqual(100, config.MAXALLELES, "Config file value does not match")
-        os.remove(tf.name)
+
+
+
+    def test_latex_output(self):
+
+        config = utils.CTPyConfiguration(self.tf.name)
+        table = config.to_latex_table("test")
+
+        print table
+
+    def test_pandoc_output(self):
+
+        config = utils.CTPyConfiguration(self.tf.name)
+        table = config.to_pandoc_table("test")
+
+        print table
 
 if __name__ == "__main__":
     unittest.main()

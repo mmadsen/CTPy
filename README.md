@@ -32,6 +32,10 @@ can be substituted for a local development server.  This may be more easily conf
 CTPy uses the [Ming](http://merciless.sourceforge.net/index.html) object relational library to connect from Python to
 MongoDB.
 
+## Module Dependencies ##
+
+find . -name "*.py" | xargs grep -h 'import ' | grep -v ctpy | grep -v simu | sort | uniq > required-modules.txt
+
 
 ## Author ##
 
