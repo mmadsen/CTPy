@@ -34,7 +34,7 @@ MongoDB.
 
 ## Module Dependencies ##
 
-find . -name "*.py" | xargs grep -h 'import ' | grep -v ctpy | grep -v simu | sort | uniq > required-modules.txt
+find . -name "*.py" | xargs grep -h 'import ' | grep -v ctpy | grep -v simu | sort | cut -d' ' -f2 | uniq > required-modules.txt
 
 
 ## Author ##
