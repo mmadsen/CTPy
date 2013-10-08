@@ -40,7 +40,7 @@ def _get_collection_id():
 def storePerGenerationStatsPostclassification(generation, classification_id, class_type, class_dim,
                                     coarseness, num_classes, replication, ssize,
                                     popsize, mutation, sim_id, moderichness, classrichness,
-                                    mode_iqv, mode_entropy, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times):
+                                    mode_iqv, mode_entropy, class_iqv, class_entropy, design_space_occupation, class_innovation_interval_times,neutrality_slatkin):
     PerGenerationStatsPostclassification(dict(
         simulation_time=generation,
         classification_id=classification_id,
@@ -60,7 +60,8 @@ def storePerGenerationStatsPostclassification(generation, classification_id, cla
         class_evenness_iqv=class_iqv,
         class_shannon_entropy=class_entropy,
         design_space_occupation=design_space_occupation,
-        class_innovation_interval_times=class_innovation_interval_times
+        class_innovation_interval_times=class_innovation_interval_times,
+        class_neutrality_slatkin=neutrality_slatkin
     )).m.insert()
     return True
 
@@ -87,6 +88,7 @@ def columns_to_export_for_analysis():
         "class_evenness_iqv",
         "class_shannon_entropy",
         "design_space_occupation",
+        "class_neutrality_slatkin",
     ]
     return cols
 
@@ -122,3 +124,4 @@ class PerGenerationStatsPostclassification(Document):
         class_shannon_entropy = Field(float)
         design_space_occupation = Field(float)  # a single value, denoting the fraction of occupied classes
         class_innovation_interval_times = Field([int])   # a list of intervals between appearances of a new class
+        class_neutrality_slatkin = Field(float)

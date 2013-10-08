@@ -12,6 +12,7 @@ from bson.objectid import ObjectId
 import logging as log
 from collections import defaultdict
 import numpy as np
+from slatkin import montecarlo   # https://github.com/mmadsen/slatkin-exact-tools
 import itertools
 
 class ClassificationStatsPerSimrun:
@@ -211,6 +212,9 @@ class ClassificationStatsPerSample:
             class_freq = [float(count)/float(s.sample_size) for class_id, count in class_counts.items() ]
             shannon_entropy = m.diversity_shannon_entropy(class_freq)
             class_iqv = m.diversity_iqv(class_freq)
+            slatkin_result = self._slatkin_neutrality_for_classes(class_counts)
+
+
 
             #log.debug("class freq: %s  shannon entropy: %s   iqv: %s", class_freq, shannon_entropy, class_iqv)
             stats = self._calc_postclassification_stats(s)
@@ -218,7 +222,7 @@ class ClassificationStatsPerSample:
             data.storePerGenerationStatsPostclassification(s.simulation_time,ObjectId(self.class_id),self.class_type,self.dimensionality,
                                                         self.coarseness,self.classification_size,s.replication,s.sample_size,s.population_size,s.mutation_rate,
                                                         s.simulation_run_id,stats["mode_richness_list"],stats["class_richness"],
-                                                        stats["mode_iqv"],stats["mode_entropy"],class_iqv,shannon_entropy,stats["design_space_occupation"],None)
+                                                        stats["mode_iqv"],stats["mode_entropy"],class_iqv,shannon_entropy,stats["design_space_occupation"],None,slatkin_result)
 
             if self.save_indiv:
                     data.storeIndividualSampleClassified(s.simulation_time,ObjectId(self.class_id),self.class_type,self.dimensionality,
@@ -257,7 +261,9 @@ class ClassificationStatsPerSample:
         # given that each dimension has the same coarseness, of course....
         return self.coarseness ** self.dimensionality
 
-
+    def _slatkin_neutrality_for_classes(self, class_counts):
+        (prob, theta) = montecarlo(self.simconfig.SLATKIN_MONTECARLO_REPLICATES, class_counts, len(class_counts))
+        return prob
 
     # private methods
 

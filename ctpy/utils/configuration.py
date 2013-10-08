@@ -16,6 +16,12 @@ class CTPyConfiguration:
     MODETYPE_EVEN = str("EVEN")
     MODETYPE_RANDOM = str('RANDOM')
 
+    SLATKIN_MONTECARLO_REPLICATES = 10000
+    """
+    Number of monte carlo samples used for estimating the Ewens-Slatkin Exact test for a sample of
+    traits or classes.  This is generally expected to be constant across an analysis.
+    """
+
     ### Research-level constants
 
     MAXALLELES = 1000000000
@@ -163,6 +169,7 @@ class CTPyConfiguration:
         'DIMENSIONS_STUDIED' : 'Trait and classification dimensionalities',
         'DIMENSION_PARTITIONS' : 'Classification coarseness levels (modes per dimension)',
         'NUM_REPLICATES_FOR_RANDOM_DIMENSION_MODES' : 'Replicate random classifications per coarseness level',
+        'SLATKIN_MONTECARLO_REPLICATES' : 'Number of Monte Carlo replicates for Ewens-Slatkin neutrality test',
     }
 
 

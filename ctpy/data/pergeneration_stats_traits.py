@@ -39,7 +39,7 @@ def _get_collection_id():
 
 def storePerGenerationStatsTraits(generation, replication, ssize,
                                     popsize, mutation, dimensionality, sim_id, mean_richness, mean_entropy,
-                                    mean_iqv, loci_richness, loci_entropy, loci_iqv):
+                                    mean_iqv, loci_richness, loci_entropy, loci_iqv,loci_neutrality_slatkin):
     PerGenerationStatsTraits(dict(
         simulation_time=generation,
         replication=replication,
@@ -53,7 +53,8 @@ def storePerGenerationStatsTraits(generation, replication, ssize,
         mean_evenness_iqv = mean_iqv,
         loci_trait_richness = loci_richness,
         loci_evenness_shannon_entropy = loci_entropy,
-        loci_evenness_iqv = loci_iqv
+        loci_evenness_iqv = loci_iqv,
+        loci_neutrality_slatkin = loci_neutrality_slatkin,
     )).m.insert()
     return True
 
@@ -76,6 +77,7 @@ def columns_to_export_for_analysis():
         "mean_trait_richness",
         "mean_evenness_shannon_entropy",
         "mean_evenness_iqv",
+        "loci_neutrality_slatkin"
     ]
     return cols
 
@@ -105,3 +107,4 @@ class PerGenerationStatsTraits(Document):
         loci_trait_richness = Field([int])
         loci_evenness_shannon_entropy = Field([float])
         loci_evenness_iqv = Field([float])
+        loci_neutrality_slatkin = Field([float])

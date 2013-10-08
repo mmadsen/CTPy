@@ -12,6 +12,7 @@ import logging as log
 from collections import defaultdict
 import numpy as np
 from diversity import diversity_iqv, diversity_shannon_entropy
+from slatkin import montecarlo   # https://github.com/mmadsen/slatkin-exact-tools
 import itertools
 
 
@@ -43,6 +44,7 @@ class TraitStatisticsPerSample:
         iqv_by_locus = []
         richness_by_locus = []
         trait_counts = {}
+        slatkin_by_locus = []
 
         # initialization
         for locus in range(0, s.dimensionality):
@@ -62,6 +64,7 @@ class TraitStatisticsPerSample:
             trait_freq = [float(count)/float(s.sample_size) for trait_id, count in trait_counts[locus].items() ]
             entropy_by_locus.append(diversity_shannon_entropy(trait_freq))
             iqv_by_locus.append(diversity_iqv(trait_freq))
+            slatkin_by_locus.append(self._slatkin_neutrality_for_locus(trait_counts[locus]))
 
 
         mean_entropy = np.mean(np.array(entropy_by_locus))
@@ -71,4 +74,10 @@ class TraitStatisticsPerSample:
         # store the result
         data.storePerGenerationStatsTraits(s.simulation_time,s.replication,s.sample_size,s.population_size,
                                            s.mutation_rate,s.dimensionality, s.simulation_run_id,mean_richness,mean_entropy,mean_iqv,
-                                           richness_by_locus,entropy_by_locus,iqv_by_locus)
+                                           richness_by_locus,entropy_by_locus,iqv_by_locus,slatkin_by_locus)
+
+
+
+    def _slatkin_neutrality_for_locus(self, trait_counts):
+        (prob, theta) = montecarlo(self.simconfig.SLATKIN_MONTECARLO_REPLICATES, trait_counts, len(trait_counts))
+        return prob
