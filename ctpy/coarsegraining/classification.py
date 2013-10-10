@@ -14,6 +14,7 @@ from collections import defaultdict
 import numpy as np
 from slatkin import montecarlo   # https://github.com/mmadsen/slatkin-exact-tools
 import itertools
+import pprint as pp
 
 class ClassificationStatsPerSimrun:
 
@@ -180,12 +181,14 @@ class ClassificationStatsPerSample:
         :return: None
         """
         log.info("Starting identification of individuals to classification %s", self.class_id)
+                    # these are caches, to be used in other methods
+        global mode_counts_by_dimension, class_counts
         records = self._get_individual_cursor_for_dimensionality(self.dimensionality)
 
         #log.debug("record length: %s", len(records))
 
         for s in records:
-            log.debug("Starting analysis of record")
+            #log.debug("Starting analysis of record")
             classified_indiv = []
             mode_counts_by_dimension = {}
             class_counts = defaultdict(int)
@@ -195,8 +198,7 @@ class ClassificationStatsPerSample:
                 # initialize a cache
                 mode_counts_by_dimension[dim_num] = defaultdict(int)
 
-            # these are caches, to be used in other methods
-            global mode_counts_by_dimension, class_counts
+
 
 
             for indiv in s.sample:
@@ -212,7 +214,7 @@ class ClassificationStatsPerSample:
             class_freq = [float(count)/float(s.sample_size) for class_id, count in class_counts.items() ]
             shannon_entropy = m.diversity_shannon_entropy(class_freq)
             class_iqv = m.diversity_iqv(class_freq)
-            slatkin_result = self._slatkin_neutrality_for_classes(class_counts)
+            slatkin_result = self._slatkin_neutrality_for_classes(class_counts.values())
 
 
 
@@ -232,7 +234,6 @@ class ClassificationStatsPerSample:
 
 
 
-
     # private analytic methods
 
 
@@ -247,7 +248,7 @@ class ClassificationStatsPerSample:
             mode_evenness_iqv_list.append(m.diversity_iqv(mode_freq))
             mode_evenness_entropy_list.append(m.diversity_shannon_entropy(mode_freq))
 
-        log.debug("mode_richness_list %s", mode_richness_list )
+        #log.debug("mode_richness_list %s", mode_richness_list )
         results = {}
         results["mode_richness_list"] = mode_richness_list
         results["class_richness"] = len(class_counts)
@@ -333,3 +334,38 @@ class ClassificationStatsPerSample:
         # which modes the alleles each identified to given the mode boundaries
         #log.debug("identified modes: %s", identified_modes)
         return '-'.join([`num` for num in identified_modes])
+
+
+
+
+## Utility method, outside the class because we aren't proceeding per-classification here
+
+
+def update_with_slatkin_test(simconfig, s):
+    """
+    Takes an IndividualSampleClassified object, calculates the slatkin exact test for it,
+    and updates the existing pergenerationstats_postclassification object.
+
+    :param sample:
+    :return:
+    """
+    pp.pprint(s)
+    class_counts = defaultdict(int)
+    for indiv in s.sample:
+        class_counts[indiv.classid] += 1
+
+    counts = class_counts.values()
+
+    (prob, theta) = montecarlo(simconfig.SLATKIN_MONTECARLO_REPLICATES, counts, len(counts))
+
+    # find the proper pergeneration object for this sample, and add the slatkin result
+    #
+    record = data.PerGenerationStatsPostclassification.m.find(dict(
+        classification_id=s.classification_id,
+        simulation_run_id=s.simulation_run_id,
+        simulation_time=s.simulation_time,
+        replication=s.replication,
+        sample_size=s.sample_size)).one()
+
+    data.updateFieldPerGenerationStatsPostclassification(record._id, "class_neutrality_slatkin", prob )
+

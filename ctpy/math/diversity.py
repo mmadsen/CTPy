@@ -35,7 +35,7 @@ def diversity_iqv(freq_list):
     factor = float(k) / (float(k) - 1.0)
     iqv = factor * isum
 
-    logger.debug("k: %s  isum: %s  factor: %s  iqv:  %s", k, isum, factor, iqv)
+    #logger.debug("k: %s  isum: %s  factor: %s  iqv:  %s", k, isum, factor, iqv)
     return iqv
 
 def diversity_neiman_tf(freq_list, num_classes_possible):

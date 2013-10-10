@@ -39,7 +39,7 @@ class TraitStatisticsPerSample:
         :return: no return value
         """
         s = self.sample
-        log.debug("Starting analysis of sample")
+        #log.debug("Starting analysis of sample")
         entropy_by_locus = []
         iqv_by_locus = []
         richness_by_locus = []
@@ -57,24 +57,68 @@ class TraitStatisticsPerSample:
             for locus_num in range(0, s.dimensionality):
                 trait_counts[locus_num][indiv.genotype[locus_num]] += 1
 
-        log.debug("%s", trait_counts)
+        #log.debug("%s", trait_counts)
 
         for locus in range(0, s.dimensionality):
             richness_by_locus.append(len(trait_counts[locus]))
             trait_freq = [float(count)/float(s.sample_size) for trait_id, count in trait_counts[locus].items() ]
             entropy_by_locus.append(diversity_shannon_entropy(trait_freq))
             iqv_by_locus.append(diversity_iqv(trait_freq))
-            slatkin_by_locus.append(self._slatkin_neutrality_for_locus(trait_counts[locus]))
+            slatkin_by_locus.append(self._slatkin_neutrality_for_locus(trait_counts[locus].values()))
 
 
         mean_entropy = np.mean(np.array(entropy_by_locus))
         mean_iqv = np.mean(np.array(iqv_by_locus))
         mean_richness = np.mean(np.array(richness_by_locus))
+        mean_slatkin = np.mean(np.array(slatkin_by_locus))
 
         # store the result
         data.storePerGenerationStatsTraits(s.simulation_time,s.replication,s.sample_size,s.population_size,
                                            s.mutation_rate,s.dimensionality, s.simulation_run_id,mean_richness,mean_entropy,mean_iqv,
-                                           richness_by_locus,entropy_by_locus,iqv_by_locus,slatkin_by_locus)
+                                           richness_by_locus,entropy_by_locus,iqv_by_locus,slatkin_by_locus,mean_slatkin)
+
+
+
+    def update_with_slatkin_test(self):
+        """
+        Given a per generation trait statistics record, we get the original sample, total its trait counts,
+        get the slatkin exact neutrality result, and UPDATE the per generation trait statistics record.
+
+        :return:
+        """
+        s = self.sample
+        trait_counts = {}
+        slatkin_results = []
+        #log.debug("Starting retrofit of sample")
+
+        # initialization
+        for locus in range(0, s.dimensionality):
+            trait_counts[locus] = defaultdict(int)
+
+        # go through individuals in a single pass, counting all loci
+        # we do this manually, because using numpy.bincount yields an array with zeros
+        # for any slot which has no entries, which is a giant space given MAXALLELE
+        for indiv in s.sample:
+            for locus_num in range(0, s.dimensionality):
+                trait_counts[locus_num][indiv.genotype[locus_num]] += 1
+
+
+
+        for locus in range(0, s.dimensionality):
+            counts = trait_counts[locus].values()
+            slatkin_results.append(self._slatkin_neutrality_for_locus(counts))
+
+        mean_slatkin = np.mean(np.array(slatkin_results))
+
+        record = data.PerGenerationStatsTraits.m.find(dict(
+            dimensionality=s.dimensionality,
+            simulation_run_id=s.simulation_run_id,
+            simulation_time=s.simulation_time,
+            replication=s.replication,
+            sample_size=s.sample_size)).one()
+
+        data.updateFieldPerGenerationStatsTraits(record._id, "loci_neutrality_slatkin", slatkin_results)
+        data.updateFieldPerGenerationStatsTraits(record._id, "mean_neutrality_slatkin", mean_slatkin)
 
 
 
