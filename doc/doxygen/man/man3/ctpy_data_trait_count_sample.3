@@ -1,0 +1,58 @@
+.TH "ctpy.data.trait_count_sample" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.data.trait_count_sample \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBTraitCountSample\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBsampleTraitCounts\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+.. module:: trait_count_sample
+:platform: Unix, Windows
+:synopsis: Data object for storing a sample of trait counts (across all loci) in MongoDB, via the Ming ORM.
+
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "def ctpy\&.data\&.trait_count_sample\&.sampleTraitCounts (pop, param)"
+
+.PP
+.nf
+Samples trait counts for all loci in a replicant population, and stores the counts  in the database.
+
+    Args:
+
+        pop (Population):  simuPOP population replicate.
+
+        params (list):  list of parameters (sample size, mutation rate, population size, simulation ID, number of loci)
+
+    Returns:
+
+        Boolean true:  all PyOperators need to return true.
+.fi
+.PP
+ 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

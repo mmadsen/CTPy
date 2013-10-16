@@ -1,0 +1,79 @@
+.TH "ctpy.data.richness_sample" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.data.richness_sample \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBRichnessSample\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBsampleNumAlleles\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+.. module:: richness_sample
+:platform: Unix, Windows
+:synopsis: Data object for storing a sample of trait richness from a population in MongoDB, via the Ming ORM.
+
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+
+
+Aggregation framework query for calculating the mean richness for combinations of
+population size, mutation rate, and sample size, for comparison with formulas
+derived from Ewens sampling theory.
+
+db.richness_sample.aggregate(
+    { '$project' : {
+        'population_size' : 1,
+        'richness' : 1,
+        'mutation_rate' : 1,
+        'sample_size' : 1,
+                'locus' : 1,
+    }},
+    {
+        '$group' : {
+            '_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size', locus: '$locus'},
+            'mean_richness' : { '$avg' : '$richness'},
+        }
+    })
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "def ctpy\&.data\&.richness_sample\&.sampleNumAlleles (pop, param)"
+
+.PP
+.nf
+Samples allele richness for all loci in a replicant population, and stores the richness of the sample in the database.
+
+    Args:
+
+        pop (Population):  simuPOP population replicate.
+
+        params (list):  list of parameters (sample size, mutation rate, population size, simulation ID)
+
+    Returns:
+
+        Boolean true:  all PyOperators need to return true.
+.fi
+.PP
+ 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

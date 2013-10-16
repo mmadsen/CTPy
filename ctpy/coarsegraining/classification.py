@@ -349,7 +349,6 @@ def update_with_slatkin_test(simconfig, s):
     :param sample:
     :return:
     """
-    pp.pprint(s)
     class_counts = defaultdict(int)
     for indiv in s.sample:
         class_counts[indiv.classid] += 1

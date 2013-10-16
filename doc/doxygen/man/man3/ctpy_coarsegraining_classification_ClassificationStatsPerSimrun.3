@@ -1,0 +1,44 @@
+.TH "ctpy.coarsegraining.classification.ClassificationStatsPerSimrun" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.coarsegraining.classification.ClassificationStatsPerSimrun \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBprocess_simulation_run\fP"
+.br
+.RI "\fIProcess the individual samples for a single simulation run, calculating any statistics that require aggregation over the simulation run, saving the results to the database\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsimconfig\fP"
+.br
+.ti -1c
+.RI "\fBsimrun_param_cache\fP"
+.br
+.ti -1c
+.RI "\fBparam_cached\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "def ctpy\&.coarsegraining\&.classification\&.ClassificationStatsPerSimrun\&.process_simulation_run (self, simrun_id)"
+
+.PP
+Process the individual samples for a single simulation run, calculating any statistics that require aggregation over the simulation run, saving the results to the database\&. This requires that we process each 'replication' separately, so that we do not mix them together\&.
+.PP
+:return: 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

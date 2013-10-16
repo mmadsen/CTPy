@@ -1,0 +1,73 @@
+.TH "ctpy.data.trait_lifetime.TraitLifetimeCacheIAModels" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.data.trait_lifetime.TraitLifetimeCacheIAModels \- 
+.PP
+Caches the starting generation of each newly mutated allele\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBdebugPrintOriginCache\fP"
+.br
+.ti -1c
+.RI "def \fBallele_origin_tracker\fP"
+.br
+.RI "\fIUsed as an output function in a simuPOP mutator, post 1\&.11\&. \fP"
+.ti -1c
+.RI "def \fBallele_demise_tracker\fP"
+.br
+.RI "\fIChecks to see if any traits have gone to zero frequency and thus exited the population\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBorigin_cache\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Caches the starting generation of each newly mutated allele\&. 
+
+Constructor takes as argument the number of loci and initial alleles, since these begin their lifetime at gen 0\&.
+.PP
+NOTE: This class is appropriate ONLY for infinite alleles models, with no back-mutation or other mechanisms by which a trait can 'come back' from an exit\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "def ctpy\&.data\&.trait_lifetime\&.TraitLifetimeCacheIAModels\&.allele_demise_tracker (self, pop, param)"
+
+.PP
+Checks to see if any traits have gone to zero frequency and thus exited the population\&. If a trait has exited, the generation of exit is recorded in the cache, and a record inserted into the database recording the total lifetime in generations of the trait\&.
+.PP
+NOTE: This operator is appropriate ONLY for infinite alleles models, with no back-mutation or other mechanisms by which a trait can 'come back' from an exit\&.
+.PP
+Args: 
+.PP
+.nf
+pop (Population):  simuPOP population replicate.
+
+params (list):  list of parameters (sample size, mutation rate, population size, simulation ID, number of loci)
+
+.fi
+.PP
+.PP
+Returns: 
+.PP
+.nf
+Boolean true:  all PyOperators need to return true
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

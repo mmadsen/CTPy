@@ -1,0 +1,49 @@
+.TH "ctpy.math.trait_statistics.TraitStatisticsPerSample" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.math.trait_statistics.TraitStatisticsPerSample \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBprocess_trait_statistics\fP"
+.br
+.RI "\fIGiven a sample in the fulldataset, we want to calculate the following: trait richness per locus for sample, mean trait richness per generation for sample, shannon entropy and iqv per locus for sample, mean shannon entropy and iqv per generation for sample\&. \fP"
+.ti -1c
+.RI "def \fBupdate_with_slatkin_test\fP"
+.br
+.RI "\fIGiven a per generation trait statistics record, we get the original sample, total its trait counts, get the slatkin exact neutrality result, and UPDATE the per generation trait statistics record\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsimconfig\fP"
+.br
+.ti -1c
+.RI "\fBsample\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "def ctpy\&.math\&.trait_statistics\&.TraitStatisticsPerSample\&.process_trait_statistics (self)"
+
+.PP
+Given a sample in the fulldataset, we want to calculate the following: trait richness per locus for sample, mean trait richness per generation for sample, shannon entropy and iqv per locus for sample, mean shannon entropy and iqv per generation for sample\&. These statistics are saved to the database with sim run ID, replication, sample size, mutation rate, simulation time, and population size as keys\&. With these keys, we can match them up to their post-classification counterparts\&.
+.PP
+:return: no return value 
+.SS "def ctpy\&.math\&.trait_statistics\&.TraitStatisticsPerSample\&.update_with_slatkin_test (self)"
+
+.PP
+Given a per generation trait statistics record, we get the original sample, total its trait counts, get the slatkin exact neutrality result, and UPDATE the per generation trait statistics record\&. :return: 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

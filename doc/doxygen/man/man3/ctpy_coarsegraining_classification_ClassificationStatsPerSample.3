@@ -1,0 +1,69 @@
+.TH "ctpy.coarsegraining.classification.ClassificationStatsPerSample" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ctpy.coarsegraining.classification.ClassificationStatsPerSample \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBidentify_individual_samples\fP"
+.br
+.RI "\fIIdentify the individuals sampled from each generation of a simulation run to the appropriate class from the focal classification\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsimconfig\fP"
+.br
+.ti -1c
+.RI "\fBclassification\fP"
+.br
+.ti -1c
+.RI "\fBclass_id\fP"
+.br
+.ti -1c
+.RI "\fBdimensionality\fP"
+.br
+.ti -1c
+.RI "\fBcoarseness\fP"
+.br
+.ti -1c
+.RI "\fBclass_type\fP"
+.br
+.ti -1c
+.RI "\fBsave_indiv\fP"
+.br
+.ti -1c
+.RI "\fBclassification_size\fP"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "tuple \fBmode_definition_cache\fP = dict()"
+.br
+.ti -1c
+.RI "tuple \fBclassification_dimension_cache\fP = dict()"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "def ctpy\&.coarsegraining\&.classification\&.ClassificationStatsPerSample\&.identify_individual_samples (self)"
+
+.PP
+Identify the individuals sampled from each generation of a simulation run to the appropriate class from the focal classification\&. Each 'sample' is a record from one generation of one replication of one simulation run, at a given sample size and dimensionality\&. Within each sample record is a list of sampled individual genotypes\&. This list is what we iterate over to identify via the classification, and then we calculate various stats, and store the resulting stats\&. If the flag for saving raw individuals (after classification identification) is set, we also store the list of individuals and the classes to which their genotypes identify\&.
+.PP
+:return: None 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for CTPy from the source code\&.

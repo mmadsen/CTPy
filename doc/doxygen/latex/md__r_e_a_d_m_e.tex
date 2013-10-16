@@ -1,0 +1,29 @@
+Cultural transmission models in python using simu\-P\-O\-P, Sci\-Py, and Num\-Py. Data storage is currently in a Mongo\-D\-B instance, which can be local or remote, if simulations are being run on multiple machines.
+
+C\-T\-Py is a software layer on top of simu\-P\-O\-P by Bo Peng, currently version 1.\-X. See \href{http://simupop.sourceforge.net/}{\tt http\-://simupop.\-sourceforge.\-net/} for source code, license, and documentation.
+
+\subsection*{Directory Structure}
+
+analytics \-: python scripts which process simulation data from the database, and make entries into the database of their results.
+
+ctpy \-: python modules and classes used in simulations and analytics
+
+simulations \-: python scripts which run simu\-P\-O\-P simulations of cultural transmission models, logging samples to the database.
+
+test \-: unit and functional test scripts
+
+\subsection*{Runtime Dependency}
+
+C\-T\-Py assumes that there is an instance of Mongo\-D\-B to which it can log samples and statistical data. The init.\-py file in the ctpy/sampling directory contains the database initialization, so that remote connections can be substituted for a local development server. This may be more easily configurable in future releases.
+
+C\-T\-Py uses the \href{http://merciless.sourceforge.net/index.html}{\tt Ming} object relational library to connect from Python to Mongo\-D\-B.
+
+\subsection*{Module Dependencies}
+
+find . -\/name \char`\"{}$\ast$.\-py\char`\"{} $|$ xargs grep -\/h 'import ' $|$ grep -\/v ctpy $|$ grep -\/v simu $|$ sort $|$ cut -\/d' ' -\/f2 $|$ uniq $>$ required-\/modules.\-txt
+
+\subsection*{Author}
+
+Mark E. Madsen Copyright 2012-\/2013. All rights reserved. This software is made available under the Apache Software License (see file L\-I\-C\-E\-N\-S\-E), which allows you to use the software for commercial or non-\/commercial purposes, but you must attribute authorship, and derivatives must allow the user to find the original code and license.
+
+\href{mailto:mark@madsenlab.org}{\tt mark@madsenlab.\-org} \href{http://notebook.madsenlab.org}{\tt Website and Lab Notebook} 

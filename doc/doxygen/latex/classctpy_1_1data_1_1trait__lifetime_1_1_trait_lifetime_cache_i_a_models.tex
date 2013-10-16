@@ -1,0 +1,67 @@
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models}{\section{ctpy.\-data.\-trait\-\_\-lifetime.\-Trait\-Lifetime\-Cache\-I\-A\-Models Class Reference}
+\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models}\index{ctpy.\-data.\-trait\-\_\-lifetime.\-Trait\-Lifetime\-Cache\-I\-A\-Models@{ctpy.\-data.\-trait\-\_\-lifetime.\-Trait\-Lifetime\-Cache\-I\-A\-Models}}
+}
+
+
+Caches the starting generation of each newly mutated allele.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_aa8f37e27c5e6c87657232372b748c6ba}{def {\bfseries \-\_\-\-\_\-init\-\_\-\-\_\-}}\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_aa8f37e27c5e6c87657232372b748c6ba}
+
+\item 
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_ae8808c305c0c7bd0c9a95aa5bcc15d29}{def {\bfseries debug\-Print\-Origin\-Cache}}\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_ae8808c305c0c7bd0c9a95aa5bcc15d29}
+
+\item 
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_a79dd58583fc674ec882f7e8119c563b0}{def \hyperlink{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_a79dd58583fc674ec882f7e8119c563b0}{allele\-\_\-origin\-\_\-tracker}}\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_a79dd58583fc674ec882f7e8119c563b0}
+
+\begin{DoxyCompactList}\small\item\em Used as an output function in a simu\-P\-O\-P mutator, post 1.\-11. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_ab75d75f7c965b390dadc6a210cc860eb}{allele\-\_\-demise\-\_\-tracker}
+\begin{DoxyCompactList}\small\item\em Checks to see if any traits have gone to zero frequency and thus exited the population. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_a97d755b0300aad41ae2afb6447cf89af}{{\bfseries origin\-\_\-cache}}\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_a97d755b0300aad41ae2afb6447cf89af}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Caches the starting generation of each newly mutated allele. 
+
+Constructor takes as argument the number of loci and initial alleles, since these begin their lifetime at gen 0.
+
+N\-O\-T\-E\-: This class is appropriate O\-N\-L\-Y for infinite alleles models, with no back-\/mutation or other mechanisms by which a trait can \char`\"{}come back\char`\"{} from an exit. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_ab75d75f7c965b390dadc6a210cc860eb}{\index{ctpy\-::data\-::trait\-\_\-lifetime\-::\-Trait\-Lifetime\-Cache\-I\-A\-Models@{ctpy\-::data\-::trait\-\_\-lifetime\-::\-Trait\-Lifetime\-Cache\-I\-A\-Models}!allele\-\_\-demise\-\_\-tracker@{allele\-\_\-demise\-\_\-tracker}}
+\index{allele\-\_\-demise\-\_\-tracker@{allele\-\_\-demise\-\_\-tracker}!ctpy::data::trait_lifetime::TraitLifetimeCacheIAModels@{ctpy\-::data\-::trait\-\_\-lifetime\-::\-Trait\-Lifetime\-Cache\-I\-A\-Models}}
+\subsubsection[{allele\-\_\-demise\-\_\-tracker}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-data.\-trait\-\_\-lifetime.\-Trait\-Lifetime\-Cache\-I\-A\-Models.\-allele\-\_\-demise\-\_\-tracker (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{pop, }
+\item[{}]{param}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1data_1_1trait__lifetime_1_1_trait_lifetime_cache_i_a_models_ab75d75f7c965b390dadc6a210cc860eb}
+
+
+Checks to see if any traits have gone to zero frequency and thus exited the population. 
+
+If a trait has exited, the generation of exit is recorded in the cache, and a record inserted into the database recording the total lifetime in generations of the trait.
+
+N\-O\-T\-E\-: This operator is appropriate O\-N\-L\-Y for infinite alleles models, with no back-\/mutation or other mechanisms by which a trait can \char`\"{}come back\char`\"{} from an exit.
+
+Args\-: \begin{DoxyVerb}pop (Population):  simuPOP population replicate.
+
+params (list):  list of parameters (sample size, mutation rate, population size, simulation ID, number of loci)
+\end{DoxyVerb}
+
+
+Returns\-: \begin{DoxyVerb}Boolean true:  all PyOperators need to return true\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+ctpy/data/trait\-\_\-lifetime.\-py\end{DoxyCompactItemize}

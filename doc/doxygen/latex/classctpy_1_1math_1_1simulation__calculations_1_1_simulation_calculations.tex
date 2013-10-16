@@ -1,0 +1,271 @@
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations}{\section{ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations Class Reference}
+\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations}\index{ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations@{ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations}}
+}
+
+
+Common Values \#\#\#\#\#\#\#\#\#\#\#\#\#.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ab00bd033de015209aba7b2e10f547d5d}{def {\bfseries \-\_\-\-\_\-init\-\_\-\-\_\-}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ab00bd033de015209aba7b2e10f547d5d}
+
+\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a26e2aee1058529d61399e51767a12460}{compute\-\_\-sim\-\_\-param\-\_\-combinations}
+\begin{DoxyCompactList}\small\item\em The number of simulation parameter combinations can probably be reduced to the Cartesian product of innovation rates and overall population sizes. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af4774a281ed7c5b5c80a0440b6d12949}{compute\-\_\-even\-\_\-dimension\-\_\-classifications}
+\begin{DoxyCompactList}\small\item\em Classification Combinations \#\#\#\#\#\#\#\#\#\#\#\#\#. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8f9ffc30a7e7c68dca35021e193fcad0}{compute\-\_\-random\-\_\-dimension\-\_\-classifications}
+\begin{DoxyCompactList}\small\item\em For each dimensionality, we have R classifications per level of mode partitioning M. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b960cd6d285a6de588321c02c00cb77}{compute\-\_\-total\-\_\-classifications}
+\begin{DoxyCompactList}\small\item\em Since dimensionality is a property of subsampling the simulation output into separate data samples, any given data sample stream has a specific dimensionality (and other configuration parameters). \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ad455df8e83ed3d3bc0fba5edbca5b79c}{compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality}
+\begin{DoxyCompactList}\small\item\em Sometimes we want to know how many classifications there are, across all the levels of dimensionality. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a908df80f1b75622aa3ac55786c826e45}{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple}
+\begin{DoxyCompactList}\small\item\em Single Population Models (Simple Models) \#\#\#\#\#\#\#\#\#\#\#\#. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0d1cb4ca9f1b3eb820c6c55290b54442}{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple}
+\begin{DoxyCompactList}\small\item\em For single population models, the number of simulation replicates is just the number of simulation parameter combinations times the number of simu\-P\-O\-P replicates. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_aaa6bcc1a6b782731e34b9b45debd19ba}{compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple}
+\begin{DoxyCompactList}\small\item\em For each simulation replicate in each run, we're also taking a variety of sample sizes of individuals for recording aggregate statistics and capturing genotypes for classification. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af04fd402c83c49ebeb20edbbf33371ea}{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality}
+\begin{DoxyCompactList}\small\item\em From the raw sim runs, we also study different dimensionality by subsampling. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b4ad989ba3ccb1dcbbe74516582399c}{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications}
+\begin{DoxyCompactList}\small\item\em If we identify every replicate (given level of dimensionality, sample size, and combination of simulation parameters) with every even and random classification applicable to the given level of dimensionality, we end up with this many separate data stream samples. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a5f674e430d656ea58e8a65fecf828e89}{compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration}
+\begin{DoxyCompactList}\small\item\em If we aggregate raw sample paths at a variety of durations, and classify the results in addition to the raw unaggregated samples paths, this is the number of total sample paths that results. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a708d30886bbcf7f47275c068dcc48d22}{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models}
+\begin{DoxyCompactList}\small\item\em The total number of \char`\"{}samples\char`\"{} (sets of observations at a given level of ssize, dim, class, T\-A duration, simparams, replicated N times). \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0296fdc56eb45ac033f54911bd544003}{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models}
+\begin{DoxyCompactList}\small\item\em For analyses with just raw samples, and no time averaging, this is the number of \char`\"{}samples\char`\"{} (sets of observations at a given level of ssize, dim, class, simparams, replicated N times). \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af24f85fb2f5c2d6583d424450797e620}{compute\-\_\-network\-\_\-param\-\_\-combinations}
+\begin{DoxyCompactList}\small\item\em metapopulation models \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\# \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a80b8bc79f51913c9ec1de88f2077923f}{compute\-\_\-total\-\_\-network\-\_\-realizations}
+\begin{DoxyCompactList}\small\item\em The number of network realizations is the number of network parameter combinations times the number of replicates we'll study per parameter combination. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ab4c7d2bde540dc4a98bf68030f7858b2}{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation}
+\begin{DoxyCompactList}\small\item\em Applicable to metapopulation models with networks of demes. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a9a2a4b527030b8870dc61c594058e8f4}{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation}
+\begin{DoxyCompactList}\small\item\em Applicable to metapopulation models with networks of demes. \end{DoxyCompactList}\item 
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8ad4d81250f51646c2fc9446b2890a59}{def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8ad4d81250f51646c2fc9446b2890a59}{compute\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-metapop}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8ad4d81250f51646c2fc9446b2890a59}
+
+\begin{DoxyCompactList}\small\item\em \-:return\-: \end{DoxyCompactList}\item 
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a1cf5ec800072697168f6e8637500d960}{def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a1cf5ec800072697168f6e8637500d960}{compute\-\_\-replicates\-\_\-ssize\-\_\-dim\-\_\-classified\-\_\-metapop}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a1cf5ec800072697168f6e8637500d960}
+
+\begin{DoxyCompactList}\small\item\em \-:return\-: \end{DoxyCompactList}\item 
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0159756aa16d7b4c2229ca4d143b05df}{def \hyperlink{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0159756aa16d7b4c2229ca4d143b05df}{compute\-\_\-replicates\-\_\-ssize\-\_\-dim\-\_\-classified\-\_\-timeaveraged}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0159756aa16d7b4c2229ca4d143b05df}
+
+\begin{DoxyCompactList}\small\item\em \-:return\-: \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af7970b2eae3b3acd6133b9f96373d3de}{{\bfseries simconfig}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af7970b2eae3b3acd6133b9f96373d3de}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Common Values \#\#\#\#\#\#\#\#\#\#\#\#\#. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af4774a281ed7c5b5c80a0440b6d12949}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-even\-\_\-dimension\-\_\-classifications@{compute\-\_\-even\-\_\-dimension\-\_\-classifications}}
+\index{compute\-\_\-even\-\_\-dimension\-\_\-classifications@{compute\-\_\-even\-\_\-dimension\-\_\-classifications}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-even\-\_\-dimension\-\_\-classifications}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-even\-\_\-dimension\-\_\-classifications (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af4774a281ed7c5b5c80a0440b6d12949}
+
+
+Classification Combinations \#\#\#\#\#\#\#\#\#\#\#\#\#. 
+
+For each dimensionality, we will have one classification per level of mode partitioning (i.\-e., a classification which chops dimensions into 2 modes, one which chops dimensions into 4 modes, etc). T\-O\-D\-O\-: We might also want classifications which are even, but different levels of partitioning for different dimensions...? \-:return\-: number of classifications with even dimensions \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af24f85fb2f5c2d6583d424450797e620}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-network\-\_\-param\-\_\-combinations@{compute\-\_\-network\-\_\-param\-\_\-combinations}}
+\index{compute\-\_\-network\-\_\-param\-\_\-combinations@{compute\-\_\-network\-\_\-param\-\_\-combinations}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-network\-\_\-param\-\_\-combinations}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-network\-\_\-param\-\_\-combinations (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af24f85fb2f5c2d6583d424450797e620}
+
+
+metapopulation models \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\# 
+
+The number of network model parameter combinations is important because for each combination, we will then test a number of random realizations, and each random realization will be run at all simulation parameter combinations. This value is currently the product of the levels of clustering coefficient and small-\/world rewiring probability that we're testing.
+
+\-:return\-: number of network parameter combinations to test \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8f9ffc30a7e7c68dca35021e193fcad0}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-random\-\_\-dimension\-\_\-classifications@{compute\-\_\-random\-\_\-dimension\-\_\-classifications}}
+\index{compute\-\_\-random\-\_\-dimension\-\_\-classifications@{compute\-\_\-random\-\_\-dimension\-\_\-classifications}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-random\-\_\-dimension\-\_\-classifications}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-random\-\_\-dimension\-\_\-classifications (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8f9ffc30a7e7c68dca35021e193fcad0}
+
+
+For each dimensionality, we have R classifications per level of mode partitioning M. 
+
+For each of the R classifications, the M modes have random boundaries chosen uniformly. T\-O\-D\-O\-: We might want classifications which have different levels of M per dimension, but random mode boundaries....? \-:return\-: number of classifications with M mode partitions, given R randomly generated partitions per value of M \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a26e2aee1058529d61399e51767a12460}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-sim\-\_\-param\-\_\-combinations@{compute\-\_\-sim\-\_\-param\-\_\-combinations}}
+\index{compute\-\_\-sim\-\_\-param\-\_\-combinations@{compute\-\_\-sim\-\_\-param\-\_\-combinations}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-sim\-\_\-param\-\_\-combinations}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-sim\-\_\-param\-\_\-combinations (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a26e2aee1058529d61399e51767a12460}
+
+
+The number of simulation parameter combinations can probably be reduced to the Cartesian product of innovation rates and overall population sizes. 
+
+The number of trait dimensions can -- I\-F simu\-P\-O\-P evolves each locus independently in terms of mutations -- be a post-\/processing step. All \char`\"{}raw\char`\"{} simulation runs would occur with the highest number of dimensions studied (say, 8), and then to study a smaller number of dimensions (say, 2), we'd simply extract two dimensions from the raw dataset.
+
+\-:return\-: number of simu\-P\-O\-P parameter combinations to test \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b960cd6d285a6de588321c02c00cb77}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-classifications@{compute\-\_\-total\-\_\-classifications}}
+\index{compute\-\_\-total\-\_\-classifications@{compute\-\_\-total\-\_\-classifications}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-classifications}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-classifications (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b960cd6d285a6de588321c02c00cb77}
+
+
+Since dimensionality is a property of subsampling the simulation output into separate data samples, any given data sample stream has a specific dimensionality (and other configuration parameters). 
+
+We want, then, to identify the sample stream through each of the even and random classifications we pre-\/define. \-:return\-: number of total even and random classifications \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ad455df8e83ed3d3bc0fba5edbca5b79c}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality@{compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality}}
+\index{compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality@{compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-classifications\-\_\-across\-\_\-dimensionality (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ad455df8e83ed3d3bc0fba5edbca5b79c}
+
+
+Sometimes we want to know how many classifications there are, across all the levels of dimensionality. 
+
+\-:return\-: number of total classifications across all dimensions \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a80b8bc79f51913c9ec1de88f2077923f}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-network\-\_\-realizations@{compute\-\_\-total\-\_\-network\-\_\-realizations}}
+\index{compute\-\_\-total\-\_\-network\-\_\-realizations@{compute\-\_\-total\-\_\-network\-\_\-realizations}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-network\-\_\-realizations}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-network\-\_\-realizations (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a80b8bc79f51913c9ec1de88f2077923f}
+
+
+The number of network realizations is the number of network parameter combinations times the number of replicates we'll study per parameter combination. 
+
+\-:return\-: number of network realizations to test \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0296fdc56eb45ac033f54911bd544003}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models@{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models}}
+\index{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models@{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-notimeavg\-\_\-simple\-\_\-models (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0296fdc56eb45ac033f54911bd544003}
+
+
+For analyses with just raw samples, and no time averaging, this is the number of \char`\"{}samples\char`\"{} (sets of observations at a given level of ssize, dim, class, simparams, replicated N times). 
+
+\-:return\-: number of sets of distinct observations including replication at each \char`\"{}combination\char`\"{} of treatments, without any time averaging \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a708d30886bbcf7f47275c068dcc48d22}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models@{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models}}
+\index{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models@{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-number\-\_\-samples\-\_\-simple\-\_\-models (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a708d30886bbcf7f47275c068dcc48d22}
+
+
+The total number of \char`\"{}samples\char`\"{} (sets of observations at a given level of ssize, dim, class, T\-A duration, simparams, replicated N times). 
+
+\-:return\-: number of sets of distinct observations including replication at each \char`\"{}combination\char`\"{} of treatments \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af04fd402c83c49ebeb20edbbf33371ea}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality@{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality}}
+\index{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality@{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_af04fd402c83c49ebeb20edbbf33371ea}
+
+
+From the raw sim runs, we also study different dimensionality by subsampling. 
+
+This leads to genotype and statistics which are distinct for each level of dimensionality, at each sample size, F\-O\-R each combination of simulation parameters, by the number of replicates at each sim param combination...
+
+\-:return\-: number of replicates at each dimensionality and sample size and param combo, given replication level \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b4ad989ba3ccb1dcbbe74516582399c}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications@{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications}}
+\index{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications@{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-replicates\-\_\-ssize\-\_\-dimensionality\-\_\-classifications (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a8b4ad989ba3ccb1dcbbe74516582399c}
+
+
+If we identify every replicate (given level of dimensionality, sample size, and combination of simulation parameters) with every even and random classification applicable to the given level of dimensionality, we end up with this many separate data stream samples. 
+
+\-:return\-: number of data sample streams given classification, dimensionality, ssize, sim params \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a5f674e430d656ea58e8a65fecf828e89}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration@{compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration}}
+\index{compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration@{compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-sample\-\_\-paths\-\_\-ssize\-\_\-dim\-\_\-class\-\_\-taduration (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a5f674e430d656ea58e8a65fecf828e89}
+
+
+If we aggregate raw sample paths at a variety of durations, and classify the results in addition to the raw unaggregated samples paths, this is the number of total sample paths that results. 
+
+\-:return\-: number of data sample streams given class, dim, ssize, simparam, taduration \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_aaa6bcc1a6b782731e34b9b45debd19ba}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple@{compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple}}
+\index{compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple@{compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-sample\-\_\-size\-\_\-replicates\-\_\-simple (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_aaa6bcc1a6b782731e34b9b45debd19ba}
+
+
+For each simulation replicate in each run, we're also taking a variety of sample sizes of individuals for recording aggregate statistics and capturing genotypes for classification. 
+
+This increases the total number of sample \char`\"{}streams\char`\"{} by a factor. \-:return\-: number of simulation replicates for each sample size factor \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a9a2a4b527030b8870dc61c594058e8f4}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation@{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation}}
+\index{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation@{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-metapopulation (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a9a2a4b527030b8870dc61c594058e8f4}
+
+
+Applicable to metapopulation models with networks of demes. 
+
+The number of simulation replicates is the number of simulation execution runs, times the number of replications we ask simu\-P\-O\-P to do for every parameter combination and network realization (i.\-e., configuration).
+
+\-:return\-: number of total simulation replicates across all parameter and network combinations \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0d1cb4ca9f1b3eb820c6c55290b54442}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple@{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple}}
+\index{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple@{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-simulation\-\_\-replicates\-\_\-simple (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a0d1cb4ca9f1b3eb820c6c55290b54442}
+
+
+For single population models, the number of simulation replicates is just the number of simulation parameter combinations times the number of simu\-P\-O\-P replicates. 
+
+\-:return\-: number of simulation replicates for a single population model \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ab4c7d2bde540dc4a98bf68030f7858b2}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation@{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation}}
+\index{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation@{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-metapopulation (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_ab4c7d2bde540dc4a98bf68030f7858b2}
+
+
+Applicable to metapopulation models with networks of demes. 
+
+The number of simulation runs (i.\-e., execution runs) is the product of the number of simulation parameter combinations and the number of network realizations against which we want to test. Note that each execution run can generate multiple independent replicates of those parameters in simu\-P\-O\-P, so this is N\-O\-T the number of independent data sample streams.
+
+\-:return\-: number of total simulation execution runs \hypertarget{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a908df80f1b75622aa3ac55786c826e45}{\index{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}!compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple@{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple}}
+\index{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple@{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple}!ctpy::math::simulation_calculations::SimulationCalculations@{ctpy\-::math\-::simulation\-\_\-calculations\-::\-Simulation\-Calculations}}
+\subsubsection[{compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-simulation\-\_\-calculations.\-Simulation\-Calculations.\-compute\-\_\-total\-\_\-simulation\-\_\-runs\-\_\-simple (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1simulation__calculations_1_1_simulation_calculations_a908df80f1b75622aa3ac55786c826e45}
+
+
+Single Population Models (Simple Models) \#\#\#\#\#\#\#\#\#\#\#\#. 
+
+For single population models, the number of simulation runs is just the number of simulation parameter combinations, so this is a pass through. \-:return\-: number of simulation runs for a single population model 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+ctpy/math/simulation\-\_\-calculations.\-py\end{DoxyCompactItemize}

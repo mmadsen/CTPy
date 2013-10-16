@@ -1,0 +1,36 @@
+April 2013 M\-E\-M
+
+Brainstorming an efficient classification module for python and the {\bfseries simu\-P\-O\-P} system.
+
+\subsection*{Possible Models}
+
+The main possibilities are\-:
+
+
+\begin{DoxyEnumerate}
+\item \char`\"{}\-Live\char`\"{} classification -- taking samples of individuals and coding their genotypes into classes as a {\itshape post\-Ops} step
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Post-\/processed classification -- take samples of individuals (not just genotype counts or frequencies), and post-\/process
+\end{DoxyEnumerate}
+
+\subsection*{Difficulties With Variation Model}
+
+The {\bfseries simu\-P\-O\-P} system has a couple of genotype representation models (\char`\"{}variation model\char`\"{}) but the basic ones represent units of variation (i.\-e., alleles, for simplicity, but you can interpret them as nucleotides, S\-N\-Ps, etc) as integers at a locus. The default is to allow 256 allelic states, but with the \char`\"{}long\char`\"{} version of the modules, a very large number of states are achievable.
+
+The hard part with classification is that we want to specify a set of modes as \char`\"{}chopping up\char`\"{} the allelic state space, in such a way that variation at stationarity is somewhat distributed across the classification, and isn't always (a) concentrated into one class, or (b) evenly distributed across all classes with no empty classes.
+
+The former would happen, for example, if the mutation model starts at the highest integer represented in the population, and simply increments it, but the class definitions chop up the entire \char`\"{}long integer\char`\"{} range into modes. For any reasonable population size, and any reasonable length of simulation run, the \char`\"{}currently occupied\char`\"{} portion of the state space is likely to be concentrated in one of the modes, since mutation is \char`\"{}adjacent\char`\"{} to existing variants.
+
+The latter would happen if we tried to tweak the modes and the length of the situation so that we use only part of the long integer range for modes, but we \char`\"{}get it wrong\char`\"{} and the occupied state space tends to overwhelm the \char`\"{}size\char`\"{} of the classes we define.
+
+The virtue of the {\bfseries Transmission\-Framework} implementation, which partitioned the unit interval, was that we could have practically infinite variants, but we can easily predefine the partitions of the unit interval, and use either uniform random doubles, or other distributions whose range could be clipped to the unit interval to generate novel alleles.
+
+So the big issue is how to do that in simu\-P\-O\-P.
+
+\subsubsection*{Possible Variation Model Solutions}
+
+
+\begin{DoxyEnumerate}
+\item Ensure that mutation is range-\/sensitive, instead 
+\end{DoxyEnumerate}

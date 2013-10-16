@@ -1,0 +1,34 @@
+.TH "md__r_e_a_d_m_e" 3 "Sun Oct 13 2013" "Version 1.0.3" "CTPy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md__r_e_a_d_m_e \- CTPy 
+Cultural transmission models in python using simuPOP, SciPy, and NumPy\&. Data storage is currently in a MongoDB instance, which can be local or remote, if simulations are being run on multiple machines\&.
+.PP
+CTPy is a software layer on top of simuPOP by Bo Peng, currently version 1\&.X\&. See \fChttp://simupop\&.sourceforge\&.net/\fP for source code, license, and documentation\&.
+.PP
+.SS "Directory Structure"
+.PP
+analytics : python scripts which process simulation data from the database, and make entries into the database of their results\&.
+.PP
+ctpy : python modules and classes used in simulations and analytics
+.PP
+simulations : python scripts which run simuPOP simulations of cultural transmission models, logging samples to the database\&.
+.PP
+test : unit and functional test scripts
+.PP
+.SS "Runtime Dependency"
+.PP
+CTPy assumes that there is an instance of MongoDB to which it can log samples and statistical data\&. The init\&.py file in the ctpy/sampling directory contains the database initialization, so that remote connections can be substituted for a local development server\&. This may be more easily configurable in future releases\&.
+.PP
+CTPy uses the \fCMing\fP object relational library to connect from Python to MongoDB\&.
+.PP
+.SS "Module Dependencies"
+.PP
+find \&. -name '*\&.py' | xargs grep -h 'import ' | grep -v ctpy | grep -v simu | sort | cut -d' ' -f2 | uniq > required-modules\&.txt
+.PP
+.SS "Author"
+.PP
+Mark E\&. Madsen Copyright 2012-2013\&. All rights reserved\&. This software is made available under the Apache Software License (see file LICENSE), which allows you to use the software for commercial or non-commercial purposes, but you must attribute authorship, and derivatives must allow the user to find the original code and license\&.
+.PP
+mark@madsenlab.org \fCWebsite and Lab Notebook\fP 

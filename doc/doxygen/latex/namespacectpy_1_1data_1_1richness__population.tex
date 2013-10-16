@@ -1,0 +1,65 @@
+\hypertarget{namespacectpy_1_1data_1_1richness__population}{\section{ctpy.\-data.\-richness\-\_\-population Namespace Reference}
+\label{namespacectpy_1_1data_1_1richness__population}\index{ctpy.\-data.\-richness\-\_\-population@{ctpy.\-data.\-richness\-\_\-population}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classctpy_1_1data_1_1richness__population_1_1_richness_sample}{Richness\-Sample}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacectpy_1_1data_1_1richness__population_a7e8b27a330599139bebcb628538e72b8}{census\-Num\-Alleles}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}.. module:: richness_population
+    :platform: Unix, Windows
+    :synopsis: Data object for storing a census of trait richness from a population in MongoDB, via the Ming ORM.
+
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>
+
+
+
+    Aggregation framework query for calculating the mean richness for combinations of
+    population size, mutation rate, and sample size, for comparison with formulas
+    derived from Ewens sampling theory.
+
+    db.richness_population.aggregate(
+{ '$project' : {
+    'population_size' : 1,
+    'richness' : 1,
+    'mutation_rate' : 1,
+    'sample_size' : 1,
+            'locus' : 1,
+}},
+{
+    '$group' : {
+        '_id': { population: '$population_size', mutation_rate : '$mutation_rate', sample_size: '$sample_size', locus: '$locus'},
+        'mean_richness' : { '$avg' : '$richness'},
+    }
+})\end{DoxyVerb}
+ 
+
+\subsection{Function Documentation}
+\hypertarget{namespacectpy_1_1data_1_1richness__population_a7e8b27a330599139bebcb628538e72b8}{\index{ctpy\-::data\-::richness\-\_\-population@{ctpy\-::data\-::richness\-\_\-population}!census\-Num\-Alleles@{census\-Num\-Alleles}}
+\index{census\-Num\-Alleles@{census\-Num\-Alleles}!ctpy::data::richness_population@{ctpy\-::data\-::richness\-\_\-population}}
+\subsubsection[{census\-Num\-Alleles}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-data.\-richness\-\_\-population.\-census\-Num\-Alleles (
+\begin{DoxyParamCaption}
+\item[{}]{pop, }
+\item[{}]{param}
+\end{DoxyParamCaption}
+)}}\label{namespacectpy_1_1data_1_1richness__population_a7e8b27a330599139bebcb628538e72b8}
+\begin{DoxyVerb}Samples allele richness for all loci in a replicant population, and stores the richness of the sample in the database.
+
+    Args:
+
+        pop (Population):  simuPOP population replicate.
+
+        params (list):  list of parameters (sample size, mutation rate, population size, simulation ID)
+
+    Returns:
+
+        Boolean true:  all PyOperators need to return true.\end{DoxyVerb}
+ 

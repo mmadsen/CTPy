@@ -1,0 +1,54 @@
+\hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample}{\section{ctpy.\-math.\-trait\-\_\-statistics.\-Trait\-Statistics\-Per\-Sample Class Reference}
+\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample}\index{ctpy.\-math.\-trait\-\_\-statistics.\-Trait\-Statistics\-Per\-Sample@{ctpy.\-math.\-trait\-\_\-statistics.\-Trait\-Statistics\-Per\-Sample}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_ab11ed10d974dd4f2873ef6a283ed30ab}{def {\bfseries \-\_\-\-\_\-init\-\_\-\-\_\-}}\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_ab11ed10d974dd4f2873ef6a283ed30ab}
+
+\item 
+def \hyperlink{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a368e901d667a703f72ef4b6aff9738b5}{process\-\_\-trait\-\_\-statistics}
+\begin{DoxyCompactList}\small\item\em Given a sample in the fulldataset, we want to calculate the following\-: trait richness per locus for sample, mean trait richness per generation for sample, shannon entropy and iqv per locus for sample, mean shannon entropy and iqv per generation for sample. \end{DoxyCompactList}\item 
+def \hyperlink{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a6c5bd126d94e0b27407d70fd5fc035a6}{update\-\_\-with\-\_\-slatkin\-\_\-test}
+\begin{DoxyCompactList}\small\item\em Given a per generation trait statistics record, we get the original sample, total its trait counts, get the slatkin exact neutrality result, and U\-P\-D\-A\-T\-E the per generation trait statistics record. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a1e19ba5922fcdaf9a80d3633dad30f36}{{\bfseries simconfig}}\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a1e19ba5922fcdaf9a80d3633dad30f36}
+
+\item 
+\hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a64dd95776aefda9aa63d255b20f1a660}{{\bfseries sample}}\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a64dd95776aefda9aa63d255b20f1a660}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a368e901d667a703f72ef4b6aff9738b5}{\index{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample@{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample}!process\-\_\-trait\-\_\-statistics@{process\-\_\-trait\-\_\-statistics}}
+\index{process\-\_\-trait\-\_\-statistics@{process\-\_\-trait\-\_\-statistics}!ctpy::math::trait_statistics::TraitStatisticsPerSample@{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample}}
+\subsubsection[{process\-\_\-trait\-\_\-statistics}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-trait\-\_\-statistics.\-Trait\-Statistics\-Per\-Sample.\-process\-\_\-trait\-\_\-statistics (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a368e901d667a703f72ef4b6aff9738b5}
+
+
+Given a sample in the fulldataset, we want to calculate the following\-: trait richness per locus for sample, mean trait richness per generation for sample, shannon entropy and iqv per locus for sample, mean shannon entropy and iqv per generation for sample. 
+
+These statistics are saved to the database with sim run I\-D, replication, sample size, mutation rate, simulation time, and population size as keys. With these keys, we can match them up to their post-\/classification counterparts.
+
+\-:return\-: no return value \hypertarget{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a6c5bd126d94e0b27407d70fd5fc035a6}{\index{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample@{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample}!update\-\_\-with\-\_\-slatkin\-\_\-test@{update\-\_\-with\-\_\-slatkin\-\_\-test}}
+\index{update\-\_\-with\-\_\-slatkin\-\_\-test@{update\-\_\-with\-\_\-slatkin\-\_\-test}!ctpy::math::trait_statistics::TraitStatisticsPerSample@{ctpy\-::math\-::trait\-\_\-statistics\-::\-Trait\-Statistics\-Per\-Sample}}
+\subsubsection[{update\-\_\-with\-\_\-slatkin\-\_\-test}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-math.\-trait\-\_\-statistics.\-Trait\-Statistics\-Per\-Sample.\-update\-\_\-with\-\_\-slatkin\-\_\-test (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classctpy_1_1math_1_1trait__statistics_1_1_trait_statistics_per_sample_a6c5bd126d94e0b27407d70fd5fc035a6}
+
+
+Given a per generation trait statistics record, we get the original sample, total its trait counts, get the slatkin exact neutrality result, and U\-P\-D\-A\-T\-E the per generation trait statistics record. 
+
+\-:return\-: 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+ctpy/math/trait\-\_\-statistics.\-py\end{DoxyCompactItemize}

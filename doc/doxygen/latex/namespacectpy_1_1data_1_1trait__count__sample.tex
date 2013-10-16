@@ -1,0 +1,44 @@
+\hypertarget{namespacectpy_1_1data_1_1trait__count__sample}{\section{ctpy.\-data.\-trait\-\_\-count\-\_\-sample Namespace Reference}
+\label{namespacectpy_1_1data_1_1trait__count__sample}\index{ctpy.\-data.\-trait\-\_\-count\-\_\-sample@{ctpy.\-data.\-trait\-\_\-count\-\_\-sample}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classctpy_1_1data_1_1trait__count__sample_1_1_trait_count_sample}{Trait\-Count\-Sample}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacectpy_1_1data_1_1trait__count__sample_a5c62d9dbc4aee45b24743ea44131c452}{sample\-Trait\-Counts}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}.. module:: trait_count_sample
+:platform: Unix, Windows
+:synopsis: Data object for storing a sample of trait counts (across all loci) in MongoDB, via the Ming ORM.
+
+.. moduleauthor:: Mark E. Madsen <mark@madsenlab.org>\end{DoxyVerb}
+ 
+
+\subsection{Function Documentation}
+\hypertarget{namespacectpy_1_1data_1_1trait__count__sample_a5c62d9dbc4aee45b24743ea44131c452}{\index{ctpy\-::data\-::trait\-\_\-count\-\_\-sample@{ctpy\-::data\-::trait\-\_\-count\-\_\-sample}!sample\-Trait\-Counts@{sample\-Trait\-Counts}}
+\index{sample\-Trait\-Counts@{sample\-Trait\-Counts}!ctpy::data::trait_count_sample@{ctpy\-::data\-::trait\-\_\-count\-\_\-sample}}
+\subsubsection[{sample\-Trait\-Counts}]{\setlength{\rightskip}{0pt plus 5cm}def ctpy.\-data.\-trait\-\_\-count\-\_\-sample.\-sample\-Trait\-Counts (
+\begin{DoxyParamCaption}
+\item[{}]{pop, }
+\item[{}]{param}
+\end{DoxyParamCaption}
+)}}\label{namespacectpy_1_1data_1_1trait__count__sample_a5c62d9dbc4aee45b24743ea44131c452}
+\begin{DoxyVerb}Samples trait counts for all loci in a replicant population, and stores the counts  in the database.
+
+    Args:
+
+        pop (Population):  simuPOP population replicate.
+
+        params (list):  list of parameters (sample size, mutation rate, population size, simulation ID, number of loci)
+
+    Returns:
+
+        Boolean true:  all PyOperators need to return true.\end{DoxyVerb}
+ 
