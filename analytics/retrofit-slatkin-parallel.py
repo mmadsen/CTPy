@@ -118,7 +118,7 @@ def postclassification_worker(queue, simconfig, args):
             completed_count += 1
 
             if(completed_count % 1000 == 0):
-                log.info("worker %s: completed %s samples", os.getpid(), completed_count )
+                log.info("postclassification worker %s: completed %s samples", os.getpid(), completed_count )
 
         finally:
             queue.task_done()
@@ -133,8 +133,8 @@ def traits_worker(queue, simconfig, args):
             stat.update_with_slatkin_test()
             completed_count += 1
 
-            if(completed_count % 1000 == 0):
-                log.info("worker %s: completed %s samples", os.getpid(), completed_count )
+            if(completed_count % 100 == 0):
+                log.info("trait worker %s: completed %s samples", os.getpid(), completed_count )
 
         finally:
             queue.task_done()
