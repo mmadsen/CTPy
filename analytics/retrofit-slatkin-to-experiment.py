@@ -52,18 +52,6 @@ def setup():
 if __name__ == "__main__":
     setup()
 
-    cmd = "mongo "
-    cmd += args.dbhost
-    cmd += ":"
-    cmd += args.dbport
-    cmd += "/"
-    cmd += args.experiment
-    cmd += "_samples_postclassification --eval \""
-    cmd += "db.pergeneration_stats_postclassification.ensureIndex({classification_id: 1, simulation_run_id: 1, simulation_time: 1, replication: 1, sample_size: 1}, {name: \"SlatkinIndex\"}) \""
-
-    log.info("Cmd to index: %s", cmd)
-    exit(1)
-    os.system(cmd)
 
 
 

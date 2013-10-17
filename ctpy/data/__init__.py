@@ -55,7 +55,7 @@ def getMingConfiguration():
         key += '.uri'
         collection = module._get_collection_id()
         urlstring += collection
-        log.debug("Configuring %s module as %s", module, urlstring)
+        #log.debug("Configuring %s module as %s", module, urlstring)
         config[key] = urlstring
     return config
 
