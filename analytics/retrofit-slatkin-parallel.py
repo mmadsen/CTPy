@@ -18,6 +18,8 @@ import ctpy.coarsegraining as cg
 import ctpy.math as m
 import multiprocessing
 import os
+import sys
+import time
 
 
 
@@ -32,7 +34,7 @@ def setup():
     parser.add_argument("--dbport", help="database port, defaults to 27017", default="27017")
     parser.add_argument("--configuration", help="Configuration file for experiment", required=True)
     parser.add_argument("--parallelism", help="Number of concurrent processes to run", default="4")
-    parser.add_argument("--collections", choices=['postclassification', 'traits', 'both'], help="Collections to retrofit ", required=True)
+    parser.add_argument("--collection", choices=['postclassification', 'traits'], help="Collection to retrofit ", required=True)
 
     args = parser.parse_args()
 
@@ -57,11 +59,15 @@ def main():
     global tqueue, pcqueue, process_list
     process_list = []
 
-    if(args.collections == 'traits' or args.collections == 'both'):
+
+    if(args.collection == 'traits'):
+        log.info("Processing trait collection for Slatkin retrofit")
         tqueue = multiprocessing.JoinableQueue()
-        results = multiprocessing.Queue()
-        create_processes(tqueue, results, traits_worker)
-        queue_trait_jobs()
+        trait_sample_cursor = data.IndividualSampleFullDataset.m.find(dict(),dict(timeout=False))
+        create_queueing_process(tqueue, trait_sample_cursor, queue_worker)
+        # to avoid a race condition where the workers start up and find the queue empty, we wait a bit
+        time.sleep(5)
+        create_processes(tqueue, traits_worker)
         try:
             tqueue.join()
         except KeyboardInterrupt:
@@ -70,12 +76,13 @@ def main():
                 proc.terminate()
             exit(1)
 
-    process_list = []
-
-    if(args.collections == 'postclassification' or args.collections == 'both'):
+    elif(args.collection == 'postclassification'):
         pcqueue = multiprocessing.JoinableQueue()
-        create_processes(pcqueue, results, postclassification_worker)
-        queue_postclassification_jobs()
+        classified_sample_cursor = data.IndividualSampleClassified.m.find(dict(),dict(timeout=False))
+        create_queueing_process(pcqueue, classified_sample_cursor, queue_worker)
+        # to avoid a race condition where the workers start up and find the queue empty, we wait a bit
+        time.sleep(5)
+        create_processes(pcqueue, postclassification_worker)
         try:
             pcqueue.join()
         except KeyboardInterrupt:
@@ -84,10 +91,19 @@ def main():
                 proc.terminate()
             exit(1)
 
+    else:
+        log.error("Collection argument not recognized")
+
     log.info("collection processing complete")
 
 
-def create_processes(queue, results_queue, worker):
+def create_queueing_process(queue, cursor, worker):
+    process = multiprocessing.Process(target=worker, args=(queue, cursor, simconfig, args))
+    process.daemon = True
+    process_list.append(process)
+    process.start()
+
+def create_processes(queue, worker):
     for i in range(0, int(args.parallelism)):
         process = multiprocessing.Process(target=worker, args=(queue, simconfig, args))
         process.daemon = True
@@ -95,18 +111,6 @@ def create_processes(queue, results_queue, worker):
         process.start()
 
 
-def queue_trait_jobs():
-
-    trait_sample_cursor = data.IndividualSampleFullDataset.m.find(dict(),dict(timeout=False))
-    for sample in trait_sample_cursor:
-        tqueue.put(sample)
-
-
-def queue_postclassification_jobs():
-
-    classified_sample_cursor = data.IndividualSampleClassified.m.find(dict(),dict(timeout=False))
-    for sample in classified_sample_cursor:
-        pcqueue.put(sample)
 
 
 def postclassification_worker(queue, simconfig, args):
@@ -138,6 +142,56 @@ def traits_worker(queue, simconfig, args):
 
         finally:
             queue.task_done()
+
+
+def queue_worker(queue, cursor, simconfig, args):
+    """
+    Worker routine which will queue database records in batches, so that we can process
+    data that will not fit in RAM.
+
+
+    :param queue:
+    :param cursor:
+    :param simconfig:
+    :param args:
+    :return:
+    """
+    BATCH_SIZE = 500
+    completed_count = 0
+    total_records = cursor.count()
+    log.info("queue worker: total records to process: %s", total_records)
+
+    # For large data collections, we'll work 100K at a time for a batch, which shouldn't exceed 1-2 GB of RAM
+    # for the queue.
+    if(total_records > 1000000):
+        BATCH_SIZE = 100000
+    while True:
+        # we can't check queue size on OS X given what multiprocessing calls a "broken" semaphore
+        # implementation, so for dev and test purposes, we do it cruftily
+        try:
+            if(sys.platform == 'darwin'):
+                log.info("queue worker: queuing %s records using OS X timing approximation", BATCH_SIZE)
+                for i in range(0, BATCH_SIZE):
+                    queue.put(cursor.next())
+                if(BATCH_SIZE == 500):
+                    time.sleep(5)
+                else:
+                    time.sleep(60)
+            else:
+                if(queue.qsize() < BATCH_SIZE):
+                    log.info("queue worker: queuing %s records by watching queue size", BATCH_SIZE)
+                    for i in range(0, BATCH_SIZE):
+                        queue.put(cursor.next())
+                time.sleep(5)
+        except StopIteration:
+            log.info("queue worker: final records queued")
+            break
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
