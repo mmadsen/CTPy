@@ -2,6 +2,8 @@ language: python
 python:
   - "2.7"
 # command to install dependencies
+services:
+  - mongodb
 before_install:
   - sudo apt-get install swig python-numpy
   - ./install-slatkin-tools.sh
