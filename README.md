@@ -1,6 +1,8 @@
 CTPy
 ====
 
+[![Build Status](https://travis-ci.org/mmadsen/CTPy.svg?branch=master)](https://travis-ci.org/mmadsen/CTPy)
+
 Cultural transmission models in python using simuPOP, SciPy, and NumPy.  Data storage is currently in
 a MongoDB instance, which can be local or remote, if simulations are being run on multiple machines.
 
