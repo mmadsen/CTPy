@@ -1,0 +1,8 @@
+pymongo
+ming
+uuid
+importlib
+numpy
+networkx
+matplotlib
+git+https://github.com/mmadsen/pytransmission.git

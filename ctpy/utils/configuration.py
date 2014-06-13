@@ -229,13 +229,13 @@ class CTPyConfiguration:
 
         """
 
-        if kwargs['caption'] is not None:
-            caption_text = '\\caption{'
-            caption_text += kwargs['caption']
+        if 'caption' not in kwargs or kwargs['caption'] is None:
+            caption_text = "\\caption{Parameters for Axelrod Simulations for Experiment Name: "
+            caption_text += experiment
             caption_text += '}\n'
         else:
-            caption_text = "\\caption{Parameters for CTPy Simulations for Experiment Name: "
-            caption_text += experiment
+            caption_text = '\\caption{'
+            caption_text += kwargs['caption']
             caption_text += '}\n'
 
 

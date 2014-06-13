@@ -44,7 +44,6 @@ data.set_database_port(sargs.database_port)
 config = data.getMingConfiguration()
 ming.configure(**config)
 
-sim_id = uuid.uuid4().urn
 
 
 # parameters intersected to form sample space
